@@ -1,0 +1,91 @@
+<USER_REQUEST>
+Ini adalah code html dari design ui/ux homepage untuk kamu build dengan mengubah menjadi react+vite+tailwind. Eksekusi sesuai stitch-workflow.md, serta design-system.md dan gambar screenshot yang saya berikan untuk menjadi referensimu.
+
+
+<!DOCTYPE html>
+
+<html class="scroll-smooth" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>HyBloggyon // Architectural Precision</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;300;400;800&amp;family=Space+Mono&amp;family=Satoshi:wght@300;400;700;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-surface": "#1c1b1b",
+                        "accent-green": "#7A8A63",
+                        "surface-tint": "#5f5e60",
+                        "primary-container": "#1b1b1d",
+                        "background-alt": "#ECECEC",
+                        "on-tertiary-container": "#8a8280",
+                        "on-secondary": "#ffffff",
+                        "background-ash": "#F4F4F5",
+                        "on-surface-variant": "#47464a",
+                        "on-primary-fixed-variant": "#474649",
+                        "secondary-fixed": "#f2ded8",
+                        "on-tertiary-fixed": "#1f1b19",
+                        "inverse-primary": "#c8c6c8",
+                        "tertiary-fixed-dim": "#cec4c2",
+                        "primary-fixed": "#e5e1e4",
+                        "paper-white": "#FFFFFF",
+                        "background": "#fdf8f8",
+                        "on-primary-container": "#858386",
+                        "s
+<truncated 35094 bytes>
+m]">Built with intention</span>
+</div>
+</div>
+</div>
+</footer>
+<script>
+    // Simple parallax effect for Hero
+    window.addEventListener('scroll', () => {
+        const scroll = window.pageYOffset;
+        const heroImage = document.querySelector('section img');
+        if(heroImage) {
+            heroImage.style.transform = `translateY(${scroll * 0.15}px) scale(${1 + scroll * 0.0001})`;
+        }
+    });
+
+    // Horizontal Scroll Implementation
+    const scrollContainer = document.querySelector('.horizontal-scroll-container');
+    const scrollWrapper = document.querySelector('#scroll-wrapper');
+    
+    window.addEventListener('scroll', () => {
+        const containerRect = scrollContainer.getBoundingClientRect();
+        const containerTop = containerRect.top;
+        const containerHeight = scrollContainer.offsetHeight;
+        const windowHeight = window.innerHeight;
+        
+        // Calculate progress (0 to 1)
+        let progress = -containerTop / (containerHeight - windowHeight);
+        progress = Math.max(0, Math.min(1, progress));
+        
+        // Calculate max translation
+        const maxScroll = scrollWrapper.scrollWidth - window.innerWidth;
+        
+        // Apply translation
+        if (scrollWrapper) {
+            scrollWrapper.style.transform = `translateX(${-progress * maxScroll}px)`;
+        }
+    });
+</script>
+</body></html>
+</USER_REQUEST>
+<ADDITIONAL_METADATA>
+The current local time is: 2026-05-27T20:36:07+07:00.
+
+The user's current state is as follows:
+Active Document: c:\Users\User\Documents\HyBloggyon\Docs\stitch-workflow.md (LANGUAGE_MARKDOWN)
+Cursor is on line: 1
+Other open documents:
+- c:\Users\User\Documents\HyBloggyon\Docs\stitch-workflow.md (LANGUAGE_MARKDOWN)
+</ADDITIONAL_METADATA>
+<USER_SETTINGS_CHANGE>
+The user changed setting `Model Selection` from None to Claude Sonnet 4.6 (Thinking). No need to comment on this change if the user doesn't ask about it. If reporting what model you are, please use a human readable name instead of the exact string.
+</USER_SETTINGS_CHANGE>

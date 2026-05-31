@@ -1,0 +1,115 @@
+// src/components/notes/FeaturedNotes.jsx
+import { useEffect, useRef } from 'react';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
+
+const FEATURED = [
+  {
+    id: 1,
+    tag: 'Filosofi',
+    date: '24 Mei 2026',
+    title: 'Tentang Kebosanan yang Produktif',
+    excerpt: 'Kebosanan bukan musuh kreativitas. Ia adalah kondisi prasyarat yang paling sering diabaikan di era notifikasi tanpa henti.',
+    readTime: '7 menit',
+    accent: 'var(--color-accent-green)',
+  },
+  {
+    id: 2,
+    tag: 'Teknologi',
+    date: '17 Mei 2026',
+    title: 'Internet Sedang Menyusut',
+    excerpt: 'Paradoks terbesar era kita: akses informasi tak terbatas, namun ruang eksplorasi yang terasa semakin sempit.',
+    readTime: '11 menit',
+    accent: 'var(--color-accent-warm)',
+  },
+  {
+    id: 3,
+    tag: 'Personal',
+    date: '9 Mei 2026',
+    title: 'Mencatat sebagai Ritual',
+    excerpt: 'Sebuah buku catatan bukan sekadar tempat menyimpan ide. Ia adalah cermin yang memperlihatkan cara pikiran kita bekerja.',
+    readTime: '5 menit',
+    accent: 'var(--color-wasabi)',
+  },
+];
+
+export default function FeaturedNotes() {
+  const sectionRef = useRef(null);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      gsap.fromTo('.featured-note-card',
+        { opacity: 0, y: 60 },
+        {
+          opacity: 1, y: 0,
+          duration: 1, stagger: 0.15, ease: 'power3.out',
+          scrollTrigger: { trigger: sectionRef.current, start: 'top 75%' }
+        }
+      );
+    }, sectionRef);
+    return () => ctx.revert();
+  }, []);
+
+  return (
+    <section ref={sectionRef} style={{ backgroundColor: 'var(--color-background-ash)', borderBottom: '1px solid var(--color-ink)', padding: '80px 60px' }}>
+      <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
+        
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '48px' }}>
+          <div>
+            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--color-espresso)', display: 'block', marginBottom: '8px' }}>
+              Featured Notes
+            </span>
+            <h2 style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 'clamp(28px, 4vw, 48px)', letterSpacing: '-0.03em', color: 'var(--color-ink)', lineHeight: 1 }}>
+              Yang Paling Banyak<br/>
+              <em style={{ fontWeight: 300 }}>Direnungkan</em>
+            </h2>
+          </div>
+          <a href="#all-notes" style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'rgba(0,0,0,0.4)', borderBottom: '1px solid rgba(0,0,0,0.2)', paddingBottom: '2px', transition: 'color 0.2s' }}
+            onMouseEnter={(e) => e.currentTarget.style.color = 'var(--color-ink)'}
+            onMouseLeave={(e) => e.currentTarget.style.color = 'rgba(0,0,0,0.4)'}
+          >
+            Lihat semua →
+          </a>
+        </div>
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '1px', border: '1px solid var(--color-ink)', backgroundColor: 'var(--color-ink)' }}>
+          {FEATURED.map((note) => (
+            <article
+              key={note.id}
+              className="featured-note-card"
+              style={{ backgroundColor: 'var(--color-background-ash)', padding: '48px 40px', display: 'flex', flexDirection: 'column', gap: '20px', cursor: 'pointer', transition: 'background-color 0.25s ease' }}
+              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#fff'}
+              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'var(--color-background-ash)'}
+            >
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.12em', textTransform: 'uppercase', backgroundColor: note.accent, color: 'var(--color-ink)', padding: '4px 10px' }}>
+                  {note.tag}
+                </span>
+                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'rgba(0,0,0,0.35)' }}>{note.date}</span>
+              </div>
+
+              <h3 style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: '22px', lineHeight: 1.15, letterSpacing: '-0.02em', color: 'var(--color-ink)' }}>
+                {note.title}
+              </h3>
+
+              <p style={{ fontFamily: 'var(--font-mono)', fontSize: '13px', lineHeight: 1.7, color: 'rgba(0,0,0,0.6)', flexGrow: 1 }}>
+                {note.excerpt}
+              </p>
+
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderTop: '1px solid rgba(0,0,0,0.08)', paddingTop: '20px' }}>
+                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'rgba(0,0,0,0.35)', letterSpacing: '0.05em' }}>
+                  {note.readTime} baca
+                </span>
+                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'var(--color-ink)', letterSpacing: '0.05em' }}>
+                  Baca →
+                </span>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
