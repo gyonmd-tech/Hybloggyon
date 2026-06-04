@@ -37,11 +37,11 @@ export default function AccentQuote() {
             style={{
               fontFamily: 'var(--font-heading)',
               fontWeight: 300,
-              fontSize: 'clamp(24px, 3.5vw, 48px)',
-              lineHeight: 1.15,
-              letterSpacing: '-0.025em',
+              fontSize: 'clamp(32px, 5vw, 64px)', // Increased size
+              lineHeight: 1.1, // Tighter line height for large text
+              letterSpacing: '-0.03em',
               color: '#ffffff',
-              marginBottom: '24px',
+              marginBottom: '32px', // More breathing room below
             }}
           >
             "Menulis bukan tentang menyimpan kata — ini tentang{' '}
@@ -54,10 +54,10 @@ export default function AccentQuote() {
           <cite
             style={{
               fontFamily: 'var(--font-mono)',
-              fontSize: '11px',
-              letterSpacing: '0.1em',
+              fontSize: '12px', // Slightly larger
+              letterSpacing: '0.15em',
               textTransform: 'uppercase',
-              color: 'rgba(255,255,255,0.4)',
+              color: 'rgba(255,255,255,0.5)', // Slightly brighter
               fontStyle: 'normal',
             }}
           >

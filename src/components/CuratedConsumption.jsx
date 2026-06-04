@@ -11,29 +11,6 @@ const EXHIBITION_ITEMS = [
 
 export default function CuratedConsumption() {
   const [activeIdx, setActiveIdx] = useState(null);
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const check = () => {
-      const mobile = window.innerWidth < 769;
-      setIsMobile(mobile);
-      // On mobile, default-activate first item so bg image shows
-      if (mobile) setActiveIdx(0);
-      else setActiveIdx(null);
-    };
-    check();
-    window.addEventListener('resize', check);
-    return () => window.removeEventListener('resize', check);
-  }, []);
-
-  const handleInteraction = (idx) => {
-    if (isMobile) {
-      // Toggle on mobile tap — if same, keep it active (don't close)
-      setActiveIdx(idx);
-    }
-  };
-
-  const hoveredIdx = isMobile ? activeIdx : activeIdx;
 
   return (
     <section
@@ -48,36 +25,39 @@ export default function CuratedConsumption() {
         flexDirection: 'column',
       }}
     >
-      {/* Background Images Layer */}
-      {EXHIBITION_ITEMS.map((item, idx) => {
-        const isActive = hoveredIdx === idx;
-        return (
-          <div
-            key={idx}
-            style={{
-              position: 'absolute',
-              inset: 0,
-              backgroundImage: `url(${item.img})`,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              opacity: isActive ? 0.6 : 0,
-              transform: isActive ? 'scale(1)' : 'scale(1.05)',
-              transition: 'opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 1.2s cubic-bezier(0.16, 1, 0.3, 1)',
-              zIndex: 0,
-              pointerEvents: 'none',
-              willChange: 'opacity, transform',
-            }}
-          />
-        );
-      })}
+      {/* Desktop Background Images Layer (Hidden on Mobile) */}
+      <div className="hide-mobile">
+        {EXHIBITION_ITEMS.map((item, idx) => {
+          const isActive = activeIdx === idx;
+          return (
+            <div
+              key={idx}
+              style={{
+                position: 'absolute',
+                inset: 0,
+                backgroundImage: `url(${item.img})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                opacity: isActive ? 0.6 : 0,
+                transform: isActive ? 'scale(1)' : 'scale(1.05)',
+                transition: 'opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 1.2s cubic-bezier(0.16, 1, 0.3, 1)',
+                zIndex: 0,
+                pointerEvents: 'none',
+                willChange: 'opacity, transform',
+              }}
+            />
+          );
+        })}
+      </div>
 
-      {/* Dark overlay */}
+      {/* Dark overlay for desktop */}
       <div
+        className="hide-mobile"
         style={{
           position: 'absolute', inset: 0,
           background: 'linear-gradient(to top, rgba(18,18,20,1) 0%, rgba(18,18,20,0.4) 100%)',
           zIndex: 1, pointerEvents: 'none',
-          opacity: hoveredIdx !== null ? 1 : 0,
+          opacity: activeIdx !== null ? 1 : 0,
           transition: 'opacity 0.6s ease',
         }}
       />
@@ -89,26 +69,45 @@ export default function CuratedConsumption() {
       <div
         style={{
           position: 'relative', zIndex: 10,
-          padding: 'clamp(32px, 5vw, 60px) clamp(20px, 3vw, 40px)',
-          display: 'flex', justifyContent: 'space-between', alignItems: 'center'
+          padding: 'clamp(40px, 6vw, 80px) clamp(20px, 3vw, 40px) clamp(20px, 4vw, 40px) clamp(20px, 3vw, 40px)',
+          display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start',
+          flexWrap: 'wrap', gap: '24px'
         }}
       >
-        <span style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '0.2em', color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase' }}>
-          Koleksi &amp; Arsip
-        </span>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', maxWidth: '500px' }}>
+          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '0.2em', color: 'var(--color-accent-green)', textTransform: 'uppercase' }}>
+            [ Exhibition ]
+          </span>
+          <h2 style={{ 
+            fontFamily: 'var(--font-heading)', fontWeight: 400, fontSize: 'clamp(28px, 4vw, 40px)', 
+            letterSpacing: '0.02em', textTransform: 'uppercase', color: '#ffffff', margin: 0 
+          }}>
+            Koleksi &amp; Arsip
+          </h2>
+          <p style={{ 
+            fontFamily: 'var(--font-mono)', fontSize: '12px', color: 'rgba(255,255,255,0.6)', 
+            lineHeight: 1.6, margin: 0 
+          }}>
+            Kumpulan referensi kultural pilihan—dari album esensial, sinema lambat, hingga literatur distopia yang membentuk fondasi dan arah pemikiran.
+          </p>
+        </div>
+        
         <span
+          className="hide-mobile"
           style={{
             fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.2em',
             color: 'var(--color-accent-green)', border: '1px solid var(--color-accent-green)',
-            padding: '4px 12px', borderRadius: '100px'
+            padding: '6px 16px', borderRadius: '100px', alignSelf: 'flex-start',
+            marginTop: '8px'
           }}
         >
-          {isMobile ? '[ TAP TO REVEAL ]' : '[ HOVER TO REVEAL ]'}
+          [ HOVER TO REVEAL ]
         </span>
       </div>
 
-      {/* Massive Typography List */}
+      {/* DESKTOP VIEW: Massive Typography List */}
       <div
+        className="hide-mobile"
         style={{
           position: 'relative', zIndex: 10, flex: 1, display: 'flex',
           flexDirection: 'column', justifyContent: 'center',
@@ -117,17 +116,16 @@ export default function CuratedConsumption() {
       >
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0' }}>
           {EXHIBITION_ITEMS.map((item, idx) => {
-            const isHovered = hoveredIdx === idx;
-            const isDimmed = hoveredIdx !== null && !isHovered;
+            const isHovered = activeIdx === idx;
+            const isDimmed = activeIdx !== null && !isHovered;
 
             return (
               <div
                 key={idx}
-                onMouseEnter={() => !isMobile && setActiveIdx(idx)}
-                onMouseLeave={() => !isMobile && setActiveIdx(null)}
-                onClick={() => isMobile && handleInteraction(idx)}
+                onMouseEnter={() => setActiveIdx(idx)}
+                onMouseLeave={() => setActiveIdx(null)}
                 style={{
-                  cursor: isMobile ? 'pointer' : 'crosshair',
+                  cursor: 'crosshair',
                   padding: 'clamp(8px, 1.5vh, 16px) 0',
                   borderBottom: '1px solid rgba(255,255,255,0.1)',
                   display: 'flex', alignItems: 'center', gap: 'clamp(16px, 3vw, 40px)',
@@ -148,7 +146,6 @@ export default function CuratedConsumption() {
                   {item.title}
                 </h2>
 
-                {/* Meta Tag */}
                 <span
                   style={{
                     fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '0.2em',
@@ -156,38 +153,69 @@ export default function CuratedConsumption() {
                     opacity: isHovered ? 1 : 0,
                     transform: isHovered ? 'translateX(0)' : 'translateX(-20px)',
                     transition: 'all 0.4s ease 0.1s', whiteSpace: 'nowrap',
-                    display: 'none',
+                    display: 'inline-block',
                   }}
-                  className="reveal-tag"
                 >
                   {item.tag}
                 </span>
-
-                {/* Mobile: show tag below title when active */}
-                {isMobile && isHovered && (
-                  <span
-                    style={{
-                      fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.15em',
-                      color: 'var(--color-accent-green)', textTransform: 'uppercase', whiteSpace: 'nowrap',
-                    }}
-                  >
-                    {item.tag}
-                  </span>
-                )}
               </div>
             );
           })}
         </div>
       </div>
 
+      {/* MOBILE VIEW: Cinematic Cards */}
+      <div
+        className="hide-desktop"
+        style={{
+          position: 'relative', zIndex: 10, display: 'flex',
+          flexDirection: 'column', gap: '12px',
+          padding: '0 20px 40px 20px'
+        }}
+      >
+        {EXHIBITION_ITEMS.map((item, idx) => (
+          <div key={idx} style={{
+            position: 'relative',
+            height: '160px',
+            width: '100%',
+            overflow: 'hidden',
+            border: '1px solid rgba(255,255,255,0.1)',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'flex-end',
+            padding: '20px',
+            backgroundColor: 'var(--color-ink)'
+          }}>
+            <div style={{
+              position: 'absolute', inset: 0,
+              backgroundImage: `url(${item.img})`, backgroundSize: 'cover', backgroundPosition: 'center',
+              filter: 'grayscale(60%) contrast(1.1)',
+              opacity: 0.45
+            }} />
+            <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(18,18,20,0.95) 0%, rgba(18,18,20,0.1) 100%)' }} />
+            
+            <div style={{ position: 'relative', zIndex: 2 }}>
+              <span style={{ 
+                fontFamily: 'var(--font-mono)', fontSize: '9px', letterSpacing: '0.15em', 
+                color: 'var(--color-accent-green)', textTransform: 'uppercase', display: 'block', marginBottom: '4px'
+              }}>
+                {item.tag}
+              </span>
+              <h2 style={{ 
+                fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: '24px', 
+                letterSpacing: '-0.02em', color: '#ffffff', margin: 0, textTransform: 'uppercase', lineHeight: 1.1
+              }}>
+                {item.title}
+              </h2>
+            </div>
+          </div>
+        ))}
+      </div>
+
       <style>{`
-        @media (min-width: 769px) {
-          .reveal-tag { display: inline-block !important; }
-        }
         @media (max-width: 768px) {
           .curated-consumption-section {
             min-height: auto !important;
-            padding-bottom: 48px;
           }
         }
       `}</style>

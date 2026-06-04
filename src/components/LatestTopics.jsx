@@ -82,17 +82,16 @@ export default function LatestTopics() {
                   padding: 'clamp(20px, 3vw, 32px) clamp(20px, 3vw, 40px)',
                   borderBottom: '1px solid var(--color-ink)',
                   textDecoration: 'none',
-                  color: 'var(--color-ink)',
-                  transition: 'background-color 0.3s ease',
+                  transition: 'background-color 0.3s ease, color 0.3s ease',
                 }}
               >
                 <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
                   <span
+                    className="topic-category-tag"
                     style={{
                       fontFamily: 'var(--font-mono)',
                       fontSize: '10px',
                       letterSpacing: '0.1em',
-                      color: 'var(--color-ink)',
                       border: '1px solid var(--color-ink)',
                       padding: '2px 8px',
                       borderRadius: '50px',
@@ -131,22 +130,26 @@ export default function LatestTopics() {
                 >
                   <div style={{ textAlign: 'right' }}>
                     <p
+                      className="topic-meta-text"
                       style={{
                         fontFamily: 'var(--font-mono)',
                         fontSize: '10px',
                         letterSpacing: '0.08em',
                         color: 'var(--color-espresso)',
                         textTransform: 'uppercase',
+                        transition: 'color 0.3s ease',
                       }}
                     >
                       {topic.date}
                     </p>
                     <p
+                      className="topic-meta-text"
                       style={{
                         fontFamily: 'var(--font-mono)',
                         fontSize: '10px',
                         color: 'rgba(45,34,30,0.5)',
                         marginTop: '4px',
+                        transition: 'color 0.3s ease',
                       }}
                     >
                       {topic.readTime}
@@ -171,20 +174,39 @@ export default function LatestTopics() {
 
       {/* Internal CSS for Hover States */}
       <style>{`
+        .topic-row-hover {
+          color: var(--color-ink) !important;
+          background-color: transparent;
+        }
         .topic-row-hover:hover {
-          background-color: rgba(18, 18, 20, 0.03) !important;
+          background-color: var(--color-ink) !important;
+          color: #ffffff !important;
         }
         .topic-row-hover:hover .topic-title {
-          transform: translateX(8px);
+          transform: translateX(16px);
         }
         .topic-row-hover:hover .topic-arrow {
-          transform: translateX(4px) scale(1.1);
+          transform: translateX(8px) scale(1.2);
+        }
+        .topic-category-tag {
+          border-color: var(--color-ink) !important;
+          color: var(--color-ink) !important;
+          transition: all 0.3s ease;
+        }
+        .topic-row-hover:hover .topic-category-tag {
+          background-color: var(--color-accent-green) !important;
+          border-color: var(--color-accent-green) !important;
+          color: var(--color-ink) !important;
+        }
+        .topic-row-hover:hover .topic-meta-text {
+          color: rgba(255,255,255,0.7) !important;
         }
         @media (max-width: 768px) {
           .journal-count-meta { display: none !important; }
           .topic-grid-row {
             display: flex !important;
             flex-direction: column !important;
+            align-items: flex-start !important;
             gap: 6px !important;
             padding: 16px clamp(20px, 3vw, 40px) !important;
           }

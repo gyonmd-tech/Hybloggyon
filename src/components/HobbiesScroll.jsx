@@ -1,5 +1,5 @@
 // src/components/HobbiesScroll.jsx
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
@@ -18,65 +18,57 @@ const HOBBIES = [
 export default function HobbiesScroll() {
   const containerRef = useRef(null);
   const scrollContainerRef = useRef(null);
-  // Lazy init — reads window immediately so first render is correct
-  const [isMobile, setIsMobile] = useState(() =>
-    typeof window !== 'undefined' ? window.innerWidth < 769 : false
-  );
 
   useEffect(() => {
-    const check = () => setIsMobile(window.innerWidth < 769);
-    window.addEventListener('resize', check);
-    return () => window.removeEventListener('resize', check);
-  }, []);
+    let ctx = gsap.context(() => {
+      let mm = gsap.matchMedia();
+      
+      mm.add("(min-width: 769px)", () => {
+        const scrollEl = scrollContainerRef.current;
+        if (!scrollEl) return;
 
-  useEffect(() => {
-    // Opsi A: Skip GSAP entirely on mobile
-    if (isMobile) return;
+        const getScrollAmount = () => {
+          return -(scrollEl.scrollWidth - scrollEl.parentElement.offsetWidth);
+        };
 
-    const ctx = gsap.context(() => {
-      const scrollEl = scrollContainerRef.current;
-      if (!scrollEl) return;
-
-      const getScrollAmount = () => {
-        return -(scrollEl.scrollWidth - scrollEl.parentElement.offsetWidth);
-      };
-
-      const tween = gsap.to(scrollEl, {
-        x: getScrollAmount,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: containerRef.current,
-          start: 'top top',
-          end: () => `+=${scrollEl.scrollWidth - scrollEl.parentElement.offsetWidth}`,
-          pin: true,
-          scrub: true,
-          invalidateOnRefresh: true,
-        }
-      });
-
-      gsap.utils.toArray('.hobby-parallax-img').forEach((img) => {
-        gsap.fromTo(img,
-          { backgroundPosition: '0% 50%' },
-          {
-            backgroundPosition: '100% 50%',
-            ease: 'none',
-            scrollTrigger: {
-              trigger: img.closest('.hobby-white-card'),
-              containerAnimation: tween,
-              start: 'left right', end: 'right left', scrub: true,
-            }
+        const tween = gsap.to(scrollEl, {
+          x: getScrollAmount,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: containerRef.current,
+            start: 'top top',
+            end: () => `+=${scrollEl.scrollWidth - scrollEl.parentElement.offsetWidth}`,
+            pin: true,
+            scrub: true,
+            invalidateOnRefresh: true,
           }
-        );
+        });
+
+        gsap.utils.toArray('.hobby-parallax-img').forEach((img) => {
+          gsap.fromTo(img,
+            { backgroundPosition: '0% 50%' },
+            {
+              backgroundPosition: '100% 50%',
+              ease: 'none',
+              scrollTrigger: {
+                trigger: img.closest('.hobby-white-card'),
+                containerAnimation: tween,
+                start: 'left right', end: 'right left', scrub: true,
+              }
+            }
+          );
+        });
       });
     }, containerRef);
 
     return () => ctx.revert();
-  }, [isMobile]);
+  }, []);
 
-  // ── MOBILE: Vertical stacked grid layout ──────────────────────────────────
-  if (isMobile) {
-    return (
+  return (
+    <>
+      {/* ── MOBILE: Vertical stacked grid layout ────────────────────────────────── */}
       <section
+        className="block md:hidden w-full"
         style={{
           backgroundColor: '#f8f8f8',
           borderBottom: '1px solid rgba(0,0,0,0.1)',
@@ -84,6 +76,7 @@ export default function HobbiesScroll() {
       >
         {/* Mobile Section Header */}
         <div
+          className="w-full"
           style={{
             backgroundColor: 'var(--color-accent-green)',
             padding: '48px 20px',
@@ -103,16 +96,16 @@ export default function HobbiesScroll() {
         </div>
 
         {/* Mobile: Vertical list of cards */}
-        <div style={{ display: 'flex', flexDirection: 'column' }}>
+        <div className="flex flex-col w-full">
           {HOBBIES.map((hobby) => (
             <div
               key={hobby.id}
-              className="hobby-white-card"
               style={{
                 backgroundColor: '#f8f8f8',
                 borderBottom: '1px solid rgba(0,0,0,0.1)',
                 display: 'flex',
                 flexDirection: 'column',
+                width: '100%'
               }}
             >
               {/* Image */}
@@ -144,79 +137,78 @@ export default function HobbiesScroll() {
           ))}
         </div>
       </section>
-    );
-  }
 
-  // ── DESKTOP: Original GSAP horizontal scroll ──────────────────────────────
-  return (
-    <section
-      ref={containerRef}
-      style={{
-        height: '100svh',
-        display: 'flex',
-        backgroundColor: '#f8f8f8',
-        overflow: 'hidden',
-        borderBottom: '1px solid rgba(0,0,0,0.1)',
-      }}
-    >
-      {/* Left Panel */}
-      <div
+      {/* ── DESKTOP: GSAP horizontal scroll ────────────────────────────── */}
+      <section
+        ref={containerRef}
+        className="hidden md:flex w-full"
         style={{
-          width: '35vw', minWidth: '320px', height: '100%',
-          backgroundColor: 'var(--color-accent-green)',
-          padding: '80px 60px', display: 'flex', flexDirection: 'column',
-          justifyContent: 'center', flexShrink: 0, position: 'relative',
-          zIndex: 10, borderRight: '1px solid rgba(0,0,0,0.1)',
-          boxShadow: '10px 0 30px rgba(0,0,0,0.05)', overflow: 'hidden',
+          height: '100svh',
+          backgroundColor: '#f8f8f8',
+          overflow: 'hidden',
+          borderBottom: '1px solid rgba(0,0,0,0.1)',
         }}
       >
-        <div style={{ position: 'absolute', top: '-5%', left: '-10%', fontFamily: 'var(--font-heading)', fontWeight: 800, fontSize: '60vh', lineHeight: 1, color: 'rgba(0,0,0,0.03)', pointerEvents: 'none', zIndex: 0 }}>*</div>
-        <div style={{ position: 'relative', zIndex: 1 }}>
-          <p style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '0.15em', color: 'rgba(0,0,0,0.6)', textTransform: 'uppercase', marginBottom: '30px' }}>Observasi Periferal</p>
-          <div style={{ width: '40px', height: '2px', backgroundColor: 'rgba(0,0,0,0.8)', marginBottom: '30px' }} />
-          <h2 style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 'clamp(48px, 5vw, 72px)', lineHeight: 1, letterSpacing: '-0.02em', color: 'var(--color-ink)', textTransform: 'uppercase', marginBottom: '30px' }}>
-            MINAT &<br />OBSESI
-          </h2>
-          <p style={{ fontFamily: 'var(--font-mono)', fontSize: '13px', lineHeight: 1.6, color: 'rgba(0,0,0,0.7)', maxWidth: '280px', marginBottom: '60px' }}>
-            Kumpulan obsesi kecil dan observasi periferal. Hal-hal yang mengisi jeda waktu saat dunia tidak sedang melihat.
-          </p>
-          <p style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.1em', color: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <span style={{ display: 'inline-block', width: '30px', height: '1px', backgroundColor: 'rgba(0,0,0,0.3)' }} />
-            SCROLL HORIZONTALLY
-          </p>
+        {/* Left Panel */}
+        <div
+          style={{
+            width: '35vw', minWidth: '320px', height: '100%',
+            backgroundColor: 'var(--color-accent-green)',
+            padding: '80px 60px', display: 'flex', flexDirection: 'column',
+            justifyContent: 'center', flexShrink: 0, position: 'relative',
+            zIndex: 10, borderRight: '1px solid rgba(0,0,0,0.1)',
+            boxShadow: '10px 0 30px rgba(0,0,0,0.05)', overflow: 'hidden',
+          }}
+        >
+          <div style={{ position: 'absolute', top: '-5%', left: '-10%', fontFamily: 'var(--font-heading)', fontWeight: 800, fontSize: '60vh', lineHeight: 1, color: 'rgba(0,0,0,0.03)', pointerEvents: 'none', zIndex: 0 }}>*</div>
+          <div style={{ position: 'relative', zIndex: 1 }}>
+            <p style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '0.15em', color: 'rgba(0,0,0,0.6)', textTransform: 'uppercase', marginBottom: '30px' }}>Observasi Periferal</p>
+            <div style={{ width: '40px', height: '2px', backgroundColor: 'rgba(0,0,0,0.8)', marginBottom: '30px' }} />
+            <h2 style={{ fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 'clamp(48px, 5vw, 72px)', lineHeight: 1, letterSpacing: '-0.02em', color: 'var(--color-ink)', textTransform: 'uppercase', marginBottom: '30px' }}>
+              MINAT &<br />OBSESI
+            </h2>
+            <p style={{ fontFamily: 'var(--font-mono)', fontSize: '13px', lineHeight: 1.6, color: 'rgba(0,0,0,0.7)', maxWidth: '280px', marginBottom: '60px' }}>
+              Kumpulan obsesi kecil dan observasi periferal. Hal-hal yang mengisi jeda waktu saat dunia tidak sedang melihat.
+            </p>
+            <p style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.1em', color: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <span style={{ display: 'inline-block', width: '30px', height: '1px', backgroundColor: 'rgba(0,0,0,0.3)' }} />
+              SCROLL HORIZONTALLY
+            </p>
+          </div>
         </div>
-      </div>
 
-      {/* Right: Horizontal scroll cards */}
-      <div style={{ display: 'flex', height: '100%', flexGrow: 1, overflow: 'hidden' }}>
-        <div ref={scrollContainerRef} style={{ display: 'flex', height: '100%', willChange: 'transform' }}>
-          {HOBBIES.map((hobby) => (
-            <div
-              key={hobby.id}
-              className="hobby-white-card"
-              style={{
-                width: '600px', height: '100%', flexShrink: 0,
-                backgroundColor: '#f8f8f8', borderRight: '1px solid rgba(0,0,0,0.1)',
-                display: 'flex', flexDirection: 'column', position: 'relative',
-              }}
-            >
+        {/* Right: Horizontal scroll cards */}
+        <div style={{ display: 'flex', height: '100%', flexGrow: 1, overflow: 'hidden' }}>
+          <div ref={scrollContainerRef} style={{ display: 'flex', height: '100%', willChange: 'transform' }}>
+            {HOBBIES.map((hobby) => (
               <div
-                className="hobby-parallax-img"
-                style={{ width: '100%', height: '45%', backgroundImage: `url('${hobby.bg}')`, backgroundSize: 'cover', backgroundPosition: '0% 50%', filter: 'grayscale(100%)' }}
-              />
-              <div style={{ padding: '40px', display: 'flex', flexDirection: 'column', flexGrow: 1, position: 'relative' }}>
-                <div style={{ marginTop: 'auto', position: 'relative', zIndex: 2 }}>
-                  <div style={{ backgroundColor: 'rgba(212, 233, 196, 0.6)', display: 'inline-block', padding: '4px 12px', marginBottom: '20px' }}>
-                    <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', fontWeight: 600, letterSpacing: '0.1em', color: '#1a1a1a' }}>{hobby.tag}</span>
+                key={hobby.id}
+                className="hobby-white-card"
+                style={{
+                  width: '500px', height: '100%', flexShrink: 0,
+                  backgroundColor: '#f8f8f8', borderRight: '1px solid rgba(0,0,0,0.1)',
+                  display: 'flex', flexDirection: 'column', position: 'relative',
+                }}
+              >
+                <div
+                  className="hobby-parallax-img"
+                  style={{ width: '100%', height: '45%', backgroundImage: `url('${hobby.bg}')`, backgroundSize: 'cover', backgroundPosition: '0% 50%', filter: 'grayscale(100%)' }}
+                />
+                <div style={{ padding: '40px', display: 'flex', flexDirection: 'column', flexGrow: 1, position: 'relative' }}>
+                  <div style={{ marginTop: 'auto', position: 'relative', zIndex: 2 }}>
+                    <div style={{ backgroundColor: 'rgba(212, 233, 196, 0.6)', display: 'inline-block', padding: '4px 12px', marginBottom: '20px' }}>
+                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', fontWeight: 600, letterSpacing: '0.1em', color: '#1a1a1a' }}>{hobby.tag}</span>
+                    </div>
+                    <h3 style={{ fontFamily: 'var(--font-heading)', fontWeight: 800, fontSize: '28px', lineHeight: 1.1, letterSpacing: '-0.02em', color: '#111111', marginBottom: '16px', whiteSpace: 'pre-line' }}>{hobby.title}</h3>
+                    <p style={{ fontFamily: 'var(--font-mono)', fontSize: '14px', lineHeight: 1.6, color: '#666666', letterSpacing: '0.02em' }}>{hobby.description}</p>
                   </div>
-                  <h3 style={{ fontFamily: 'var(--font-heading)', fontWeight: 800, fontSize: '28px', lineHeight: 1.1, letterSpacing: '-0.02em', color: '#111111', marginBottom: '16px', whiteSpace: 'pre-line' }}>{hobby.title}</h3>
-                  <p style={{ fontFamily: 'var(--font-mono)', fontSize: '14px', lineHeight: 1.6, color: '#666666', letterSpacing: '0.02em' }}>{hobby.description}</p>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </>
   );
 }
+

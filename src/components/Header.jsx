@@ -17,17 +17,10 @@ export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [isHidden, setIsHidden] = useState(false);
   const [hoveredPath, setHoveredPath] = useState(null);
-  const [isMobile, setIsMobile] = useState(
-    () => typeof window !== 'undefined' ? window.innerWidth < 769 : false
-  );
+  
+  // Always render both and hide via CSS to avoid hydration mismatch
   const location = useLocation();
   const closeTimerRef = useRef(null);
-
-  useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 769);
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
 
   // Close mobile menu on route change
   useEffect(() => { setMobileMenuOpen(false); }, [location]);
@@ -55,15 +48,13 @@ export default function Header() {
   }, []);
 
   const handleEnter = useCallback(() => {
-    if (isMobile) return;
     if (closeTimerRef.current) { clearTimeout(closeTimerRef.current); closeTimerRef.current = null; }
     setMenuOpen(true);
-  }, [isMobile]);
+  }, []);
 
   const handleLeave = useCallback(() => {
-    if (isMobile) return;
     closeTimerRef.current = setTimeout(() => { setMenuOpen(false); setHoveredPath(null); }, 300);
-  }, [isMobile]);
+  }, []);
 
   return (
     <>
@@ -125,8 +116,6 @@ export default function Header() {
 
       {/* ── MAIN FLOATING HEADER ── */}
       <motion.div
-        onMouseEnter={handleEnter}
-        onMouseLeave={handleLeave}
         initial={{ y: -100, x: '-50%', opacity: 0 }}
         animate={{ y: isHidden && !menuOpen && !mobileMenuOpen ? -150 : 0, x: '-50%', opacity: 1 }}
         transition={{ type: 'spring', stiffness: 350, damping: 25 }}
@@ -136,106 +125,111 @@ export default function Header() {
           gap: '12px', padding: '10px 20px 40px 20px', marginTop: '-10px',
         }}
       >
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-          {/* Logo pill */}
-          <motion.a
-            href="/"
-            whileHover="hover"
-            initial="initial"
-            style={{
-              display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-              backgroundColor: scrolled && !menuOpen ? 'rgba(18, 18, 20, 0.85)' : 'rgba(18, 18, 20, 0.95)',
-              backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)',
-              borderRadius: '999px', padding: isMobile ? '10px 28px' : '10px 48px',
-              textDecoration: 'none', border: '1px solid rgba(255,255,255,0.1)',
-              boxShadow: menuOpen ? '0 16px 40px rgba(0,0,0,0.4)' : '0 8px 24px rgba(0,0,0,0.2)',
-              position: 'relative', overflow: 'hidden', willChange: 'transform, backdrop-filter',
-            }}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          {/* Logo container */}
+          <div
+            onMouseEnter={handleEnter}
+            onMouseLeave={handleLeave}
           >
-            <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, background: 'linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0) 100%)', pointerEvents: 'none', borderRadius: '999px' }} />
-            <motion.span
-              variants={{ initial: { rotate: 0, scale: 1 }, hover: { rotate: 180, scale: 1.2 } }}
-              transition={{ type: 'spring', stiffness: 300, damping: 15 }}
-              style={{ color: '#ffffff', marginRight: '12px', fontSize: '18px', display: 'inline-block', zIndex: 1 }}
-            >✦</motion.span>
-            <span style={{ fontFamily: 'var(--font-heading)', fontWeight: 400, fontSize: isMobile ? '18px' : '22px', letterSpacing: '-0.04em', color: '#ffffff', lineHeight: 1, position: 'relative', zIndex: 1 }}>
-              HyBloggyon
-            </span>
-          </motion.a>
+            <motion.a
+              href="/"
+              whileHover="hover"
+              initial="initial"
+              style={{
+                display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                backgroundColor: scrolled && !menuOpen ? 'rgba(18, 18, 20, 0.95)' : 'var(--color-ink)',
+                padding: '12px 32px',
+                textDecoration: 'none',
+                border: '1px solid rgba(255,255,255,0.15)',
+                boxShadow: menuOpen ? '6px 6px 0 rgba(0,0,0,0.8)' : '4px 4px 0 rgba(0,0,0,0.6)',
+                transition: 'box-shadow 0.2s',
+              }}
+            >
+              <motion.span
+                variants={{ initial: { rotate: 0, scale: 1 }, hover: { rotate: 90, scale: 1.1 } }}
+                transition={{ type: 'spring', stiffness: 300, damping: 15 }}
+                style={{ color: '#ffffff', marginRight: '16px', fontSize: '16px', display: 'inline-block', zIndex: 1 }}
+              >✦</motion.span>
+              <span style={{ fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: '20px', letterSpacing: '-0.02em', color: '#ffffff', lineHeight: 1, position: 'relative', zIndex: 1 }}>
+                HyBloggyon
+              </span>
+            </motion.a>
+          </div>
 
-          {/* Hamburger button — mobile only */}
-          {isMobile && (
+          {/* Hamburger button (Mobile only - hidden on md) */}
+          <div className="md:hidden">
             <motion.button
               onClick={() => setMobileMenuOpen(true)}
-              whileTap={{ scale: 0.9 }}
+              whileTap={{ scale: 0.95 }}
               style={{
                 display: 'flex', flexDirection: 'column', justifyContent: 'center',
-                alignItems: 'center', gap: '5px',
-                backgroundColor: 'rgba(18, 18, 20, 0.95)', backdropFilter: 'blur(24px)',
-                WebkitBackdropFilter: 'blur(24px)', border: '1px solid rgba(255,255,255,0.1)',
-                borderRadius: '999px', width: '44px', height: '44px',
+                alignItems: 'center', gap: '6px',
+                backgroundColor: 'var(--color-ink)', 
+                border: '1px solid rgba(255,255,255,0.15)',
+                boxShadow: '4px 4px 0 rgba(0,0,0,0.6)',
+                width: '48px', height: '48px',
                 cursor: 'pointer', padding: 0, flexShrink: 0,
               }}
               aria-label="Buka menu navigasi"
             >
-              <span style={{ display: 'block', width: '18px', height: '1.5px', backgroundColor: '#ffffff' }} />
-              <span style={{ display: 'block', width: '18px', height: '1.5px', backgroundColor: '#ffffff' }} />
-              <span style={{ display: 'block', width: '12px', height: '1.5px', backgroundColor: '#ffffff', alignSelf: 'flex-start', marginLeft: '3px' }} />
+              <span style={{ display: 'block', width: '22px', height: '2px', backgroundColor: '#ffffff' }} />
+              <span style={{ display: 'block', width: '22px', height: '2px', backgroundColor: '#ffffff' }} />
             </motion.button>
-          )}
+          </div>
         </div>
 
-        {/* Desktop nav pill */}
-        {!isMobile && (
+        {/* Desktop nav menu (Hidden on mobile) */}
+        <div className="hidden md:block">
           <AnimatePresence>
             {menuOpen && (
-              <motion.div
-                initial={{ opacity: 0, y: -20, scale: 0.9 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: -20, scale: 0.9 }}
-                transition={{ type: 'spring', stiffness: 400, damping: 25 }}
-                style={{
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  backgroundColor: 'rgba(18, 18, 20, 0.85)', backdropFilter: 'blur(24px)',
-                  WebkitBackdropFilter: 'blur(24px)', borderRadius: '999px',
-                  padding: '6px 12px', border: '1px solid rgba(255,255,255,0.1)',
-                  boxShadow: '0 16px 48px rgba(0,0,0,0.25)', willChange: 'transform, opacity',
-                }}
-              >
-                <nav style={{ display: 'flex', alignItems: 'center', gap: '8px', position: 'relative' }} onMouseLeave={() => setHoveredPath(null)}>
-                  {NAV_ITEMS.map((item, i) => {
-                    const isActive = location.pathname === item.href || (item.href !== '/' && location.pathname.startsWith(item.href));
-                    const isHovered = hoveredPath === item.href;
-                    return (
-                      <motion.a
-                        key={item.label} href={item.href}
-                        initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, scale: 0.9 }}
-                        transition={{ delay: i * 0.04, type: 'spring', stiffness: 400, damping: 25 }}
-                        onMouseEnter={() => setHoveredPath(item.href)}
-                        style={{ position: 'relative', padding: '8px 28px', textDecoration: 'none', zIndex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center' }}
-                      >
-                        {isHovered && !isActive && (
-                          <motion.div layoutId="nav-hover" transition={{ type: 'spring', stiffness: 500, damping: 30 }}
-                            style={{ position: 'absolute', inset: 0, backgroundColor: 'rgba(255,255,255,0.1)', borderRadius: '999px', zIndex: -1 }} />
-                        )}
-                        {isActive && (
-                          <motion.div layoutId="nav-active" transition={{ type: 'spring', stiffness: 500, damping: 30 }}
-                            style={{ position: 'absolute', inset: 0, backgroundColor: '#ffffff', borderRadius: '999px', zIndex: -1, boxShadow: '0 4px 12px rgba(255,255,255,0.2)' }} />
-                        )}
-                        <span style={{
-                          position: 'relative', fontFamily: 'Switzer, var(--font-sans)', fontSize: '12px',
-                          fontWeight: isActive ? 600 : 500, letterSpacing: '0.15em', textTransform: 'uppercase',
-                          color: isActive ? 'var(--color-ink)' : (isHovered ? '#ffffff' : 'rgba(255,255,255,0.5)'),
-                          transition: 'color 0.2s', whiteSpace: 'nowrap', zIndex: 2,
-                        }}>{item.label}</span>
-                      </motion.a>
-                    );
-                  })}
-                </nav>
-              </motion.div>
+              <div onMouseEnter={handleEnter} onMouseLeave={handleLeave}>
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ type: 'spring', stiffness: 400, damping: 25 }}
+                  style={{
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    backgroundColor: 'var(--color-ink)',
+                    padding: '8px 16px', border: '1px solid rgba(255,255,255,0.15)',
+                    boxShadow: '4px 4px 0 rgba(0,0,0,0.6)',
+                  }}
+                >
+                  <nav style={{ display: 'flex', alignItems: 'center', gap: '8px', position: 'relative' }} onMouseLeave={() => setHoveredPath(null)}>
+                    {NAV_ITEMS.map((item, i) => {
+                      const isActive = location.pathname === item.href || (item.href !== '/' && location.pathname.startsWith(item.href));
+                      const isHovered = hoveredPath === item.href;
+                      return (
+                        <motion.a
+                          key={item.label} href={item.href}
+                          initial={{ opacity: 0, y: 5 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
+                          transition={{ delay: i * 0.04, type: 'spring', stiffness: 400, damping: 25 }}
+                          onMouseEnter={() => setHoveredPath(item.href)}
+                          style={{ position: 'relative', padding: '8px 24px', textDecoration: 'none', zIndex: 1, display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+                        >
+                          {isHovered && !isActive && (
+                            <motion.div layoutId="nav-hover" transition={{ type: 'spring', stiffness: 500, damping: 30 }}
+                              style={{ position: 'absolute', inset: 0, backgroundColor: 'rgba(255,255,255,0.1)', zIndex: -1 }} />
+                          )}
+                          {isActive && (
+                            <motion.div layoutId="nav-active" transition={{ type: 'spring', stiffness: 500, damping: 30 }}
+                              style={{ position: 'absolute', inset: 0, backgroundColor: '#ffffff', zIndex: -1 }} />
+                          )}
+                          <span style={{
+                            position: 'relative', fontFamily: 'var(--font-mono)', fontSize: '12px',
+                            fontWeight: isActive ? 600 : 500, letterSpacing: '0.1em', textTransform: 'uppercase',
+                            color: isActive ? 'var(--color-ink)' : (isHovered ? '#ffffff' : 'rgba(255,255,255,0.5)'),
+                            transition: 'color 0.2s', whiteSpace: 'nowrap', zIndex: 2,
+                          }}>{item.label}</span>
+                        </motion.a>
+                      );
+                    })}
+                  </nav>
+                </motion.div>
+              </div>
             )}
           </AnimatePresence>
-        )}
+        </div>
       </motion.div>
     </>
   );

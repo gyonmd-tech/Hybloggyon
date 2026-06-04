@@ -4,6 +4,7 @@ import SplitType from 'split-type';
 
 export default function HeroBanner() {
   const titleRef = useRef(null);
+  const mobileTitleRef = useRef(null);
   const bgRef = useRef(null);
   const frameRef = useRef(null);
 
@@ -15,10 +16,9 @@ export default function HeroBanner() {
         { scale: 1, filter: 'grayscale(100%) contrast(1.2) brightness(0.9)', duration: 2.5, ease: 'power3.out', delay: 1.5 }
       );
 
-      // 2. Title Character Stagger
+      // 2. Title Character Stagger (Desktop)
       if (titleRef.current) {
         const text = new SplitType(titleRef.current, { types: 'chars' });
-        // Hide original text overflow during animation
         gsap.set(titleRef.current, { overflow: 'hidden' });
         
         gsap.fromTo(text.chars, 
@@ -31,14 +31,38 @@ export default function HeroBanner() {
             stagger: 0.05, 
             ease: 'expo.out', 
             delay: 2.2,
-            onComplete: () => { text.revert(); } // Clean up DOM after animation
+            onComplete: () => { text.revert(); }
+          }
+        );
+
+        // Animate the center description alongside the title
+        gsap.fromTo('.hero-center-desc',
+          { y: 20, opacity: 0 },
+          { y: 0, opacity: 1, duration: 1.5, ease: 'power2.out', delay: 3.0 }
+        );
+      }
+
+      // 2b. Title Stagger (Mobile)
+      if (mobileTitleRef.current) {
+        const mobileText = new SplitType(mobileTitleRef.current, { types: 'chars' });
+        gsap.set(mobileTitleRef.current, { overflow: 'hidden' });
+        
+        gsap.fromTo(mobileText.chars, 
+          { y: 60, opacity: 0 },
+          { 
+            y: 0, 
+            opacity: 1, 
+            duration: 1, 
+            stagger: 0.03, 
+            ease: 'expo.out', 
+            delay: 2.2,
+            onComplete: () => { mobileText.revert(); }
           }
         );
       }
 
       // 3. Corner Frame Reveal
       if (frameRef.current) {
-        // Animate the two rows (top row, bottom row)
         gsap.fromTo(frameRef.current.children,
           { opacity: 0, y: 20 },
           { opacity: 1, y: 0, duration: 1.5, stagger: 0.2, ease: 'power2.out', delay: 2.6 }
@@ -94,15 +118,38 @@ export default function HeroBanner() {
         .hero-interactive {
           pointer-events: auto;
         }
+        
+        /* Mobile Layout Optimizations */
         @media (max-width: 768px) {
-          .hero-frame { inset: 20px; }
+          .hero-frame { 
+            inset: 24px; 
+            justify-content: flex-end; /* Push everything to bottom */
+            padding-bottom: 12px;
+          }
           .hero-row-top { display: none; }
-          .hero-row-bottom { flex-direction: column; align-items: flex-start; gap: 16px; padding-bottom: 8px; }
-          .hero-align-right { text-align: left !important; }
-          .hero-cta-btn { display: inline-block !important; width: auto !important; padding: 14px 28px !important; font-size: 11px; }
-          .hero-center { padding: 0 20px; }
+          .hero-row-bottom { 
+            flex-direction: column; 
+            align-items: flex-start; 
+            gap: 32px; 
+            width: 100%;
+          }
+          .hero-align-right { 
+            text-align: left !important; 
+            width: 100%; 
+          }
+          .hero-cta-btn { 
+            display: flex !important; 
+            justify-content: space-between;
+            align-items: center;
+            width: 100% !important; 
+            padding: 18px 24px !important; 
+            font-size: 12px; 
+          }
           .hero-investigating { display: none !important; }
-          .hero-desc-block { display: none !important; }
+          .hero-desc-block { 
+            display: block !important; 
+            max-width: 100% !important; 
+          }
         }
       `}</style>
 
@@ -129,7 +176,7 @@ export default function HeroBanner() {
         style={{
           position: 'absolute',
           inset: 0,
-          background: 'linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.5) 40%, rgba(0,0,0,1) 100%)',
+          background: 'linear-gradient(to bottom, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.6) 50%, rgba(0,0,0,1) 100%)',
           zIndex: 1,
         }}
       />
@@ -137,8 +184,8 @@ export default function HeroBanner() {
       {/* Grain texture */}
       <div className="grain-overlay" aria-hidden="true" />
 
-      {/* Dead Center Title */}
-      <div className="hero-center">
+      {/* Dead Center Title (Desktop Only) */}
+      <div className="hero-center hide-mobile">
         <h1
           ref={titleRef}
           style={{
@@ -150,7 +197,7 @@ export default function HeroBanner() {
             color: '#ffffff',
             margin: 0,
             textShadow: '0 10px 40px rgba(0,0,0,0.5)',
-            clipPath: 'polygon(0 0, 100% 0, 100% 120%, 0 120%)', // For elegant reveal
+            clipPath: 'polygon(0 0, 100% 0, 100% 120%, 0 120%)',
           }}
         >
           Field Study.
@@ -160,7 +207,7 @@ export default function HeroBanner() {
       {/* The 4-Corner Frame Layout */}
       <div className="hero-frame" ref={frameRef}>
         
-        {/* Top Row */}
+        {/* Top Row (Desktop Only) */}
         <div className="hero-row-top">
           <div>
             <span style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'rgba(255,255,255,0.7)', letterSpacing: '0.15em', textTransform: 'uppercase' }}>
@@ -176,8 +223,25 @@ export default function HeroBanner() {
 
         {/* Bottom Row */}
         <div className="hero-row-bottom">
-          <div className="hero-desc-block" style={{ maxWidth: '300px' }}>
-             <span
+          <div className="hero-desc-block" style={{ maxWidth: '340px' }}>
+            {/* Mobile Title */}
+            <h1 
+              className="hide-desktop"
+              ref={mobileTitleRef}
+              style={{
+                fontFamily: 'var(--font-heading)',
+                fontWeight: 300,
+                fontSize: '56px',
+                lineHeight: 1,
+                letterSpacing: '-0.04em',
+                color: '#ffffff',
+                marginBottom: '24px',
+              }}
+            >
+              Field Study.
+            </h1>
+
+            <span
               style={{
                 fontFamily: 'var(--font-mono)',
                 fontSize: '11px',
@@ -193,8 +257,8 @@ export default function HeroBanner() {
             <p
               style={{
                 fontFamily: 'var(--font-mono)',
-                fontSize: '12px',
-                color: 'rgba(255,255,255,0.7)',
+                fontSize: '13px',
+                color: 'rgba(255,255,255,0.8)',
                 lineHeight: 1.6,
                 margin: 0,
               }}
@@ -242,7 +306,8 @@ export default function HeroBanner() {
                 e.currentTarget.style.transform = 'translateY(0)';
               }}
             >
-              Mulai Membaca →
+              <span>Mulai Membaca</span>
+              <span>→</span>
             </a>
           </div>
         </div>

@@ -106,45 +106,46 @@ export default function FeaturedEssays() {
         position: 'relative',
       }}
     >
-      {/* Aesthetic Minimalist Section Header */}
+      {/* Editorial Brutalist Section Header Transition */}
       <div
         style={{
-          padding: 'clamp(20px, 3vw, 32px) clamp(20px, 3vw, 40px)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          backgroundColor: 'var(--color-background-ash)',
-          borderBottom: '1px solid var(--color-ink)',
-          borderTop: '1px solid var(--color-ink)',
+          padding: 'clamp(80px, 12vw, 160px) clamp(20px, 3vw, 40px) 0 clamp(20px, 3vw, 40px)',
+          backgroundColor: '#0a0a0a',
+          color: '#ffffff',
           position: 'relative',
           zIndex: 10,
         }}
       >
-        <h2
-          style={{
-            fontFamily: 'var(--font-heading)',
-            fontWeight: 400,
-            fontSize: 'clamp(24px, 3vw, 32px)',
-            letterSpacing: '-0.02em',
-            color: 'var(--color-ink)',
-            margin: 0,
-          }}
-        >
-          Esai Pilihan
-        </h2>
-
-        <span
-          className="essay-sorotan-badge"
-          style={{
-            fontFamily: 'var(--font-mono)',
-            fontSize: '11px',
-            letterSpacing: '0.2em',
-            textTransform: 'uppercase',
-            color: 'var(--color-espresso)',
-          }}
-        >
-          [ Sorotan Pilihan ]
-        </span>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', borderBottom: '2px solid #ffffff', paddingBottom: '32px' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
+            <span
+              style={{
+                fontFamily: 'var(--font-mono)',
+                fontSize: '11px',
+                letterSpacing: '0.2em',
+                textTransform: 'uppercase',
+                color: 'var(--color-accent-green)',
+              }}
+            >
+              [ Sorotan Utama ]
+            </span>
+            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'rgba(255,255,255,0.4)', letterSpacing: '0.15em' }}>
+              VOL. 01
+            </span>
+          </div>
+          <h2
+            style={{
+              fontFamily: 'var(--font-heading)',
+              fontWeight: 400, // Minimalist, not too bold
+              fontSize: 'clamp(40px, 8vw, 80px)',
+              letterSpacing: '-0.02em',
+              margin: 0,
+              textTransform: 'uppercase',
+            }}
+          >
+            Esai Pilihan
+          </h2>
+        </div>
       </div>
 
       {/* Essay panels */}

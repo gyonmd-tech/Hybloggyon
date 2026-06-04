@@ -75,8 +75,6 @@ export default function IntroDescription() {
       </div>
       <style>{`
         @media (max-width: 768px) {
-          .intro-section { text-align: left !important; }
-          .intro-section > div > div { align-items: flex-start !important; text-align: left !important; }
           .intro-description-text { font-size: clamp(24px, 7vw, 36px) !important; }
           .intro-meta-text { display: none; }
         }
