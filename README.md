@@ -1,16 +1,32 @@
-# React + Vite
+# HyBloggyon // Field Study
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Sebuah *workshop* digital dan repositori pemikiran pribadi. Dibangun dengan estetika desain *editorial neo-brutalist* yang terinspirasi dari Awwwards, menonjolkan tipografi brutal, arsitektur grid yang kaku, dan warna-warna monokromatik dengan sentuhan aksen natural.
 
-Currently, two official plugins are available:
+**[🌐 Kunjungi Website Live](https://hybloggyon.vercel.app/)** *(Ganti dengan link Vercel Anda yang sebenarnya nanti)*
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## 🏛 Arsitektur Proyek
 
-## React Compiler
+Blog ini tidak dibangun menggunakan CMS konvensional (seperti WordPress), melainkan direkayasa sebagai **Static Site / Single Page Application (SPA)** yang sangat cepat menggunakan teknologi modern:
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **Framework:** React 19 + Vite
+- **Styling:** Tailwind CSS v4 (menggunakan custom Design Tokens)
+- **Konten:** MDX (Markdown dengan dukungan React Component)
+- **Animasi:** GSAP (ScrollTrigger)
+- **Deployment:** Vercel (CI/CD Auto-Deploy)
 
-## Expanding the ESLint configuration
+## 📂 Struktur Direktori Utama
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- `/content/` - Tempat semua artikel MDX dan metadata konten disimpan.
+- `/public/images/` - Penyimpanan aset gambar statis (cover artikel, hero image).
+- `/src/components/` - Blok-blok antarmuka (*UI components*) modular.
+- `/src/pages/` - Halaman-halaman utama penyusun struktur *routing*.
+- `/src/styles/` - Berisi `global.css` sebagai fondasi visual sistem desain.
+
+## 📝 Manajemen Konten
+
+Proyek ini menggunakan arsitektur *Git-based CMS*. Untuk menulis artikel baru, Anda hanya perlu membuat *file* `.mdx` baru di dalam folder `src/content/posts/`, menulis menggunakan Markdown, dan melakukan `git push`. Vercel akan otomatis merakit ulang *website* dan menampilkannya ke publik dalam hitungan detik.
+
+*(Panduan lengkap manajemen konten dapat dilihat pada file `PANDUAN-KONTEN.md` di proyek ini).*
+
+---
+*Didesain dan dikembangkan sebagai ruang jeda dan kontemplasi digital.*
