@@ -72,9 +72,13 @@ export default function BookRow({ book }) {
     <>
       <style>{`
         .book-row { display: grid; grid-template-columns: 80px 1fr auto; gap: 24px; align-items: center; padding: 20px 0; border-bottom: 1px solid var(--color-ink); transition: background 0.15s ease; }
+        .book-cover { width: 80px; height: 120px; border: 1px solid var(--color-ink); box-shadow: 3px 3px 0px var(--color-ink); overflow: hidden; flex-shrink: 0; transition: transform 0.2s ease; }
+        .book-title { font-family: var(--font-heading); font-weight: 300; font-size: 1.25rem; letter-spacing: -0.01em; color: var(--color-ink); margin: 0 0 4px 0; line-height: 1.2; }
         .book-status-tag { flex-shrink: 0; }
         @media (max-width: 768px) {
-          .book-row { grid-template-columns: 64px 1fr; gap: 16px; }
+          .book-row { grid-template-columns: 52px 1fr; gap: 14px; padding: 14px 0; }
+          .book-cover { width: 52px; height: 78px; box-shadow: 2px 2px 0px var(--color-ink); }
+          .book-title { font-size: 0.95rem; }
           .book-status-tag { display: none; }
         }
       `}</style>
@@ -85,15 +89,7 @@ export default function BookRow({ book }) {
     >
       {/* Cover 80×120px */}
       <div
-        style={{
-          width: '80px',
-          height: '120px',
-          border: '1px solid var(--color-ink)',
-          boxShadow: '3px 3px 0px var(--color-ink)',
-          overflow: 'hidden',
-          flexShrink: 0,
-          transition: 'transform 0.2s ease',
-        }}
+        className="book-cover"
         onMouseEnter={(e) => {
           e.currentTarget.style.transform = 'translateY(-3px)';
           e.currentTarget.style.boxShadow = '4px 5px 0px var(--color-ink)';
@@ -143,17 +139,7 @@ export default function BookRow({ book }) {
 
       {/* Metadata + kesan */}
       <div style={{ minWidth: 0 }}>
-        <p
-          style={{
-            fontFamily: 'var(--font-heading)',
-            fontWeight: 300,
-            fontSize: '1.25rem',
-            letterSpacing: '-0.01em',
-            color: 'var(--color-ink)',
-            margin: '0 0 4px 0',
-            lineHeight: 1.2,
-          }}
-        >
+        <p className="book-title">
           {book.title}
         </p>
         <span

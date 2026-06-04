@@ -77,7 +77,7 @@ export default function NotesStream({ activeTag, searchQuery }) {
       `}</style>
       <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
         
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '40px' }}>
+        <div className="notes-stream-header">
           <span style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--color-espresso)' }}>
             Notes Stream // {filtered.length} entries
           </span>

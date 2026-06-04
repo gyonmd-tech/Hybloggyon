@@ -138,20 +138,54 @@ export default function Header() {
               style={{
                 display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
                 backgroundColor: scrolled && !menuOpen ? 'rgba(18, 18, 20, 0.95)' : 'var(--color-ink)',
-                padding: '12px 32px',
+                padding: '10px 20px',
                 textDecoration: 'none',
                 border: '1px solid rgba(255,255,255,0.15)',
                 boxShadow: menuOpen ? '6px 6px 0 rgba(0,0,0,0.8)' : '4px 4px 0 rgba(0,0,0,0.6)',
                 transition: 'box-shadow 0.2s',
+                gap: '10px',
               }}
             >
-              <motion.span
-                variants={{ initial: { rotate: 0, scale: 1 }, hover: { rotate: 90, scale: 1.1 } }}
-                transition={{ type: 'spring', stiffness: 300, damping: 15 }}
-                style={{ color: '#ffffff', marginRight: '16px', fontSize: '16px', display: 'inline-block', zIndex: 1 }}
-              >✦</motion.span>
-              <span style={{ fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: '20px', letterSpacing: '-0.02em', color: '#ffffff', lineHeight: 1, position: 'relative', zIndex: 1 }}>
-                HyBloggyon
+              {/* Custom editorial mark — a bracketed 'H' monogram */}
+              <svg
+                width="28" height="28" viewBox="0 0 28 28" fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                style={{ flexShrink: 0 }}
+              >
+                {/* Outer bracket frame */}
+                <rect x="1" y="1" width="26" height="26" stroke="rgba(255,255,255,0.25)" strokeWidth="0.75" />
+                {/* Left vertical bar */}
+                <rect x="5" y="6" width="2.5" height="16" fill="#ffffff" />
+                {/* Right vertical bar */}
+                <rect x="20.5" y="6" width="2.5" height="16" fill="#ffffff" />
+                {/* Crossbar */}
+                <rect x="7.5" y="12.5" width="13" height="2.2" fill="rgba(255,255,255,0.6)" />
+                {/* Top-left serif tick */}
+                <rect x="3.5" y="5" width="5" height="1" fill="rgba(255,255,255,0.35)" />
+                {/* Top-right serif tick */}
+                <rect x="19.5" y="5" width="5" height="1" fill="rgba(255,255,255,0.35)" />
+                {/* Bottom-left serif tick */}
+                <rect x="3.5" y="22" width="5" height="1" fill="rgba(255,255,255,0.35)" />
+                {/* Bottom-right serif tick */}
+                <rect x="19.5" y="22" width="5" height="1" fill="rgba(255,255,255,0.35)" />
+                {/* Corner accent dots */}
+                <circle cx="1" cy="1" r="1" fill="rgba(255,255,255,0.4)" />
+                <circle cx="27" cy="1" r="1" fill="rgba(255,255,255,0.4)" />
+                <circle cx="1" cy="27" r="1" fill="rgba(255,255,255,0.4)" />
+                <circle cx="27" cy="27" r="1" fill="rgba(255,255,255,0.4)" />
+              </svg>
+
+              {/* Wordmark */}
+              <span style={{
+                fontFamily: 'var(--font-heading)',
+                fontWeight: 500,
+                fontSize: '16px',
+                letterSpacing: '0.02em',
+                color: '#ffffff',
+                lineHeight: 1,
+                position: 'relative', zIndex: 1,
+              }}>
+                <span style={{ opacity: 1 }}>Hy</span><span style={{ opacity: 0.45, fontWeight: 300 }}>Bloggyon</span>
               </span>
             </motion.a>
           </div>

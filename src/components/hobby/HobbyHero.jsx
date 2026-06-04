@@ -70,10 +70,25 @@ export default function HobbyHero() {
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'center',
-        padding: '0 clamp(24px, 6vw, 80px)',
+        padding: '0 clamp(20px, 6vw, 80px)',
         overflow: 'hidden',
       }}
     >
+      <style>{`
+        .hobby-hero-title {
+          margin: 0 0 32px 0;
+          font-family: var(--font-heading);
+          font-weight: 300;
+          font-size: clamp(2.4rem, 7.5vw, 9.5rem);
+          line-height: 1.1;
+          letter-spacing: -0.04em;
+        }
+        .hobby-hero-subtitle { max-width: 480px; border-top: 1px solid rgba(18,18,20,0.15); padding-top: 20px; }
+        @media (max-width: 768px) {
+          .hobby-hero-title { font-size: clamp(2rem, 9vw, 3.5rem); line-height: 1.15; letter-spacing: -0.025em; margin-bottom: 24px; }
+          .hobby-hero-subtitle { max-width: 100%; }
+        }
+      `}</style>
       {/* Dekorasi Background: Minimalist Grid */}
       <div
         aria-hidden="true"
@@ -106,16 +121,7 @@ export default function HobbyHero() {
       {/* Kontainer Teks Utama */}
       <div style={{ position: 'relative', zIndex: 1, paddingLeft: '16px', maxWidth: '1200px' }}>
         {/* Teks h1 menggunakan inline spans agar kalimat mengalir (wrap) secara natural tanpa jeda aneh */}
-        <h1
-          style={{
-            margin: '0 0 32px 0',
-            fontFamily: 'var(--font-heading)',
-            fontWeight: 300,
-            fontSize: 'clamp(3.2rem, 7.5vw, 9.5rem)',
-            lineHeight: 1.1,
-            letterSpacing: '-0.04em',
-          }}
-        >
+        <h1 className="hobby-hero-title">
           <span
             ref={line1Ref}
             style={{ color: 'var(--color-ink)' }}
@@ -132,11 +138,7 @@ export default function HobbyHero() {
 
         <div
           ref={subtitleRef}
-          style={{
-            maxWidth: '480px',
-            borderTop: '1px solid rgba(18,18,20,0.15)',
-            paddingTop: '20px',
-          }}
+          className="hobby-hero-subtitle"
         >
           <p
             style={{
