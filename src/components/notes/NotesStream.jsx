@@ -59,7 +59,7 @@ export default function NotesStream({ activeTag, searchQuery }) {
         .notes-stream-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 40px; }
         .note-row-grid {
           display: grid;
-          grid-template-columns: 40px 90px 1fr 70px;
+          grid-template-columns: 40px 1fr;
           align-items: center;
           gap: 16px;
           padding: 18px 0;
@@ -68,11 +68,21 @@ export default function NotesStream({ activeTag, searchQuery }) {
           color: var(--color-ink);
           transition: all 0.2s ease;
         }
+        .note-row-details { display: flex; align-items: center; gap: 16px; width: 100%; }
+        .note-row-meta { margin-left: auto; text-align: right; }
+        
         @media (max-width: 768px) {
-          .notes-stream-header { flex-direction: column; gap: 4px; margin-bottom: 24px; }
-          .note-row-grid { grid-template-columns: 32px 1fr; }
-          .note-row-tag { display: none; }
-          .note-row-meta { display: none; }
+          .notes-stream-header { flex-direction: column; gap: 8px; margin-bottom: 24px; }
+          .note-row-grid {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 24px 0;
+          }
+          .note-row-details { flex-wrap: wrap; gap: 12px; margin-bottom: 4px; }
+          .note-row-meta { text-align: left; display: flex; gap: 12px; align-items: center; }
+          .note-row-index { display: none; }
         }
       `}</style>
       <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
@@ -106,32 +116,33 @@ export default function NotesStream({ activeTag, searchQuery }) {
                   e.currentTarget.style.backgroundColor = 'transparent';
                 }}
               >
-                {/* Index */}
-                <span style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'rgba(0,0,0,0.25)', letterSpacing: '0.05em' }}>
+                {/* Index (Desktop only) */}
+                <span className="note-row-index" style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'rgba(0,0,0,0.25)', letterSpacing: '0.05em' }}>
                   {String(i + 1).padStart(2, '0')}.
                 </span>
 
-                {/* Tag */}
-                <span className="note-row-tag" style={{
-                  fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.1em', textTransform: 'uppercase',
-                  backgroundColor: TAG_COLORS[note.tag] || 'var(--color-wasabi)',
-                  padding: '4px 8px', display: 'inline-block',
-                }}>
-                  {note.tag}
-                </span>
+                <div style={{ flex: 1, width: '100%', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                  <div className="note-row-details">
+                    {/* Tag */}
+                    <span className="note-row-tag" style={{
+                      fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.1em', textTransform: 'uppercase',
+                      backgroundColor: TAG_COLORS[note.tag] || 'var(--color-wasabi)',
+                      padding: '4px 8px', display: 'inline-block',
+                    }}>
+                      {note.tag}
+                    </span>
 
-                {/* Title */}
-                <span style={{ fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: '17px', letterSpacing: '-0.01em', lineHeight: 1.3 }}>
-                  {note.title}
-                </span>
+                    {/* Read time + date (Moved to be adjacent to tag on mobile) */}
+                    <div className="note-row-meta">
+                      <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'rgba(0,0,0,0.4)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                        {note.date} • {note.readTime}
+                      </span>
+                    </div>
+                  </div>
 
-                {/* Read time + date */}
-                <div className="note-row-meta" style={{ textAlign: 'right' }}>
-                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'rgba(0,0,0,0.35)', display: 'block' }}>
-                    {note.readTime}
-                  </span>
-                  <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', color: 'rgba(0,0,0,0.25)' }}>
-                    {note.date}
+                  {/* Title */}
+                  <span style={{ fontFamily: 'var(--font-heading)', fontWeight: 600, fontSize: '19px', letterSpacing: '-0.01em', lineHeight: 1.3 }}>
+                    {note.title}
                   </span>
                 </div>
               </a>

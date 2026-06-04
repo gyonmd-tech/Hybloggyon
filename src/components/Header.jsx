@@ -146,46 +146,34 @@ export default function Header() {
                 gap: '10px',
               }}
             >
-              {/* Custom editorial mark — a bracketed 'H' monogram */}
-              <svg
-                width="28" height="28" viewBox="0 0 28 28" fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                style={{ flexShrink: 0 }}
-              >
-                {/* Outer bracket frame */}
-                <rect x="1" y="1" width="26" height="26" stroke="rgba(255,255,255,0.25)" strokeWidth="0.75" />
-                {/* Left vertical bar */}
-                <rect x="5" y="6" width="2.5" height="16" fill="#ffffff" />
-                {/* Right vertical bar */}
-                <rect x="20.5" y="6" width="2.5" height="16" fill="#ffffff" />
-                {/* Crossbar */}
-                <rect x="7.5" y="12.5" width="13" height="2.2" fill="rgba(255,255,255,0.6)" />
-                {/* Top-left serif tick */}
-                <rect x="3.5" y="5" width="5" height="1" fill="rgba(255,255,255,0.35)" />
-                {/* Top-right serif tick */}
-                <rect x="19.5" y="5" width="5" height="1" fill="rgba(255,255,255,0.35)" />
-                {/* Bottom-left serif tick */}
-                <rect x="3.5" y="22" width="5" height="1" fill="rgba(255,255,255,0.35)" />
-                {/* Bottom-right serif tick */}
-                <rect x="19.5" y="22" width="5" height="1" fill="rgba(255,255,255,0.35)" />
-                {/* Corner accent dots */}
-                <circle cx="1" cy="1" r="1" fill="rgba(255,255,255,0.4)" />
-                <circle cx="27" cy="1" r="1" fill="rgba(255,255,255,0.4)" />
-                <circle cx="1" cy="27" r="1" fill="rgba(255,255,255,0.4)" />
-                <circle cx="27" cy="27" r="1" fill="rgba(255,255,255,0.4)" />
-              </svg>
+              {/* Custom editorial mark: Typewriter style ligature/monogram */}
+              <div style={{
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                width: '32px', height: '32px',
+                border: '1px solid rgba(255,255,255,0.4)',
+                backgroundColor: '#ffffff',
+                color: 'var(--color-ink)',
+                fontFamily: 'var(--font-mono)',
+                fontWeight: 700,
+                fontSize: '14px',
+                letterSpacing: '-0.05em',
+                lineHeight: 1,
+              }}>
+                Hy
+              </div>
 
               {/* Wordmark */}
               <span style={{
                 fontFamily: 'var(--font-heading)',
                 fontWeight: 500,
                 fontSize: '16px',
-                letterSpacing: '0.02em',
+                letterSpacing: '0.04em',
+                textTransform: 'uppercase',
                 color: '#ffffff',
                 lineHeight: 1,
                 position: 'relative', zIndex: 1,
               }}>
-                <span style={{ opacity: 1 }}>Hy</span><span style={{ opacity: 0.45, fontWeight: 300 }}>Bloggyon</span>
+                <span style={{ opacity: 1 }}>Blog</span><span style={{ opacity: 0.5, fontWeight: 300 }}>gyon</span>
               </span>
             </motion.a>
           </div>

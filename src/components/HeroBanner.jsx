@@ -124,7 +124,7 @@ export default function HeroBanner() {
           .hero-frame { 
             inset: 24px; 
             justify-content: flex-end; /* Push everything to bottom */
-            padding-bottom: 12px;
+            padding-bottom: 80px; /* Raised up for visibility */
           }
           .hero-row-top { display: none; }
           .hero-row-bottom { 
