@@ -62,23 +62,29 @@ export default function AboutBeliefs({ beliefs }) {
       style={{
         backgroundColor: 'var(--color-ink)',
         borderBottom: '1px solid rgba(255,255,255,0.1)',
-        padding: 'clamp(80px, 12vh, 140px) clamp(24px, 6vw, 80px)',
+        padding: 'clamp(60px, 12vh, 140px) clamp(24px, 6vw, 80px)',
       }}
     >
-      <div
-        style={{
-          maxWidth: '1200px',
-          margin: '0 auto',
-          display: 'grid',
-          gridTemplateColumns: '30% 1fr',
-          gap: 'clamp(40px, 6vw, 80px)',
-          alignItems: 'start',
-        }}
-      >
+      <style>{`
+        .beliefs-grid {
+          max-width: 1200px;
+          margin: 0 auto;
+          display: grid;
+          grid-template-columns: 30% 1fr;
+          gap: clamp(40px, 6vw, 80px);
+          align-items: start;
+        }
+        .beliefs-label-col { padding-top: 8px; position: sticky; top: 120px; }
+        @media (max-width: 768px) {
+          .beliefs-grid { grid-template-columns: 1fr; }
+          .beliefs-label-col { position: static; padding-top: 0; margin-bottom: 24px; }
+        }
+      `}</style>
+      <div className="beliefs-grid">
         {/* ── Left: label ── */}
         <div
           ref={labelRef}
-          style={{ paddingTop: '8px', position: 'sticky', top: '120px' }}
+          className="beliefs-label-col"
         >
           <span
             style={{

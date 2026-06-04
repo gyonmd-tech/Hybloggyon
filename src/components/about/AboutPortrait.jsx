@@ -56,24 +56,31 @@ export default function AboutPortrait({ name, shortBio, meta }) {
     <section
       ref={sectionRef}
       style={{
-        // Gradient fade transition replacing the harsh border line
         background: 'linear-gradient(180deg, var(--color-background-ash) 0%, rgba(245,245,245,0) 100%)',
-        padding: 'clamp(80px, 12vh, 140px) clamp(24px, 6vw, 80px)',
+        padding: 'clamp(60px, 12vh, 140px) clamp(24px, 6vw, 80px)',
         position: 'relative',
       }}
     >
-      <div
-        style={{
-          maxWidth: '1200px',
-          margin: '0 auto',
-          display: 'grid',
-          gridTemplateColumns: 'minmax(280px, 35%) 1fr',
-          gap: 'clamp(40px, 8vw, 100px)',
-          alignItems: 'center',
-        }}
-      >
+      <style>{`
+        .portrait-grid {
+          max-width: 1200px;
+          margin: 0 auto;
+          display: grid;
+          grid-template-columns: minmax(240px, 35%) 1fr;
+          gap: clamp(40px, 8vw, 100px);
+          align-items: center;
+        }
+        @media (max-width: 768px) {
+          .portrait-grid {
+            grid-template-columns: 1fr;
+            gap: 40px;
+          }
+          .portrait-photo { max-width: 240px; }
+        }
+      `}</style>
+      <div className="portrait-grid">
         {/* ── Left: Foto Minimalis ── */}
-        <div ref={photoRef} style={{ width: '100%', position: 'relative' }}>
+        <div ref={photoRef} className="portrait-photo" style={{ width: '100%', position: 'relative' }}>
           {/* Subtle Gen Z Asterisk */}
           <div style={{
             position: 'absolute',
@@ -119,17 +126,17 @@ export default function AboutPortrait({ name, shortBio, meta }) {
         {/* ── Right: Teks Clean Brutalist ── */}
         <div ref={textRef} style={{ display: 'flex', flexDirection: 'column', gap: '32px', minWidth: 0 }}>
           
-          <div style={{ overflowX: 'auto', paddingBottom: '8px' }}>
+          <div>
             <h1
               style={{
                 fontFamily: 'var(--font-heading)',
-                fontWeight: 400, // sleek, classic weight
-                fontSize: 'clamp(3.5rem, 7vw, 5.5rem)',
+                fontWeight: 400,
+                fontSize: 'clamp(2.5rem, 7vw, 5.5rem)',
                 lineHeight: 1,
                 letterSpacing: '-0.04em',
                 color: 'var(--color-ink)',
                 margin: 0,
-                whiteSpace: 'nowrap',
+                wordBreak: 'break-word',
               }}
             >
               {name}

@@ -28,7 +28,7 @@ export default function NotesSearch({ onSearch, onTagSelect, activeTag }) {
       style={{
         backgroundColor: 'var(--color-background-ash)',
         borderBottom: '1px solid var(--color-ink)',
-        padding: '0 60px',
+        padding: '0 clamp(20px, 5vw, 60px)',
         position: 'sticky',
         top: 0,
         zIndex: 50,
@@ -36,16 +36,23 @@ export default function NotesSearch({ onSearch, onTagSelect, activeTag }) {
         WebkitBackdropFilter: 'blur(12px)',
       }}
     >
+      <style>{`
+        .notes-search-row {
+          display: flex;
+          align-items: center;
+          padding: 20px 0 12px 0;
+          gap: 12px;
+        }
+        .notes-search-count { flex-shrink: 0; min-width: 80px; text-align: center; }
+        .notes-top-btn { flex-shrink: 0; }
+        @media (max-width: 768px) {
+          .notes-search-count { display: none; }
+          .notes-top-btn { display: none; }
+        }
+      `}</style>
       <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
         {/* Search Row */}
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            padding: '24px 0 16px 0',
-            gap: '24px',
-          }}
-        >
+        <div className="notes-search-row">
           {/* Prominent Search Input Container */}
           <div
             style={{
@@ -92,12 +99,13 @@ export default function NotesSearch({ onSearch, onTagSelect, activeTag }) {
             )}
           </div>
 
-          <span style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'rgba(0,0,0,0.5)', letterSpacing: '0.1em', flexShrink: 0, minWidth: '80px', textAlign: 'center' }}>
+          <span className="notes-search-count" style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'rgba(0,0,0,0.5)', letterSpacing: '0.1em' }}>
             {query ? `...mencari` : '147 notes'}
           </span>
 
           {/* Escape / Back to Top Button */}
           <button
+            className="notes-top-btn"
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
             style={{
               fontFamily: 'var(--font-mono)',

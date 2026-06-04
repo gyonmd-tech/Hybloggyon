@@ -53,10 +53,18 @@ export default function FeaturedNotes() {
   }, []);
 
   return (
-    <section ref={sectionRef} style={{ backgroundColor: 'var(--color-background-ash)', borderBottom: '1px solid var(--color-ink)', padding: '80px 60px' }}>
+    <section ref={sectionRef} style={{ backgroundColor: 'var(--color-background-ash)', borderBottom: '1px solid var(--color-ink)', padding: 'clamp(48px, 8vh, 80px) clamp(20px, 5vw, 60px)' }}>
+      <style>{`
+        .featured-notes-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 48px; }
+        .featured-notes-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1px; border: 1px solid var(--color-ink); background-color: var(--color-ink); }
+        @media (max-width: 768px) {
+          .featured-notes-header { flex-direction: column; gap: 16px; margin-bottom: 32px; }
+          .featured-notes-grid { grid-template-columns: 1fr; }
+        }
+      `}</style>
       <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
         
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '48px' }}>
+        <div className="featured-notes-header">
           <div>
             <span style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--color-espresso)', display: 'block', marginBottom: '8px' }}>
               Featured Notes
@@ -74,7 +82,7 @@ export default function FeaturedNotes() {
           </a>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '1px', border: '1px solid var(--color-ink)', backgroundColor: 'var(--color-ink)' }}>
+        <div className="featured-notes-grid">
           {FEATURED.map((note) => (
             <article
               key={note.id}

@@ -33,14 +33,29 @@ export default function ArchiveSearch({
   return (
     <section
       style={{
-        paddingTop:      '40px',
-        paddingBottom:   '32px',
-        paddingLeft:     'clamp(24px, 6vw, 80px)',
-        paddingRight:    'clamp(24px, 6vw, 80px)',
-        backgroundColor: 'var(--color-background-ash)', // Transisi background untuk beda section
+        paddingTop:      '32px',
+        paddingBottom:   '24px',
+        paddingLeft:     'clamp(20px, 6vw, 80px)',
+        paddingRight:    'clamp(20px, 6vw, 80px)',
+        backgroundColor: 'var(--color-background-ash)',
         transition:      'background-color 0.4s ease',
       }}
     >
+      <style>{`
+        .archive-filter-row {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          flex-wrap: wrap;
+          row-gap: 8px;
+        }
+        .archive-filter-count {
+          margin-left: auto;
+        }
+        @media (max-width: 768px) {
+          .archive-filter-count { display: none; }
+        }
+      `}</style>
       {/* ── Search bar ── */}
       <div
         style={{
@@ -132,11 +147,7 @@ export default function ArchiveSearch({
       </div>
 
       {/* ── Chips kategori ── */}
-      <div style={{
-        display:    'flex',
-        alignItems: 'center',
-        gap:        '8px',
-      }}>
+      <div className="archive-filter-row">
         {TABS.map(tab => {
           const isActive = activeFolder === tab.id;
           const catColor = tab.id === 'semua' 
@@ -178,7 +189,7 @@ export default function ArchiveSearch({
         })}
 
         {/* Counter kanan */}
-        <span style={{
+        <span className="archive-filter-count" style={{
           marginLeft:    'auto',
           fontFamily:    'var(--font-mono)',
           fontSize:      '11px',

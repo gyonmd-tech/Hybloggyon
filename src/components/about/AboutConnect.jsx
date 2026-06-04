@@ -101,6 +101,22 @@ export default function AboutConnect({ email, socialLinks }) {
         .contact-social-link:hover::after {
           transform: translateX(0);
         }
+
+        /* Mobile overrides */
+        @media (max-width: 768px) {
+          .contact-email-link {
+            font-size: clamp(1.1rem, 5vw, 1.8rem) !important;
+            word-break: break-all;
+          }
+          .connect-intro-text {
+            font-size: clamp(1.4rem, 6vw, 2.5rem) !important;
+            margin-bottom: 40px !important;
+          }
+          .connect-social-grid {
+            grid-template-columns: 1fr !important;
+            gap: 24px !important;
+          }
+        }
       `}</style>
 
       <section
@@ -142,11 +158,11 @@ export default function AboutConnect({ email, socialLinks }) {
 
           {/* Pengantar yang Jelas & Tidak Membingungkan - Ukuran Diperbesar */}
           <p
-            className="connect-reveal"
+            className="connect-reveal connect-intro-text"
             style={{
               fontFamily: 'var(--font-heading)',
               fontWeight: 400,
-              fontSize: 'clamp(2rem, 5vw, 4.5rem)', // Diperbesar kembali seperti semula
+              fontSize: 'clamp(1.6rem, 5vw, 4.5rem)',
               lineHeight: 1.1,
               letterSpacing: '-0.03em',
               color: 'var(--color-ink)',
@@ -166,7 +182,7 @@ export default function AboutConnect({ email, socialLinks }) {
 
           {/* Grid Layout untuk Sosial & Info */}
           <div
-            className="connect-reveal"
+            className="connect-reveal connect-social-grid"
             style={{
               display: 'grid',
               gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',

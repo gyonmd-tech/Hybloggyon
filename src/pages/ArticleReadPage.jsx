@@ -169,25 +169,43 @@ export default function ArticleReadPage() {
           rawContent={post.excerpt ?? post.title ?? ''}
         />
 
+        <style>{`
+          .article-body {
+            padding-top: clamp(32px, 6vh, 64px);
+            padding-bottom: clamp(32px, 6vh, 64px);
+            padding-left: clamp(20px, 6vw, 80px);
+            padding-right: clamp(20px, 6vw, 80px);
+            background-color: var(--color-background);
+            display: flex;
+            gap: clamp(40px, 6vw, 80px);
+            align-items: flex-start;
+          }
+          .article-sidebar-desktop {
+            width: 300px;
+            flex-shrink: 0;
+          }
+          .article-sidebar-mobile {
+            padding-left: clamp(20px, 6vw, 80px);
+            padding-right: clamp(20px, 6vw, 80px);
+            padding-bottom: 40px;
+            border-top: 1px solid var(--color-background-ash);
+            background-color: var(--color-background);
+            display: none;
+          }
+          @media (max-width: 768px) {
+            .article-sidebar-desktop { display: none !important; }
+            .article-sidebar-mobile { display: block !important; }
+          }
+        `}</style>
+
         {/* Body: Konten + Sidebar */}
-        <div
-          style={{
-            paddingTop:      'clamp(40px, 6vh, 64px)',
-            paddingBottom:   'clamp(40px, 6vh, 64px)',
-            paddingLeft:     'clamp(24px, 6vw, 80px)',
-            paddingRight:    'clamp(24px, 6vw, 80px)',
-            backgroundColor: 'var(--color-background)',
-            display:         'flex',
-            gap:             'clamp(40px, 6vw, 80px)',
-            alignItems:      'flex-start',
-          }}
-        >
+        <div className="article-body">
           {/* Konten Artikel */}
           <div
             ref={articleRef}
             style={{
               flex:     1,
-              minWidth: 0, // Penting agar flex child tidak overflow
+              minWidth: 0,
             }}
           >
             {/* Prose wrapper styling */}
@@ -208,8 +226,8 @@ export default function ArticleReadPage() {
             </div>
           </div>
 
-          {/* Sidebar */}
-          <div style={{ display: 'none', '@media (min-width: 1024px)': { display: 'block' } }}>
+          {/* Sidebar Desktop — kanan konten */}
+          <div className="article-sidebar-desktop">
             <ArticleSidebar
               frontmatter={post}
               headings={headings}
@@ -221,15 +239,7 @@ export default function ArticleReadPage() {
         </div>
 
         {/* Sidebar Mobile — di bawah konten */}
-        <div
-          style={{
-            paddingLeft:  'clamp(24px, 6vw, 80px)',
-            paddingRight: 'clamp(24px, 6vw, 80px)',
-            paddingBottom: '40px',
-            borderTop:    '1px solid var(--color-background-ash)',
-            backgroundColor: 'var(--color-background)',
-          }}
-        >
+        <div className="article-sidebar-mobile">
           <ArticleSidebar
             frontmatter={post}
             headings={headings}
