@@ -46,10 +46,20 @@ export default function ConnectedThoughts() {
   }, []);
 
   return (
-    <section ref={sectionRef} style={{ backgroundColor: 'var(--color-ink)', color: '#fff', borderBottom: '1px solid rgba(255,255,255,0.1)', padding: '80px 60px' }}>
+    <section ref={sectionRef} style={{ backgroundColor: 'var(--color-ink)', color: '#fff', borderBottom: '1px solid rgba(255,255,255,0.1)', padding: 'clamp(48px, 8vh, 80px) clamp(20px, 5vw, 60px)' }}>
+      <style>{`
+        .ct-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 56px; }
+        .connection-grid { display: grid; grid-template-columns: 1fr 40px 1fr; align-items: center; gap: 32px; background-color: var(--color-ink); padding: 36px 40px; transition: background-color 0.2s; cursor: pointer; }
+        @media (max-width: 768px) {
+          .ct-header { flex-direction: column; gap: 16px; margin-bottom: 32px; }
+          .ct-header p { text-align: left; }
+          .connection-grid { grid-template-columns: 1fr; gap: 20px; padding: 24px 20px; }
+          .connection-arrow { display: none; }
+        }
+      `}</style>
       <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
 
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '56px' }}>
+        <div className="ct-header">
           <div>
             <span style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '0.15em', textTransform: 'uppercase', color: 'var(--color-accent-green)', display: 'block', marginBottom: '12px' }}>
               Connected Thoughts
@@ -68,17 +78,7 @@ export default function ConnectedThoughts() {
           {CONNECTIONS.map((c, i) => (
             <div
               key={i}
-              className="connection-item"
-              style={{
-                display: 'grid',
-                gridTemplateColumns: '1fr 40px 1fr',
-                alignItems: 'center',
-                gap: '32px',
-                backgroundColor: 'var(--color-ink)',
-                padding: '36px 40px',
-                transition: 'background-color 0.2s ease',
-                cursor: 'pointer',
-              }}
+              className="connection-item connection-grid"
               onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#1a1a1c'}
               onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'var(--color-ink)'}
             >
@@ -89,7 +89,7 @@ export default function ConnectedThoughts() {
               </div>
 
               {/* Arrow */}
-              <div style={{ textAlign: 'center' }}>
+              <div className="connection-arrow" style={{ textAlign: 'center' }}>
                 <div style={{ width: '1px', height: '40px', backgroundColor: 'rgba(255,255,255,0.2)', margin: '0 auto 4px' }} />
                 <span style={{ fontFamily: 'var(--font-mono)', fontSize: '16px', color: 'var(--color-accent-green)' }}>↓</span>
               </div>

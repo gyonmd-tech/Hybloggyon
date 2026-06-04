@@ -44,8 +44,16 @@ export default function CurrentThinking() {
   }, []);
 
   return (
-    <section ref={sectionRef} style={{ backgroundColor: 'var(--color-background-ash)', borderBottom: '1px solid var(--color-ink)', padding: '80px 60px' }}>
-      <div style={{ maxWidth: '1400px', margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '80px', alignItems: 'start' }}>
+    <section ref={sectionRef} style={{ backgroundColor: 'var(--color-background-ash)', borderBottom: '1px solid var(--color-ink)', padding: 'clamp(48px, 8vh, 80px) clamp(20px, 5vw, 60px)' }}>
+      <style>{`
+        .ct-layout { max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
+        .thinking-row-grid { display: grid; grid-template-columns: 140px 1fr; gap: 16px; padding: 16px 0; border-bottom: 1px solid rgba(0,0,0,0.07); align-items: start; }
+        @media (max-width: 768px) {
+          .ct-layout { grid-template-columns: 1fr; gap: 40px; }
+          .thinking-row-grid { grid-template-columns: 1fr; gap: 4px; }
+        }
+      `}</style>
+      <div className="ct-layout">
 
         {/* Left: Quote Block */}
         <div>
@@ -82,15 +90,7 @@ export default function CurrentThinking() {
             {THINKING.map((item, i) => (
               <div
                 key={i}
-                className="thinking-row"
-                style={{
-                  display: 'grid',
-                  gridTemplateColumns: '160px 1fr',
-                  gap: '24px',
-                  padding: '20px 0',
-                  borderBottom: '1px solid rgba(0,0,0,0.07)',
-                  alignItems: 'start',
-                }}
+                className="thinking-row thinking-row-grid"
               >
                 <span style={{ fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.1em', textTransform: 'uppercase', color: 'rgba(0,0,0,0.35)', paddingTop: '2px' }}>
                   {item.label}

@@ -147,6 +147,32 @@ const PROSE_CSS = `
   .nrl-nav-panel:hover { background-color: var(--color-background-ash); }
   .nrl-nav-panel.dark { background-color: var(--color-ink); color: #fff; }
   .nrl-nav-panel.dark:hover { background-color: #1e1e20; }
+  /* Responsive mobile */
+  @media (max-width: 768px) {
+    .nrl-wrapper {
+      padding: 70px 20px 0 !important;
+    }
+    .nrl-body {
+      flex-direction: column !important;
+      gap: 40px !important;
+    }
+    .nrl-sidebar {
+      display: none !important;
+    }
+    .nrl-reflection {
+      padding: 40px 20px !important;
+    }
+    .nrl-nav-padding {
+      padding: 0 20px !important;
+    }
+    .nrl-nav-panel {
+      padding: 32px 24px !important;
+      min-height: 200px !important;
+    }
+    .nrl-nav-grid {
+      grid-template-columns: 1fr !important;
+    }
+  }
 `;
 
 // ─── Sub-components ──────────────────────────────────────────────────────────
@@ -384,6 +410,7 @@ export default function NoteReadingLayout({
 
       {/* ── Article body wrapper ── */}
       <div
+        className="nrl-wrapper"
         style={{
           maxWidth: '1100px',
           margin: '0 auto',
@@ -412,7 +439,7 @@ export default function NoteReadingLayout({
         <TopMetaBar tag={tag} date={date} readTime={readTime} />
 
         {/* Two-column body */}
-        <div style={{ display: 'flex', gap: '60px', alignItems: 'flex-start' }}>
+        <div className="nrl-body" style={{ display: 'flex', gap: '60px', alignItems: 'flex-start' }}>
 
           {/* Left: Article prose */}
           <div ref={articleRef} style={{ flex: 1, minWidth: 0 }}>
@@ -426,17 +453,20 @@ export default function NoteReadingLayout({
           </div>
 
           {/* Right: Sticky sidebar */}
-          <Sidebar
-            connectedNotes={connectedNotes}
-            sidebarImage={sidebarImage}
-            sidebarImageCaption={sidebarImageCaption}
-          />
+          <div className="nrl-sidebar">
+            <Sidebar
+              connectedNotes={connectedNotes}
+              sidebarImage={sidebarImage}
+              sidebarImageCaption={sidebarImageCaption}
+            />
+          </div>
         </div>
       </div>
 
       {/* ── Reflection ── */}
       {(reflection || closingNote) && (
         <div
+          className="nrl-reflection"
           style={{
             maxWidth: '1100px',
             margin: '0 auto',
@@ -489,7 +519,7 @@ export default function NoteReadingLayout({
             padding: '0 60px',
             marginTop: '0',
             borderTop: '1px solid rgba(0,0,0,0.1)',
-          }}>
+          }} className="nrl-nav-padding">
             <div style={{ height: '1px', flex: 1, backgroundColor: 'rgba(0,0,0,0.08)' }} />
             <span style={{
               fontFamily: 'var(--font-mono)',
@@ -506,7 +536,7 @@ export default function NoteReadingLayout({
           </div>
 
           {/* Two-panel navigation */}
-          <div style={{
+          <div className="nrl-nav-grid" style={{
             display: 'grid',
             gridTemplateColumns: prevNote && nextNote ? '1fr 1fr' : '1fr',
             gap: '1px',

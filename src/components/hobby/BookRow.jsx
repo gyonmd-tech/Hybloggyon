@@ -69,22 +69,19 @@ export default function BookRow({ book }) {
   const status = STATUS_CONFIG[book.status] ?? STATUS_CONFIG.queue;
 
   return (
+    <>
+      <style>{`
+        .book-row { display: grid; grid-template-columns: 80px 1fr auto; gap: 24px; align-items: center; padding: 20px 0; border-bottom: 1px solid var(--color-ink); transition: background 0.15s ease; }
+        .book-status-tag { flex-shrink: 0; }
+        @media (max-width: 768px) {
+          .book-row { grid-template-columns: 64px 1fr; gap: 16px; }
+          .book-status-tag { display: none; }
+        }
+      `}</style>
     <div
-      style={{
-        display: 'grid',
-        gridTemplateColumns: '80px 1fr auto',
-        gap: '24px',
-        alignItems: 'center',
-        padding: '20px 0',
-        borderBottom: '1px solid var(--color-ink)',
-        transition: 'background 0.15s ease',
-      }}
-      onMouseEnter={(e) => {
-        e.currentTarget.style.backgroundColor = 'var(--color-paper-white)';
-      }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.backgroundColor = 'transparent';
-      }}
+      className="book-row"
+      onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = 'var(--color-paper-white)'; }}
+      onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = 'transparent'; }}
     >
       {/* Cover 80×120px */}
       <div
@@ -188,7 +185,7 @@ export default function BookRow({ book }) {
       </div>
 
       {/* Status tag */}
-      <div style={{ flexShrink: 0 }}>
+      <div className="book-status-tag">
         <span
           style={{
             display: 'inline-block',
@@ -207,5 +204,6 @@ export default function BookRow({ book }) {
         </span>
       </div>
     </div>
+    </>
   );
 }

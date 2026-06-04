@@ -73,17 +73,24 @@ function FeaturedFilm({ film, bannerRef, textRef }) {
   }, [film.tmdbId]);
 
   return (
-    <div
-      style={{
-        display: 'grid',
-        gridTemplateColumns: '55% 1fr',
-        minHeight: 'min(70vh, 600px)',
-        border: '1px solid var(--color-ink)',
-      }}
-    >
+    <div style={{ marginBottom: '40px' }}>
+      <style>{`
+        .featured-film-grid {
+          display: grid;
+          grid-template-columns: 55% 1fr;
+          min-height: min(70vh, 600px);
+          border: 1px solid var(--color-ink);
+        }
+        @media (max-width: 768px) {
+          .featured-film-grid { grid-template-columns: 1fr; min-height: unset; }
+          .featured-film-banner { min-height: 240px; border-right: none !important; border-bottom: 1px solid var(--color-ink); }
+        }
+      `}</style>
+      <div className="featured-film-grid">
       {/* Banner kiri */}
       <div
         ref={bannerRef}
+        className="featured-film-banner"
         style={{
           position: 'relative',
           overflow: 'hidden',
@@ -202,6 +209,7 @@ function FeaturedFilm({ film, bannerRef, textRef }) {
             "{film.oneWord}"
           </span>
         </div>
+      </div>
       </div>
     </div>
   );
@@ -374,13 +382,11 @@ export default function ScreeningRoom({ watchlist }) {
         </div>
 
         {/* Featured film */}
-        <div style={{ marginBottom: '40px' }}>
-          <FeaturedFilm
-            film={watchlist.featured}
-            bannerRef={bannerRef}
-            textRef={textRef}
-          />
-        </div>
+        <FeaturedFilm
+          film={watchlist.featured}
+          bannerRef={bannerRef}
+          textRef={textRef}
+        />
 
         {/* Grid film lainnya */}
         <div

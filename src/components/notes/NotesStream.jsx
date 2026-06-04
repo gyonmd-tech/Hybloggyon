@@ -54,7 +54,27 @@ export default function NotesStream({ activeTag, searchQuery }) {
   }, []);
 
   return (
-    <section id="all-notes" ref={sectionRef} style={{ backgroundColor: '#fff', borderBottom: '1px solid var(--color-ink)', padding: '80px 60px' }}>
+    <section id="all-notes" ref={sectionRef} style={{ backgroundColor: '#fff', borderBottom: '1px solid var(--color-ink)', padding: 'clamp(48px, 8vh, 80px) clamp(20px, 5vw, 60px)' }}>
+      <style>{`
+        .notes-stream-header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 40px; }
+        .note-row-grid {
+          display: grid;
+          grid-template-columns: 40px 90px 1fr 70px;
+          align-items: center;
+          gap: 16px;
+          padding: 18px 0;
+          border-bottom: 1px solid rgba(0,0,0,0.07);
+          text-decoration: none;
+          color: var(--color-ink);
+          transition: all 0.2s ease;
+        }
+        @media (max-width: 768px) {
+          .notes-stream-header { flex-direction: column; gap: 4px; margin-bottom: 24px; }
+          .note-row-grid { grid-template-columns: 32px 1fr; }
+          .note-row-tag { display: none; }
+          .note-row-meta { display: none; }
+        }
+      `}</style>
       <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
         
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '40px' }}>
@@ -76,18 +96,7 @@ export default function NotesStream({ activeTag, searchQuery }) {
               <a
                 key={note.id}
                 href={`/notes/${note.id}`}
-                className="note-stream-row"
-                style={{
-                  display: 'grid',
-                  gridTemplateColumns: '60px 100px 1fr 80px',
-                  alignItems: 'center',
-                  gap: '24px',
-                  padding: '22px 0',
-                  borderBottom: '1px solid rgba(0,0,0,0.07)',
-                  textDecoration: 'none',
-                  color: 'var(--color-ink)',
-                  transition: 'all 0.2s ease',
-                }}
+                className="note-stream-row note-row-grid"
                 onMouseEnter={(e) => {
                   e.currentTarget.style.paddingLeft = '12px';
                   e.currentTarget.style.backgroundColor = 'var(--color-background-ash)';
@@ -103,7 +112,7 @@ export default function NotesStream({ activeTag, searchQuery }) {
                 </span>
 
                 {/* Tag */}
-                <span style={{
+                <span className="note-row-tag" style={{
                   fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.1em', textTransform: 'uppercase',
                   backgroundColor: TAG_COLORS[note.tag] || 'var(--color-wasabi)',
                   padding: '4px 8px', display: 'inline-block',
@@ -117,7 +126,7 @@ export default function NotesStream({ activeTag, searchQuery }) {
                 </span>
 
                 {/* Read time + date */}
-                <div style={{ textAlign: 'right' }}>
+                <div className="note-row-meta" style={{ textAlign: 'right' }}>
                   <span style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'rgba(0,0,0,0.35)', display: 'block' }}>
                     {note.readTime}
                   </span>

@@ -150,6 +150,7 @@ export default function SideGlances({ observations }) {
 
         {/* Grid 3 kolom */}
         <div
+          className="sg-grid"
           style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(3, 1fr)',
