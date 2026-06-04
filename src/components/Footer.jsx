@@ -34,16 +34,36 @@ export default function Footer() {
       style={{
         backgroundColor: 'var(--color-ink)',
         color: '#ffffff',
-        padding: '120px 60px 40px 60px',
+        padding: 'clamp(60px, 10vw, 120px) clamp(20px, 4vw, 60px) clamp(32px, 4vw, 40px) clamp(20px, 4vw, 60px)',
       }}
     >
+      <style>{`
+        .footer-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+          gap: clamp(40px, 6vw, 80px);
+          margin-bottom: clamp(60px, 10vw, 120px);
+        }
+        .footer-brand-col { grid-column: span 2; }
+        .footer-news-col { grid-column: span 2; }
+        @media (max-width: 768px) {
+          .footer-brand-col { grid-column: span 1; }
+          .footer-news-col { grid-column: span 1; }
+          .footer-nav-cols { flex-direction: column !important; gap: 32px !important; }
+          .footer-newsletter-form { flex-direction: column !important; }
+          .footer-newsletter-form input { border-bottom: 1px solid rgba(255,255,255,0.2) !important; }
+          .footer-newsletter-form button { border-left: none !important; border-top: 1px solid rgba(255,255,255,0.2) !important; }
+          .footer-bottom { flex-direction: column !important; align-items: flex-start !important; gap: 12px !important; }
+        }
+      `}</style>
+
       <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
-        
+
         {/* Top Grid */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '80px', marginBottom: '120px' }}>
-          
+        <div className="footer-grid">
+
           {/* Col 1: Brand */}
-          <div className="footer-reveal" style={{ gridColumn: 'span 2' }}>
+          <div className="footer-reveal footer-brand-col">
             <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(40px, 6vw, 80px)', fontWeight: 800, letterSpacing: '-0.03em', margin: '0 0 24px 0', lineHeight: 1 }}>
               HyBloggyon.
             </h2>
@@ -52,34 +72,36 @@ export default function Footer() {
             </p>
           </div>
 
-          {/* Col 2: Navigation & Socials combined for neatness */}
+          {/* Col 2: Navigation & Socials */}
           <div className="footer-reveal" style={{ display: 'flex', gap: '60px' }}>
-            <div>
-              <h4 style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '0.15em', color: 'var(--color-accent-green)', marginBottom: '32px' }}>NAVIGASI</h4>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                {['Beranda', 'Semua Esai', 'Catatan', 'Manifesto', 'Arsip'].map(link => (
-                  <a key={link} href="#" style={{ fontFamily: 'var(--font-mono)', fontSize: '13px', color: '#ffffff', textDecoration: 'none', transition: 'color 0.2s', opacity: 0.8 }} onMouseEnter={(e) => e.currentTarget.style.opacity = '1'} onMouseLeave={(e) => e.currentTarget.style.opacity = '0.8'}>{link}</a>
-                ))}
+            <div className="footer-nav-cols" style={{ display: 'flex', gap: '60px' }}>
+              <div>
+                <h4 style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '0.15em', color: 'var(--color-accent-green)', marginBottom: '32px' }}>NAVIGASI</h4>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                  {['Beranda', 'Semua Esai', 'Catatan', 'Manifesto', 'Arsip'].map(link => (
+                    <a key={link} href="#" style={{ fontFamily: 'var(--font-mono)', fontSize: '13px', color: '#ffffff', textDecoration: 'none', transition: 'color 0.2s', opacity: 0.8 }} onMouseEnter={(e) => e.currentTarget.style.opacity = '1'} onMouseLeave={(e) => e.currentTarget.style.opacity = '0.8'}>{link}</a>
+                  ))}
+                </div>
               </div>
-            </div>
 
-            <div>
-              <h4 style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '0.15em', color: 'var(--color-accent-green)', marginBottom: '32px' }}>KONEKSI</h4>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                {['Instagram ↗', 'Twitter ↗', 'LinkedIn ↗', 'GitHub ↗', 'Email ↗'].map(link => (
-                  <a key={link} href="#" style={{ fontFamily: 'var(--font-mono)', fontSize: '13px', color: '#ffffff', textDecoration: 'none', transition: 'color 0.2s', opacity: 0.8 }} onMouseEnter={(e) => e.currentTarget.style.opacity = '1'} onMouseLeave={(e) => e.currentTarget.style.opacity = '0.8'}>{link}</a>
-                ))}
+              <div>
+                <h4 style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '0.15em', color: 'var(--color-accent-green)', marginBottom: '32px' }}>KONEKSI</h4>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                  {['Instagram ↗', 'Twitter ↗', 'LinkedIn ↗', 'GitHub ↗', 'Email ↗'].map(link => (
+                    <a key={link} href="#" style={{ fontFamily: 'var(--font-mono)', fontSize: '13px', color: '#ffffff', textDecoration: 'none', transition: 'color 0.2s', opacity: 0.8 }} onMouseEnter={(e) => e.currentTarget.style.opacity = '1'} onMouseLeave={(e) => e.currentTarget.style.opacity = '0.8'}>{link}</a>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
 
           {/* Col 3: Newsletter */}
-          <div className="footer-reveal" style={{ gridColumn: 'span 2' }}>
+          <div className="footer-reveal footer-news-col">
             <h4 style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '0.15em', color: 'var(--color-accent-green)', marginBottom: '32px' }}>DISPATCH / NEWSLETTER</h4>
             <p style={{ fontFamily: 'var(--font-mono)', fontSize: '13px', color: 'rgba(255,255,255,0.7)', marginBottom: '24px', lineHeight: 1.6, maxWidth: '400px' }}>
               Dapatkan pembaruan asinkron langsung ke kotak masuk Anda. Tidak ada spam, hanya intisari tulisan murni.
             </p>
-            <div style={{ display: 'flex', border: '1px solid rgba(255,255,255,0.2)', maxWidth: '400px' }}>
+            <div className="footer-newsletter-form" style={{ display: 'flex', border: '1px solid rgba(255,255,255,0.2)', maxWidth: '400px' }}>
               <input type="email" placeholder="Alamat email Anda" style={{ flex: 1, background: 'transparent', border: 'none', padding: '16px 24px', fontFamily: 'var(--font-mono)', fontSize: '12px', color: '#fff', outline: 'none' }} />
               <button style={{ padding: '16px 32px', background: '#fff', color: 'var(--color-ink)', borderLeft: '1px solid rgba(255,255,255,0.2)', fontFamily: 'var(--font-mono)', fontSize: '11px', fontWeight: 600, letterSpacing: '0.1em', cursor: 'pointer', transition: 'background-color 0.2s' }} onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'var(--color-wasabi)'} onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#fff'}>
                 KIRIM
@@ -90,7 +112,7 @@ export default function Footer() {
         </div>
 
         {/* Bottom Banner */}
-        <div className="footer-reveal" style={{ borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '40px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '20px' }}>
+        <div className="footer-reveal footer-bottom" style={{ borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '40px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '20px' }}>
           <div style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'rgba(255,255,255,0.4)', letterSpacing: '0.05em' }}>
             &copy; 2026 HYBLOGGYON. ALL RIGHTS RESERVED.
           </div>

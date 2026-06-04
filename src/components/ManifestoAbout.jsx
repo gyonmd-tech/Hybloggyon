@@ -60,9 +60,9 @@ export default function ManifestoAbout() {
     <section
       ref={sectionRef}
       style={{
-        backgroundColor: 'var(--color-background-ash)', // Cleanest background
+        backgroundColor: 'var(--color-background-ash)',
         borderBottom: '1px solid var(--color-ink)',
-        padding: '160px 40px',
+        padding: 'clamp(60px, 12vw, 160px) clamp(20px, 3vw, 40px)',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -169,6 +169,15 @@ export default function ManifestoAbout() {
         </div>
 
       </div>
+      <style>{`
+        @media (max-width: 768px) {
+          /* Align manifesto content left on mobile */
+          .manifesto-section-inner {
+            align-items: flex-start !important;
+            text-align: left !important;
+          }
+        }
+      `}</style>
     </section>
   );
 }

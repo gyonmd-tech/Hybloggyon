@@ -26,22 +26,46 @@ export default function LoggedObservations() {
           transform: translate(-4px, -4px);
           box-shadow: 6px 6px 0px var(--color-ink);
         }
+        .log-sidebar {
+          flex: 1 1 350px;
+          max-width: 450px;
+          border-right: 1px solid var(--color-ink);
+          padding: 80px 60px;
+          display: flex;
+          flex-direction: column;
+          position: sticky;
+          top: 0;
+          height: max-content;
+        }
+        .log-cards-area {
+          flex: 999 1 600px;
+          padding: 80px 60px;
+          background-color: var(--color-background-alt);
+        }
+        @media (max-width: 768px) {
+          .log-sidebar {
+            flex: 1 1 100%;
+            max-width: 100%;
+            border-right: none;
+            border-bottom: 1px solid var(--color-ink);
+            padding: 40px 20px;
+            position: static;
+            height: auto;
+          }
+          .log-cards-area {
+            flex: 1 1 100%;
+            padding: 32px 20px;
+          }
+          .log-cards-area > div {
+            grid-template-columns: 1fr !important;
+            gap: 16px !important;
+          }
+          .log-card { padding: 24px 20px; }
+        }
       `}</style>
 
       {/* Sticky Sidebar Area */}
-      <div
-        style={{
-          flex: '1 1 350px',
-          maxWidth: '450px',
-          borderRight: '1px solid var(--color-ink)',
-          padding: '80px 60px',
-          display: 'flex',
-          flexDirection: 'column',
-          position: 'sticky',
-          top: 0,
-          height: 'max-content',
-        }}
-      >
+      <div className="log-sidebar">
         <span
           style={{
             fontFamily: 'var(--font-mono)',
@@ -90,18 +114,12 @@ export default function LoggedObservations() {
       </div>
 
       {/* Cards Grid Area */}
-      <div
-        style={{
-          flex: '999 1 600px',
-          padding: '80px 60px',
-          backgroundColor: 'var(--color-background-alt)', // Slightly different shade for content
-        }}
-      >
+      <div className="log-cards-area">
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
-            gap: '30px',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
+            gap: '20px',
           }}
         >
           {LOGS.map((log) => (
@@ -114,7 +132,6 @@ export default function LoggedObservations() {
                 padding: '30px',
                 display: 'flex',
                 flexDirection: 'column',
-                minHeight: '280px',
                 cursor: 'pointer',
               }}
             >

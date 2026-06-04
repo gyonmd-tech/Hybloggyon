@@ -13,7 +13,7 @@ export default function ClassificationGrid() {
       style={{
         backgroundColor: 'var(--color-ink)',
         borderBottom: '1px solid rgba(255,255,255,0.1)',
-        padding: '120px 40px', // Increased padding to balance with other sections
+        padding: 'clamp(60px, 10vw, 120px) clamp(20px, 3vw, 40px)',
       }}
     >
       <style>{`
@@ -26,36 +26,37 @@ export default function ClassificationGrid() {
           content: '';
           position: absolute;
           top: 0; left: 0; width: 100%; height: 100%;
-          background: #ffffff; /* Contrast fill */
+          background: #ffffff;
           transform: translateY(101%);
           transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
           z-index: 0;
         }
-        .class-item:hover::before {
-          transform: translateY(0);
+        .class-item:hover::before { transform: translateY(0); }
+        .class-item > * { position: relative; z-index: 1; transition: color 0.4s ease, border-color 0.4s ease; }
+        .class-item:hover .class-title { color: var(--color-ink) !important; }
+        .class-item:hover .class-id { color: var(--color-ink) !important; }
+        .class-item:hover .class-desc { color: rgba(0,0,0,0.6) !important; }
+        .class-item:hover .class-tag { color: var(--color-ink) !important; border-color: rgba(0,0,0,0.2) !important; }
+        .class-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+          gap: 1px;
+          background-color: rgba(255,255,255,0.15);
+          border: 1px solid rgba(255,255,255,0.15);
         }
-        .class-item > * {
-          position: relative;
-          z-index: 1;
-          transition: color 0.4s ease, border-color 0.4s ease;
-        }
-        .class-item:hover .class-title {
-          color: var(--color-ink) !important;
-        }
-        .class-item:hover .class-id {
-          color: var(--color-ink) !important;
-        }
-        .class-item:hover .class-desc {
-          color: rgba(0,0,0,0.6) !important;
-        }
-        .class-item:hover .class-tag {
-          color: var(--color-ink) !important;
-          border-color: rgba(0,0,0,0.2) !important;
+        @media (max-width: 768px) {
+          .class-grid { grid-template-columns: repeat(2, 1fr); }
+          .class-grid .class-item { padding: 32px 20px; }
+          .class-header-row { flex-direction: column; gap: 8px; align-items: flex-start; }
+          .class-entry-count { display: none; }
+          .class-grid { grid-template-columns: repeat(2, 1fr); }
+          .class-grid .class-item { padding: 24px 16px; }
+          .class-grid .class-item .class-desc { display: none; }
         }
       `}</style>
 
       <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
-        <div style={{ marginBottom: '60px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
+        <div style={{ marginBottom: '60px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }} className="class-header-row">
           <div>
             <span
               style={{
@@ -86,22 +87,14 @@ export default function ClassificationGrid() {
           </div>
         </div>
 
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-            gap: '1px',
-            backgroundColor: 'rgba(255,255,255,0.15)', // Grid line color
-            border: '1px solid rgba(255,255,255,0.15)',
-          }}
-        >
+        <div className="class-grid">
           {CLASSES.map((cls) => (
             <div
               key={cls.id}
               className="class-item"
               style={{
                 backgroundColor: 'var(--color-ink)',
-                padding: '60px 40px', // Larger hit area
+                padding: '60px 40px',
                 cursor: 'pointer',
                 display: 'flex',
                 flexDirection: 'column',
@@ -128,14 +121,14 @@ export default function ClassificationGrid() {
                   ✦
                 </span>
                 <span
-                  className="class-tag"
+                  className="class-tag class-entry-count"
                   style={{
                     fontFamily: 'var(--font-mono)',
                     fontSize: '10px',
                     color: 'rgba(255,255,255,0.4)',
                     border: '1px solid rgba(255,255,255,0.2)',
                     padding: '4px 10px',
-                    borderRadius: '100px', // Pill shape matching Curated section
+                    borderRadius: '100px',
                   }}
                 >
                   {cls.count} ENTRIES

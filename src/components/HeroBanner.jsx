@@ -94,10 +94,15 @@ export default function HeroBanner() {
         .hero-interactive {
           pointer-events: auto;
         }
-        @media (max-width: 900px) {
-           .hero-frame { inset: 32px; }
-           .hero-row-bottom { flex-direction: column; align-items: flex-start; gap: 32px; }
-           .hero-align-right { text-align: left !important; }
+        @media (max-width: 768px) {
+          .hero-frame { inset: 20px; }
+          .hero-row-top { display: none; }
+          .hero-row-bottom { flex-direction: column; align-items: flex-start; gap: 16px; padding-bottom: 8px; }
+          .hero-align-right { text-align: left !important; }
+          .hero-cta-btn { display: inline-block !important; width: auto !important; padding: 14px 28px !important; font-size: 11px; }
+          .hero-center { padding: 0 20px; }
+          .hero-investigating { display: none !important; }
+          .hero-desc-block { display: none !important; }
         }
       `}</style>
 
@@ -163,7 +168,7 @@ export default function HeroBanner() {
             </span>
           </div>
           <div style={{ textAlign: 'right' }}>
-            <span style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'rgba(255,255,255,0.5)', letterSpacing: '0.15em', textTransform: 'uppercase' }}>
+            <span className="hero-gps" style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'rgba(255,255,255,0.5)', letterSpacing: '0.15em', textTransform: 'uppercase' }}>
               -6.2088° S, 106.8456° E
             </span>
           </div>
@@ -171,7 +176,7 @@ export default function HeroBanner() {
 
         {/* Bottom Row */}
         <div className="hero-row-bottom">
-          <div style={{ maxWidth: '300px' }}>
+          <div className="hero-desc-block" style={{ maxWidth: '300px' }}>
              <span
               style={{
                 fontFamily: 'var(--font-mono)',
@@ -200,6 +205,7 @@ export default function HeroBanner() {
 
           <div className="hero-align-right hero-interactive" style={{ textAlign: 'right' }}>
             <span
+              className="hero-investigating"
               style={{
                 display: 'block',
                 fontFamily: 'var(--font-mono)',
@@ -214,6 +220,7 @@ export default function HeroBanner() {
             </span>
             <a
               href="/esai"
+              className="hero-cta-btn"
               style={{
                 display: 'inline-block',
                 fontFamily: 'var(--font-mono)',

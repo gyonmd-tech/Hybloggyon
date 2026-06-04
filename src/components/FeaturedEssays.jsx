@@ -109,13 +109,13 @@ export default function FeaturedEssays() {
       {/* Aesthetic Minimalist Section Header */}
       <div
         style={{
-          padding: '32px 40px',
+          padding: 'clamp(20px, 3vw, 32px) clamp(20px, 3vw, 40px)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          backgroundColor: 'var(--color-background-ash)', // Light background, no more huge black gap
+          backgroundColor: 'var(--color-background-ash)',
           borderBottom: '1px solid var(--color-ink)',
-          borderTop: '1px solid var(--color-ink)', // Sharp separation
+          borderTop: '1px solid var(--color-ink)',
           position: 'relative',
           zIndex: 10,
         }}
@@ -134,6 +134,7 @@ export default function FeaturedEssays() {
         </h2>
 
         <span
+          className="essay-sorotan-badge"
           style={{
             fontFamily: 'var(--font-mono)',
             fontSize: '11px',
@@ -155,7 +156,7 @@ export default function FeaturedEssays() {
           style={{
             position: 'relative',
             display: 'block',
-            height: '100svh', // Truly 100% full screen regardless of browser UI
+            height: 'clamp(70vh, 100svh, 100svh)',
             overflow: 'hidden',
             borderTop: '1px solid rgba(255,255,255,0.05)',
             textDecoration: 'none',
@@ -221,14 +222,12 @@ export default function FeaturedEssays() {
             className="essay-content-overlay"
             style={{
               position: 'absolute',
-              bottom: '60px',
+              bottom: 'clamp(24px, 5vw, 60px)',
+              left: 'clamp(24px, 4vw, 48px)',
+              right: 'auto',
+              textAlign: 'left',
               zIndex: 2,
-              ...(essay.align === 'right'
-                ? { right: '48px', left: 'auto', textAlign: 'right' }
-                : essay.align === 'center'
-                ? { left: '50%', transform: 'translateX(-50%)', textAlign: 'center', width: '90%' }
-                : { left: '48px', right: 'auto', textAlign: 'left' }
-              ),
+              maxWidth: '90%',
             }}
           >
             <h2
@@ -236,11 +235,11 @@ export default function FeaturedEssays() {
               style={{
                 fontFamily: 'var(--font-heading)',
                 fontWeight: 300,
-                fontSize: 'clamp(48px, 7vw, 110px)',
-                lineHeight: 0.9,
+                fontSize: 'clamp(36px, 7vw, 110px)',
+                lineHeight: 0.95,
                 letterSpacing: '-0.03em',
                 color: '#ffffff',
-                marginBottom: '16px',
+                marginBottom: '12px',
                 transition: 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
               }}
             >
@@ -308,6 +307,22 @@ export default function FeaturedEssays() {
         }
         .essay-panel-container:hover .essay-cta span:first-child {
           border-bottom-color: #ffffff !important;
+        }
+        @media (max-width: 768px) {
+          .essay-sorotan-badge { display: none; }
+          /* Force all overlays left on mobile */
+          .essay-content-overlay {
+            left: 24px !important;
+            right: auto !important;
+            text-align: left !important;
+            transform: none !important;
+            max-width: calc(100% - 48px) !important;
+          }
+          /* Always show CTA on mobile - no hover */
+          .essay-cta {
+            opacity: 1 !important;
+            transform: translateY(0) !important;
+          }
         }
       `}</style>
     </section>

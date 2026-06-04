@@ -25,7 +25,7 @@ export default function LatestTopics() {
               display: 'flex',
               alignItems: 'baseline',
               justifyContent: 'space-between',
-              padding: '60px 40px 40px 40px', // Increased top padding for breathing room
+              padding: 'clamp(40px, 6vw, 60px) clamp(20px, 3vw, 40px)',
               borderBottom: '1px solid var(--color-ink)',
             }}
           >
@@ -48,11 +48,11 @@ export default function LatestTopics() {
               </p>
               <div style={{ width: '48px', height: '2px', backgroundColor: 'var(--color-ink)' }} />
             </div>
-            <div>
+            <div className="journal-count-meta">
               <p
                 style={{
                   fontFamily: 'var(--font-mono)',
-                  fontSize: '12px', // Slightly larger meta text
+                  fontSize: '12px',
                   letterSpacing: '0.1em',
                   textTransform: 'uppercase',
                   color: 'var(--color-espresso)',
@@ -74,12 +74,12 @@ export default function LatestTopics() {
               <a
                 key={topic.num}
                 href="#"
-                className="notes-row topic-row-hover"
+                className="notes-row topic-row-hover topic-grid-row"
                 style={{
                   display: 'grid',
                   gridTemplateColumns: '1fr 4fr 1fr',
                   alignItems: 'center',
-                  padding: '32px 40px',
+                  padding: 'clamp(20px, 3vw, 32px) clamp(20px, 3vw, 40px)',
                   borderBottom: '1px solid var(--color-ink)',
                   textDecoration: 'none',
                   color: 'var(--color-ink)',
@@ -121,6 +121,7 @@ export default function LatestTopics() {
 
                 {/* Meta Right & Arrow */}
                 <div
+                  className="topic-meta-right"
                   style={{
                     display: 'flex',
                     alignItems: 'center',
@@ -178,6 +179,17 @@ export default function LatestTopics() {
         }
         .topic-row-hover:hover .topic-arrow {
           transform: translateX(4px) scale(1.1);
+        }
+        @media (max-width: 768px) {
+          .journal-count-meta { display: none !important; }
+          .topic-grid-row {
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 6px !important;
+            padding: 16px clamp(20px, 3vw, 40px) !important;
+          }
+          .topic-meta-right { display: none !important; }
+          .topic-title { font-size: 18px !important; }
         }
       `}</style>
     </>

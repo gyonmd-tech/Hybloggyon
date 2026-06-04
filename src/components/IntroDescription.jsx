@@ -6,7 +6,7 @@ export default function IntroDescription() {
       style={{
         backgroundColor: 'var(--color-background-ash)',
         borderBottom: '1px solid var(--color-ink)',
-        padding: '120px 40px',
+        padding: 'clamp(60px, 10vw, 120px) clamp(20px, 4vw, 40px)',
       }}
     >
       <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
@@ -57,6 +57,7 @@ export default function IntroDescription() {
           </p>
 
           <p
+            className="intro-meta-text"
             style={{
               fontFamily: 'var(--font-mono)',
               fontSize: '12px',
@@ -72,6 +73,14 @@ export default function IntroDescription() {
           </p>
         </div>
       </div>
+      <style>{`
+        @media (max-width: 768px) {
+          .intro-section { text-align: left !important; }
+          .intro-section > div > div { align-items: flex-start !important; text-align: left !important; }
+          .intro-description-text { font-size: clamp(24px, 7vw, 36px) !important; }
+          .intro-meta-text { display: none; }
+        }
+      `}</style>
     </section>
   );
 }

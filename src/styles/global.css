@@ -129,6 +129,23 @@ html {
   display: none;
 }
 
+/* -------------------------------------------------------
+   RESPONSIVE UTILITIES — Mobile base (< 768px)
+------------------------------------------------------- */
+:root {
+  --px-mobile: 20px;
+  --px-desktop: 40px;
+  --section-py-mobile: 60px;
+  --section-py-desktop: 120px;
+}
+
+/* Hide on mobile, show on desktop */
+.hide-mobile { display: none !important; }
+@media (min-width: 769px) {
+  .hide-mobile { display: revert !important; }
+  .hide-desktop { display: none !important; }
+}
+
 #root {
   min-height: 100vh;
 }
