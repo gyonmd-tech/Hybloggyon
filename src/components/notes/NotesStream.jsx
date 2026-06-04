@@ -5,36 +5,43 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const ALL_NOTES = [
-  { id: 1, tag: 'Filosofi', date: '24 Mei', title: 'Tentang Kebosanan yang Produktif', readTime: '7 min' },
-  { id: 2, tag: 'Teknologi', date: '17 Mei', title: 'Internet Sedang Menyusut', readTime: '11 min' },
-  { id: 3, tag: 'Personal', date: '9 Mei', title: 'Mencatat sebagai Ritual', readTime: '5 min' },
-  { id: 4, tag: 'Musik', date: '2 Mei', title: 'Kenapa Album Konsep Masih Relevan', readTime: '9 min' },
-  { id: 5, tag: 'Observasi', date: '28 Apr', title: 'Pola di Balik Desain Antarmuka Modern', readTime: '6 min' },
-  { id: 6, tag: 'Sastra', date: '21 Apr', title: 'Membaca Ulang Borges', readTime: '13 min' },
-  { id: 7, tag: 'Film', date: '15 Apr', title: 'Kecepatan Naratif Wong Kar-wai', readTime: '8 min' },
-  { id: 8, tag: 'Filosofi', date: '8 Apr', title: 'Tentang Waktu yang Tidak Linier', readTime: '12 min' },
-  { id: 9, tag: 'Personal', date: '1 Apr', title: 'Produktivitas Bukan Tujuan', readTime: '4 min' },
-  { id: 10, tag: 'Teknologi', date: '25 Mar', title: 'Ketika AI Menulis dan Manusia Mengkurasi', readTime: '10 min' },
-  { id: 11, tag: 'Musik', date: '18 Mar', title: 'Noise sebagai Bahasa', readTime: '7 min' },
-  { id: 12, tag: 'Observasi', date: '11 Mar', title: 'Arsitektur dan Kesunyian Kota', readTime: '6 min' },
-];
+// ── Load semua posts dari MDX (semua kategori untuk stream) ───────────────────
+const mdxModules = import.meta.glob('/src/content/posts/*.mdx', { eager: true });
+
+const ALL_NOTES = Object.values(mdxModules)
+  .map(m => m.frontmatter)
+  .filter(p => p?.slug && p?.title)
+  .sort((a, b) => new Date(b.date) - new Date(a.date))
+  .map((p, i) => ({
+    id:       p.slug,
+    tag:      p.tags?.[0] ?? p.category,
+    date:     new Date(p.date).toLocaleDateString('id-ID', { day: 'numeric', month: 'short' }),
+    title:    p.title,
+    readTime: `${p.readingTime ?? 4} min`,
+    href:     `/${p.category}/${p.slug}`,
+    category: p.category,
+  }));
 
 const TAG_COLORS = {
-  'Filosofi': 'var(--color-wasabi)',
-  'Teknologi': 'var(--color-accent-green)',
-  'Personal': 'var(--color-muted-apricot)',
-  'Musik': 'var(--color-accent-warm)',
-  'Observasi': 'var(--color-surface-dim)',
-  'Sastra': 'var(--color-wasabi)',
-  'Film': 'var(--color-muted-apricot)',
+  'filosofi':   'var(--color-wasabi)',
+  'teknologi':  'var(--color-accent-green)',
+  'personal':   'var(--color-muted-apricot)',
+  'musik':      'var(--color-accent-warm)',
+  'observasi':  'var(--color-surface-dim)',
+  'sastra':     'var(--color-wasabi)',
+  'film':       'var(--color-muted-apricot)',
+  'jurnal':     'var(--color-accent-green)',
+  'refleksi':   'var(--color-wasabi)',
+  'membaca':    'var(--color-muted-apricot)',
+  'buku':       'var(--color-muted-apricot)',
 };
 
 export default function NotesStream({ activeTag, searchQuery }) {
   const sectionRef = useRef(null);
 
   const filtered = ALL_NOTES.filter((n) => {
-    const tagMatch = !activeTag || activeTag === 'Semua' || n.tag === activeTag;
+    const tagMatch = !activeTag || activeTag === 'Semua' ||
+      (n.tag ?? '').toLowerCase() === activeTag.toLowerCase();
     const queryMatch = !searchQuery || n.title.toLowerCase().includes(searchQuery.toLowerCase());
     return tagMatch && queryMatch;
   });
@@ -105,7 +112,7 @@ export default function NotesStream({ activeTag, searchQuery }) {
             filtered.map((note, i) => (
               <a
                 key={note.id}
-                href={`/notes/${note.id}`}
+                href={note.href}
                 className="note-stream-row note-row-grid"
                 onMouseEnter={(e) => {
                   e.currentTarget.style.paddingLeft = '12px';
@@ -126,7 +133,7 @@ export default function NotesStream({ activeTag, searchQuery }) {
                     {/* Tag */}
                     <span className="note-row-tag" style={{
                       fontFamily: 'var(--font-mono)', fontSize: '10px', letterSpacing: '0.1em', textTransform: 'uppercase',
-                      backgroundColor: TAG_COLORS[note.tag] || 'var(--color-wasabi)',
+                      backgroundColor: TAG_COLORS[(note.tag ?? '').toLowerCase()] || 'var(--color-wasabi)',
                       padding: '4px 8px', display: 'inline-block',
                     }}>
                       {note.tag}

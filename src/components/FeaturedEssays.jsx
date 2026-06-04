@@ -5,32 +5,35 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const ESSAYS = [
-  {
-    id: 1,
-    tag: 'ESSAY // ARCHITECTURE',
-    title: 'The Brutalist Web',
-    subtitle: 'Kejujuran Arsitektur Digital',
-    align: 'left',
-    image: 'https://images.unsplash.com/photo-1486325212027-8081e485255e?w=1600&q=75',
-  },
-  {
-    id: 2,
-    tag: 'ESSAY // PHILOSOPHY',
-    title: 'Kolektor Kenangan',
-    subtitle: 'Hal-Hal yang Tak Berguna',
-    align: 'right',
-    image: 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=1600&q=75',
-  },
-  {
-    id: 3,
-    tag: 'MUSIK // ANALISIS',
-    title: 'OK Computer',
-    subtitle: 'Kecemasan Teknologi yang Menahun',
-    align: 'center',
-    image: 'https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=1600&q=75',
-  },
-];
+// ── Gambar hero per kategori ─────────────────────────────────────────────────
+const CATEGORY_IMAGES = {
+  'esai':       'https://images.unsplash.com/photo-1455390582262-044cdead277a?w=1600&q=75',
+  'notes':      'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=1600&q=75',
+  'film-anime': 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=1600&q=75',
+  'musik':      'https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=1600&q=75',
+};
+
+// ── Load semua MDX posts ──────────────────────────────────────────────────────
+const mdxModules = import.meta.glob('/src/content/posts/*.mdx', { eager: true });
+
+const ALL_POSTS = Object.values(mdxModules)
+  .map(mod => mod.frontmatter)
+  .filter(p => p?.slug && p?.title)
+  .sort((a, b) => new Date(b.date) - new Date(a.date));
+
+// Prioritaskan featured: true, kalau kurang dari 3 tambah dari terbaru
+const featuredPosts = ALL_POSTS.filter(p => p.featured === true);
+const fillerPosts   = ALL_POSTS.filter(p => p.featured !== true);
+const sourcePosts   = [...featuredPosts, ...fillerPosts].slice(0, 3);
+
+const ESSAYS = sourcePosts.map((p, i) => ({
+  id:       i + 1,
+  tag:      `${(p.category ?? 'esai').toUpperCase().replace('-', ' & ')} // ${(p.tags?.[0] ?? 'refleksi').toUpperCase()}`,
+  title:    p.title,
+  subtitle: p.subtitle ?? p.excerpt ?? '',
+  href:     `/${p.category}/${p.slug}`,
+  image:    CATEGORY_IMAGES[p.category] ?? CATEGORY_IMAGES['esai'],
+}));
 
 export default function FeaturedEssays() {
   const containerRef = useRef(null);
@@ -152,7 +155,7 @@ export default function FeaturedEssays() {
       {ESSAYS.map((essay, i) => (
         <a
           key={essay.id}
-          href="#"
+          href={essay.href}
           className="essay-panel-container"
           style={{
             position: 'relative',

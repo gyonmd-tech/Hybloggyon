@@ -1,11 +1,22 @@
 // src/components/LatestTopics.jsx
-const TOPICS = [
-  { num: '01', category: 'SYSTEMS', title: 'The Brutalist Web: Kejujuran Arsitektur Digital', date: '20 MEI 2026', readTime: '8 MIN READ' },
-  { num: '02', category: 'ESAI', title: 'Mengapa Kita Koleksi Hal-Hal yang Tak Berguna', date: '14 MEI 2026', readTime: '6 MIN READ' },
-  { num: '03', category: 'MUSIK', title: 'OK Computer dan Kecemasan Teknologi yang Menahun', date: '05 MEI 2026', readTime: '10 MIN READ' },
-  { num: '04', category: 'FILM', title: 'Wong Kar-wai dan Waktu yang Diingat Tubuh', date: '28 APR 2026', readTime: '7 MIN READ' },
-  { num: '05', category: 'NOTES', title: 'Belajar Mengetik Tanpa Melihat Keyboard', date: '20 APR 2026', readTime: '4 MIN READ' },
-];
+
+// ── Load semua MDX posts secara dinamis ──────────────────────────────────────
+const mdxModules = import.meta.glob('/src/content/posts/*.mdx', { eager: true });
+
+const ALL_POSTS = Object.values(mdxModules)
+  .map(mod => mod.frontmatter)
+  .filter(p => p?.slug && p?.title)
+  .sort((a, b) => new Date(b.date) - new Date(a.date));
+
+// Ambil 5 terbaru
+const TOPICS = ALL_POSTS.slice(0, 5).map((p, i) => ({
+  num: String(i + 1).padStart(2, '0'),
+  category: (p.category ?? 'notes').toUpperCase().replace('-', ' & '),
+  title: p.title,
+  date: new Date(p.date).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }).toUpperCase(),
+  readTime: `${p.readingTime ?? 5} MIN READ`,
+  href: `/${p.category}/${p.slug}`,
+}));
 
 export default function LatestTopics() {
   return (
@@ -73,7 +84,7 @@ export default function LatestTopics() {
             {TOPICS.map((topic) => (
               <a
                 key={topic.num}
-                href="#"
+                href={topic.href}
                 className="notes-row topic-row-hover topic-grid-row"
                 style={{
                   display: 'grid',

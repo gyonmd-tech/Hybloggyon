@@ -5,35 +5,30 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const FEATURED = [
-  {
-    id: 1,
-    tag: 'Filosofi',
-    date: '24 Mei 2026',
-    title: 'Tentang Kebosanan yang Produktif',
-    excerpt: 'Kebosanan bukan musuh kreativitas. Ia adalah kondisi prasyarat yang paling sering diabaikan di era notifikasi tanpa henti.',
-    readTime: '7 menit',
-    accent: 'var(--color-accent-green)',
-  },
-  {
-    id: 2,
-    tag: 'Teknologi',
-    date: '17 Mei 2026',
-    title: 'Internet Sedang Menyusut',
-    excerpt: 'Paradoks terbesar era kita: akses informasi tak terbatas, namun ruang eksplorasi yang terasa semakin sempit.',
-    readTime: '11 menit',
-    accent: 'var(--color-accent-warm)',
-  },
-  {
-    id: 3,
-    tag: 'Personal',
-    date: '9 Mei 2026',
-    title: 'Mencatat sebagai Ritual',
-    excerpt: 'Sebuah buku catatan bukan sekadar tempat menyimpan ide. Ia adalah cermin yang memperlihatkan cara pikiran kita bekerja.',
-    readTime: '5 menit',
-    accent: 'var(--color-wasabi)',
-  },
+// ── Load notes dari MDX ───────────────────────────────────────────────────────
+const mdxModules = import.meta.glob('/src/content/posts/*.mdx', { eager: true });
+
+const ACCENT_COLORS = [
+  'var(--color-accent-green)',
+  'var(--color-accent-warm)',
+  'var(--color-wasabi)',
 ];
+
+const FEATURED = Object.values(mdxModules)
+  .map(m => m.frontmatter)
+  .filter(p => p?.slug && p?.category === 'notes')
+  .sort((a, b) => new Date(b.date) - new Date(a.date))
+  .slice(0, 3)
+  .map((p, i) => ({
+    id:       p.slug,
+    tag:      p.tags?.[0] ?? 'notes',
+    date:     new Date(p.date).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }),
+    title:    p.title,
+    excerpt:  p.excerpt ?? '',
+    readTime: `${p.readingTime ?? 3} menit`,
+    href:     `/notes/${p.slug}`,
+    accent:   ACCENT_COLORS[i % ACCENT_COLORS.length],
+  }));
 
 export default function FeaturedNotes() {
   const sectionRef = useRef(null);
@@ -84,10 +79,11 @@ export default function FeaturedNotes() {
 
         <div className="featured-notes-grid">
           {FEATURED.map((note) => (
-            <article
+            <a
               key={note.id}
+              href={note.href}
               className="featured-note-card"
-              style={{ backgroundColor: 'var(--color-background-ash)', padding: '48px 40px', display: 'flex', flexDirection: 'column', gap: '20px', cursor: 'pointer', transition: 'background-color 0.25s ease' }}
+              style={{ backgroundColor: 'var(--color-background-ash)', padding: '48px 40px', display: 'flex', flexDirection: 'column', gap: '20px', cursor: 'pointer', transition: 'background-color 0.25s ease', textDecoration: 'none' }}
               onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#fff'}
               onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'var(--color-background-ash)'}
             >
@@ -114,7 +110,7 @@ export default function FeaturedNotes() {
                   Baca →
                 </span>
               </div>
-            </article>
+            </a>
           ))}
         </div>
       </div>

@@ -1,9 +1,16 @@
 // src/components/ClassificationGrid.jsx
+
+// ── Load MDX untuk hitung entries per kategori ────────────────────────────────
+const mdxModules = import.meta.glob('/src/content/posts/*.mdx', { eager: true });
+const ALL_POSTS   = Object.values(mdxModules).map(m => m.frontmatter).filter(Boolean);
+
+const countByCategory = cat => ALL_POSTS.filter(p => p.category === cat).length;
+
 const CLASSES = [
-  { id: '01', name: 'ESAI', count: 12, desc: 'Tulisan reflektif panjang.' },
-  { id: '02', name: 'NOTES', count: 45, desc: 'Catatan belajar & log.' },
-  { id: '03', name: 'MUSIK', count: 8, desc: 'Analisis dan ulasan album.' },
-  { id: '04', name: 'FILM', count: 14, desc: 'Sinema dan pergerakan.' },
+  { id: '01', name: 'ESAI',       slug: 'esai',       count: countByCategory('esai'),       desc: 'Tulisan reflektif panjang.',   href: '/archive' },
+  { id: '02', name: 'NOTES',      slug: 'notes',      count: countByCategory('notes'),      desc: 'Catatan belajar & log.',        href: '/notes'   },
+  { id: '03', name: 'MUSIK',      slug: 'musik',      count: countByCategory('musik'),      desc: 'Analisis dan ulasan album.',    href: '/archive' },
+  { id: '04', name: 'FILM',       slug: 'film-anime', count: countByCategory('film-anime'), desc: 'Sinema dan pergerakan.',        href: '/archive' },
 ];
 
 export default function ClassificationGrid() {
@@ -126,8 +133,9 @@ export default function ClassificationGrid() {
         {/* DESKTOP GRID */}
         <div className="desktop-class-grid">
           {CLASSES.map((cls) => (
-            <div
+            <a
               key={cls.id}
+              href={cls.href}
               className="class-item"
               style={{
                 backgroundColor: 'var(--color-ink)',
@@ -136,6 +144,7 @@ export default function ClassificationGrid() {
                 display: 'flex',
                 flexDirection: 'column',
                 minHeight: '320px',
+                textDecoration: 'none',
               }}
             >
               {/* Top Row */}
@@ -161,14 +170,14 @@ export default function ClassificationGrid() {
                   {cls.desc}
                 </p>
               </div>
-            </div>
+            </a>
           ))}
         </div>
 
         {/* MOBILE COMPACT LIST */}
         <div className="mobile-class-list">
           {CLASSES.map((cls) => (
-            <a key={cls.id} href="#" className="mobile-class-item">
+            <a key={cls.id} href={cls.href} className="mobile-class-item">
               <div className="mobile-class-left">
                 <span className="mobile-class-number">{cls.id}</span>
                 <h3 className="mobile-class-title">{cls.name}</h3>

@@ -2,83 +2,146 @@
 
 Selamat! *Website* Anda sudah berhasil *live* di Vercel. Karena sistem *website* Anda sekarang terhubung langsung ke GitHub (CI/CD), Anda **tidak perlu lagi membuka Vercel** setiap kali ingin menambah artikel baru. Semua perubahan akan otomatis diperbarui.
 
-Berikut adalah siklus kerja (*workflow*) harian Anda sebagai penulis/pengelola blog ini:
+---
+
+## ⚠️ Catatan Penting: Lokasi File Konten
+
+> Semua tulisan yang **aktif dibaca oleh website** disimpan di:
+>
+> **`src/content/posts/`** ← INI yang digunakan website
+>
+> Folder `content/` di root project adalah folder referensi/backup, **bukan** yang dibaca website.
 
 ---
 
-## 1. Menambahkan Artikel / Esai Baru
+## 1. Menambahkan Artikel / Esai / Catatan Baru
 
-Semua tulisan Anda disimpan dalam format `.mdx` (Markdown dengan dukungan React komponen).
+Semua tulisan disimpan dalam format `.mdx` di folder **`src/content/posts/`**.
+
+### Langkah-langkah:
 
 1. Buka folder `src/content/posts/` di VS Code.
-2. Buat file baru, misalnya `esai-filosofi-waktu.mdx`.
-3. Di baris paling atas *file* tersebut, **wajib** tambahkan "Frontmatter" (metadata) dengan format seperti ini:
+2. Buat file baru, misalnya `esai-tentang-kreativitas.mdx`.
+3. Di baris paling atas file, **wajib** tambahkan Frontmatter (metadata) seperti ini:
 
 ```mdx
 ---
-title: "Membongkar Filosofi Waktu dalam Sinema Tarkovsky"
-date: "2026-06-15"
+title: "Judul Artikel Kamu"
+subtitle: "Subjudul opsional"
 category: "esai"
-author: "HyBloggyon"
-tags: ["sinema", "filosofi", "waktu"]
-coverImage: "/images/covers/esai/tarkovsky-waktu.webp"
-excerpt: "Sebuah observasi tentang bagaimana Tarkovsky memahat waktu menjadi bentuk fisik melalui kameranya."
+tags: ["tag1", "tag2"]
+date: "2026-07-01"
+slug: "judul-artikel-kamu"
+featured: false
+excerpt: "Ringkasan satu kalimat yang tampil di kartu artikel."
+coverImage: "/images/covers/esai/judul-artikel-kamu.webp"
+readingTime: 5
+pullQuote: "Kutipan pendek yang mewakili isi tulisan."
 ---
 
-Lalu di bawah garis putus-putus ini, Anda bisa mulai menulis isi esainya di sini secara normal. Anda bisa menggunakan **teks tebal**, *miring*, daftar, atau memanggil komponen khusus jika diperlukan.
+Isi tulisanmu di sini...
 ```
 
-> [!TIP]
-> Kategori yang tersedia secara bawaan adalah: `esai`, `notes`, `film-anime`, dan `musik`.
+> [!IMPORTANT]
+> Field `slug` **wajib diisi** dan harus sama persis dengan nama file (tanpa `.mdx`).
+> Contoh: file `esai-tentang-kreativitas.mdx` → slug: `"esai-tentang-kreativitas"`
+
+### Kategori yang tersedia:
+- `"esai"` — Esai panjang dan reflektif
+- `"notes"` — Catatan belajar, fragmen pikiran, jurnal
+- `"film-anime"` — Analisis dan ulasan film & anime
+- `"musik"` — Analisis album, review lagu
+
+### Template siap pakai:
+Lihat folder `Docs/` untuk template lengkap setiap kategori:
+- `Docs/TEMPLATE-ESAI.md`
+- `Docs/TEMPLATE-NOTES.md`
+- `Docs/TEMPLATE-FILM-ANIME.md`
+- `Docs/TEMPLATE-MUSIK.md`
 
 ---
 
-## 2. Mengunggah Gambar Baru
+## 2. Mengunggah Gambar Cover
 
-1. Siapkan gambar Anda (sangat disarankan menggunakan format `.webp` atau `.jpg` yang sudah dikompresi agar *website* tetap ringan).
-2. Simpan gambar tersebut ke dalam folder `public/images/`.
-   - Untuk *cover* artikel, simpan ke `public/images/covers/nama-kategori/`.
-   - Untuk gambar di dalam isi artikel, simpan ke `public/images/posts/`.
-3. Panggil gambar tersebut di dalam MDX menggunakan sintaks biasa: `![Deskripsi](/images/posts/nama-gambar.webp)`.
+1. Siapkan gambar (sangat disarankan format `.webp`, ukuran 1200×630px).
+2. Simpan ke folder yang sesuai:
+
+| Kategori | Folder tujuan |
+|---|---|
+| Esai | `public/images/covers/esai/` |
+| Notes | `public/images/covers/notes/` |
+| Film & Anime | `public/images/covers/film-anime/` |
+| Musik | `public/images/covers/musik/` |
+
+3. Nama file gambar **harus sama persis** dengan slug artikel + `.webp`
+   - Contoh slug: `esai-tentang-kreativitas`
+   - Nama file gambar: `esai-tentang-kreativitas.webp`
+
+> [!TIP]
+> Lihat `Docs/PANDUAN-GAMBAR.md` untuk panduan lengkap membuat, mengompresi, dan mengupload gambar.
 
 ---
 
 ## 3. Publikasi (Auto-Deploy ke Vercel)
 
-Setelah Anda selesai menulis dan menyimpan (*Save*) tulisan Anda di VS Code, ikuti 3 langkah sakti ini untuk mempublikasikannya ke internet:
-
-Buka **Terminal** di VS Code, lalu jalankan secara berurutan:
+Setelah selesai menulis, jalankan 3 perintah ini di Terminal VS Code:
 
 ```bash
-# 1. Masukkan semua perubahan baru ke daftar tunggu
+# 1. Masukkan semua perubahan ke daftar tunggu
 git add .
 
-# 2. Beri catatan tentang apa yang Anda ubah/tambah
-git commit -m "Menambahkan esai tentang filosofi waktu"
+# 2. Beri catatan perubahan
+git commit -m "Tambah artikel: judul artikel kamu"
 
-# 3. Dorong kode ke GitHub (Vercel akan otomatis menangkapnya!)
+# 3. Push ke GitHub — Vercel otomatis deploy!
 git push
 ```
 
-> [!IMPORTANT]  
-> Setelah Anda menekan `Enter` pada perintah `git push`, Vercel akan otomatis bekerja di balik layar. Tunggu sekitar **30 - 60 detik**, lalu *refresh* (muat ulang) alamat *website live* Anda. Artikel baru Anda pasti sudah muncul!
+> [!IMPORTANT]
+> Setelah `git push`, tunggu **30–60 detik** lalu refresh website live kamu. Artikel baru pasti sudah muncul!
 
 ---
 
-## 4. Konfigurasi Vercel Tambahan (Jika Diperlukan Nanti)
+## 4. URL Artikel di Website
 
-### Memasukkan / Memperbarui API Key TMDb
-Jika poster film di halaman "Hobby" Anda masih kosong atau tidak muncul:
-1. Buka [Dashboard Vercel](https://vercel.com) dan pilih proyek HyBloggyon Anda.
-2. Pergi ke tab **Settings** (Pengaturan) → menu **Environment Variables**.
-3. Ketik `VITE_TMDB_API_KEY` pada kolom **Key**, dan masukkan API Key rahasia Anda pada kolom **Value**.
-4. Klik **Save**.
-5. Buka tab **Deployments**, klik ikon titik tiga (⋮) pada *deployment* paling atas, lalu pilih **Redeploy**.
+Setelah dipublish, URL artikel mengikuti format:
+
+```
+https://[domain-kamu]/[category]/[slug]
+```
+
+**Contoh:**
+- `https://hybloggyon.vercel.app/esai/tentang-keheningan-sebagai-bahasa`
+- `https://hybloggyon.vercel.app/notes/fragmen-pikiran-di-bulan-mei`
+- `https://hybloggyon.vercel.app/musik/analisis-album-to-pimp-a-butterfly`
 
 ---
 
-## Ringkasan Singkat
-Setiap hari, yang perlu Anda lakukan hanyalah:
-`Tulis Artikel MDX` ➡️ `git add .` ➡️ `git commit -m "Judul"` ➡️ `git push`. 
+## 5. Ringkasan Workflow Harian
 
-Selamat menulis!
+```
+Buat file .mdx baru di src/content/posts/
+        ↓
+Isi frontmatter + konten tulisan
+        ↓
+Simpan gambar cover di public/images/covers/[kategori]/
+        ↓
+git add . → git commit -m "..." → git push
+        ↓
+Tunggu 30-60 detik → Artikel live! 🎉
+```
+
+---
+
+## 6. Konfigurasi Vercel (Jika Diperlukan)
+
+### Memperbarui API Key TMDb
+Jika poster film di halaman "Hobby" tidak muncul:
+1. Buka [Dashboard Vercel](https://vercel.com) → pilih proyek HyBloggyon.
+2. Pergi ke **Settings** → **Environment Variables**.
+3. Tambahkan `VITE_TMDB_API_KEY` dengan nilai API Key kamu.
+4. Klik **Save** → **Redeploy**.
+
+---
+
+*Selamat menulis! Untuk panduan lebih lengkap, lihat folder `Docs/` di root project.*
