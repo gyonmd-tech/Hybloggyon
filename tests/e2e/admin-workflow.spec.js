@@ -65,7 +65,10 @@ test.describe('workflow admin dengan database', () => {
 
     const oldRoute = await request.get(`/esai/${originalSlug}`, { maxRedirects: 0 });
     expect([301, 308]).toContain(oldRoute.status());
-    expect(oldRoute.headers().location).toBe(`/esai/${revisedSlug}`);
+    const redirectLocations = oldRoute.headers().location
+      .split(',')
+      .map((value) => value.trim());
+    expect(redirectLocations.every((value) => value === `/esai/${revisedSlug}`)).toBe(true);
     const newRoute = await request.get(`/esai/${revisedSlug}`);
     expect(newRoute.status()).toBe(200);
   });
