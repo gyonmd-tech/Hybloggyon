@@ -29,13 +29,15 @@ test.describe('workflow admin dengan database', () => {
   test('membuat seri, menerbitkan artikel, menyimpan revisi, dan membuat redirect slug', async ({ page, request }) => {
     await login(page);
 
+    const suffix = Date.now().toString(36);
+    const seriesName = `Catatan Integrasi ${suffix}`;
+    const seriesSlug = `catatan-integrasi-${suffix}`;
     await page.goto('/admin/series');
-    await page.getByLabel('Nama').first().fill('Catatan Integrasi');
-    await expect(page.getByLabel('Slug').first()).toHaveValue('catatan-integrasi');
+    await page.getByLabel('Nama').first().fill(seriesName);
+    await expect(page.getByLabel('Slug').first()).toHaveValue(seriesSlug);
     await page.getByRole('button', { name: 'Buat seri' }).click();
     await expect(page.getByRole('status')).toContainText('Seri dibuat');
 
-    const suffix = Date.now().toString(36);
     const originalSlug = `uji-fase-empat-${suffix}`;
     const revisedSlug = `${originalSlug}-revisi`;
     const title = `Uji Fase Empat ${suffix}`;
@@ -46,7 +48,7 @@ test.describe('workflow admin dengan database', () => {
     await page.getByLabel('Isi Markdown').fill('## Bagian pertama\n\nKonten integrasi untuk menguji alur editorial.');
     await page.getByLabel('Excerpt').fill('Artikel otomatis untuk pengujian fase empat.');
     await page.getByLabel('Tag').fill('integrasi, pengujian');
-    await page.getByLabel('Pilih seri').selectOption('catatan-integrasi');
+    await page.getByLabel('Pilih seri').selectOption(seriesSlug);
     await page.getByLabel('Status').selectOption('published');
     await page.getByRole('button', { name: 'Simpan artikel' }).click();
 

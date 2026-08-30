@@ -353,7 +353,11 @@ export async function saveAdminPost(input, editorId, postId = null) {
         .where(eq(slugRedirects.postId, id));
     }
 
-    return { id, route: newRoute };
+    return {
+      id,
+      route: newRoute,
+      previousRoute: oldRoute && oldRoute !== newRoute ? oldRoute : null,
+    };
   });
 }
 

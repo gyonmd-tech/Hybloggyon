@@ -172,6 +172,7 @@ export async function savePostAction(_previousState, formData) {
       publishedAt: input.publishedAt ? new Date(input.publishedAt) : null,
     }, admin.userId, postId);
     revalidateEditorialPaths(saved.route);
+    if (saved.previousRoute) revalidatePath(saved.previousRoute);
     redirect(`/admin/posts/${saved.id}/edit?saved=1`);
   } catch (error) {
     if (error?.digest?.startsWith('NEXT_REDIRECT')) throw error;
