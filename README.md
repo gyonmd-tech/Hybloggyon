@@ -66,7 +66,7 @@ src/
 │   ├── content/         # Kontrak dan adapter sumber konten
 │   ├── auth/            # Password, session, dan proteksi admin
 │   ├── db/              # Schema, client, dan repository PostgreSQL
-│   └── media/           # Penyimpanan lokal/S3-compatible
+│   └── media/           # Penyimpanan lokal, Vercel Blob, atau S3-compatible
 └── styles/              # Design system publik dan admin
 ```
 
@@ -99,6 +99,8 @@ DATABASE_POOL_MAX=1
 CONTENT_SOURCE=markdown
 MEDIA_STORAGE=local
 ```
+
+Untuk deployment Vercel, gunakan `MEDIA_STORAGE=blob`. Public Blob store menyediakan `BLOB_READ_WRITE_TOKEN` secara otomatis; mode S3-compatible tetap tersedia untuk hosting lain.
 
 `NEXT_PUBLIC_SITE_URL` digunakan untuk canonical URL, sitemap, robots, dan structured data. Konfigurasi lama `VITE_TMDB_API_KEY` masih dibaca sementara agar halaman Kurasi tidak langsung rusak saat migrasi.
 

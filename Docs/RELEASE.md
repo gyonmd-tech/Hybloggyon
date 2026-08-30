@@ -7,7 +7,7 @@ Dokumen ini memisahkan tiga kegiatan yang berbeda: menyiapkan staging, memindahk
 Siapkan dua environment terpisah: staging dan production. Masing-masing memerlukan:
 
 - PostgreSQL dengan koneksi TLS dan backup terjadwal;
-- object storage S3-compatible beserta URL publik/CDN;
+- Vercel Blob publik atau object storage S3-compatible beserta URL publik/CDN;
 - domain HTTPS;
 - environment variables dari `.env.example`;
 - akun database aplikasi dengan hak minimum terhadap schema HyBloggyon.
@@ -36,7 +36,7 @@ Aktifkan sementara konfigurasi berikut pada staging:
 
 ```env
 CONTENT_SOURCE=database
-MEDIA_STORAGE=s3
+MEDIA_STORAGE=blob
 ```
 
 Kemudian jalankan:
@@ -71,7 +71,7 @@ Sebelum jendela cutover:
    npm run cutover:check
    ```
 
-5. Jika lolos, ubah production menjadi `CONTENT_SOURCE=database` dan `MEDIA_STORAGE=s3`.
+5. Jika lolos, ubah production menjadi `CONTENT_SOURCE=database` dan `MEDIA_STORAGE=blob` (atau `s3` untuk storage S3-compatible).
 6. Deploy build yang sama dengan build yang sudah diperiksa.
 7. Uji halaman utama, dua artikel, login admin, sitemap, dan satu operasi draft.
 

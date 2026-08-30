@@ -4,7 +4,10 @@ const email = process.env.E2E_ADMIN_EMAIL;
 const password = process.env.E2E_ADMIN_PASSWORD;
 
 test.describe('workflow admin dengan database', () => {
-  test.skip(!email || !password, 'Membutuhkan E2E_ADMIN_EMAIL dan E2E_ADMIN_PASSWORD.');
+  test.skip(
+    !email || !password || process.env.E2E_MUTATION_TESTS !== '1',
+    'Membutuhkan kredensial E2E dan E2E_MUTATION_TESTS=1.',
+  );
   test.describe.configure({ mode: 'serial' });
 
   async function login(page) {

@@ -2,6 +2,7 @@ import 'server-only';
 import { createHash, createHmac, randomUUID } from 'node:crypto';
 import { mkdir, unlink, writeFile } from 'node:fs/promises';
 import path from 'node:path';
+import { del as deleteBlob, put as putBlob } from '@vercel/blob';
 import { slugify } from '../slugify.js';
 
 function sha256(value) {
@@ -106,6 +107,17 @@ export async function storeImage({ fileName, extension, mimeType, bytes }) {
       publicUrl: `${config.publicUrl.replace(/\/$/, '')}/${encodeKey(key)}`,
     };
   }
+  if (driver === 'blob') {
+    if (!process.env.BLOB_READ_WRITE_TOKEN?.trim()) {
+      throw new Error('BLOB_READ_WRITE_TOKEN belum dikonfigurasi.');
+    }
+    const blob = await putBlob(key, bytes, {
+      access: 'public',
+      addRandomSuffix: false,
+      contentType: mimeType,
+    });
+    return { storageKey: `blob/${blob.pathname}`, publicUrl: blob.url };
+  }
   throw new Error(`MEDIA_STORAGE tidak dikenali: ${driver}.`);
 }
 
@@ -124,5 +136,9 @@ export async function deleteStoredImage(asset) {
   }
   if (asset.storageKey.startsWith('s3/')) {
     await signedS3Request('DELETE', asset.storageKey.slice('s3/'.length));
+    return;
+  }
+  if (asset.storageKey.startsWith('blob/')) {
+    await deleteBlob(asset.publicUrl);
   }
 }

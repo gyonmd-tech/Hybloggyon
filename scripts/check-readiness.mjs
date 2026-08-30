@@ -23,8 +23,8 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || '';
 if (!['markdown', 'database'].includes(source)) {
   failures.push('CONTENT_SOURCE harus bernilai markdown atau database.');
 }
-if (!['local', 's3'].includes(mediaStorage)) {
-  failures.push('MEDIA_STORAGE harus bernilai local atau s3.');
+if (!['local', 's3', 'blob'].includes(mediaStorage)) {
+  failures.push('MEDIA_STORAGE harus bernilai local, s3, atau blob.');
 }
 if ((requireDatabase || source === 'database') && !isDatabaseConfigured()) {
   failures.push('DATABASE_URL wajib tersedia untuk aktivasi database.');
@@ -41,8 +41,8 @@ if (production) {
   if (source !== 'database') {
     failures.push('CONTENT_SOURCE harus database sebelum cutover production.');
   }
-  if (mediaStorage !== 's3') {
-    failures.push('MEDIA_STORAGE harus s3 untuk deployment dengan filesystem sementara.');
+  if (!['s3', 'blob'].includes(mediaStorage)) {
+    failures.push('MEDIA_STORAGE harus s3 atau blob untuk deployment dengan filesystem sementara.');
   }
 }
 
@@ -57,6 +57,9 @@ if (mediaStorage === 's3') {
   ]) {
     requireKey(key, 'diperlukan ketika MEDIA_STORAGE=s3.');
   }
+}
+if (mediaStorage === 'blob') {
+  requireKey('BLOB_READ_WRITE_TOKEN', 'diperlukan ketika MEDIA_STORAGE=blob.');
 }
 
 if (mediaStorage === 'local' && production) {
