@@ -7,5 +7,5 @@ import { requireAdmin } from '../../../../lib/auth/session';
 export default async function SeriesPage() {
   await requireAdmin('/admin/series');
   const items = await listSeriesWithCounts();
-  return <><AdminPageHeader eyebrow="Organisasi" title="Seri tulisan" description="Kelompokkan esai yang saling melanjutkan dan tentukan urutannya dari editor artikel." /><TaxonomyManager singular="seri" items={items} saveAction={saveSeriesAction} deleteAction={deleteSeriesAction} showDescription deleteWarning={(item) => Number(item.postCount) ? `Hapus seri “${item.name}”? Artikel tetap ada, tetapi dilepas dari seri.` : `Hapus seri “${item.name}”?`} /></>;
+  return <><AdminPageHeader eyebrow="Organisasi" title="Seri tulisan" description="Kelompokkan esai yang saling melanjutkan dan tentukan urutannya dari editor artikel." /><TaxonomyManager singular="seri" items={items} saveAction={saveSeriesAction} deleteAction={deleteSeriesAction} showDescription /></>;
 }

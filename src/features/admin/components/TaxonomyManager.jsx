@@ -11,6 +11,17 @@ function makeSlug(value) {
   return String(value || '').normalize('NFKD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim().replace(/&/g, '-dan-').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
 }
 
+function getDeleteMessage(singular, item, preventDeleteWhenUsed) {
+  const postCount = Number(item.postCount || 0);
+  if (preventDeleteWhenUsed && postCount > 0) {
+    return `${singular.charAt(0).toUpperCase() + singular.slice(1)} “${item.name}” masih dipakai dan tidak dapat dihapus.`;
+  }
+  if (singular === 'seri' && postCount > 0) {
+    return `Hapus seri “${item.name}”? Artikel tetap ada, tetapi dilepas dari seri.`;
+  }
+  return `Hapus ${singular} “${item.name}”?`;
+}
+
 function TaxonomyForm({ item, action, showDescription, submitLabel }) {
   const [state, formAction] = useActionState(action, initialState);
   const [name, setName] = useState(item?.name || '');
@@ -28,7 +39,7 @@ function TaxonomyForm({ item, action, showDescription, submitLabel }) {
   );
 }
 
-export default function TaxonomyManager({ singular, items, saveAction, deleteAction, showDescription = false, deleteWarning, preventDeleteWhenUsed = false }) {
+export default function TaxonomyManager({ singular, items, saveAction, deleteAction, showDescription = false, preventDeleteWhenUsed = false }) {
   return (
     <div className="admin-taxonomy-layout">
       <section className="admin-panel">
@@ -45,7 +56,7 @@ export default function TaxonomyManager({ singular, items, saveAction, deleteAct
               <td>{Number(item.postCount || 0)}</td>
               <td><div className="admin-actions">
                 <details><summary className="admin-button admin-button--small">Edit</summary><div style={{ position: 'absolute', right: 48, zIndex: 10, width: 'min(420px, calc(100vw - 40px))', padding: 16, border: '1px solid var(--color-ink)', background: 'var(--color-paper-white)', boxShadow: '4px 4px 0 var(--color-ink)' }}><TaxonomyForm item={item} action={saveAction} showDescription={showDescription} submitLabel={`Simpan ${singular}`} /></div></details>
-                <ConfirmForm action={deleteAction} fields={{ id: item.id }} message={deleteWarning ? deleteWarning(item) : `Hapus ${singular} “${item.name}”?`}><button className="admin-button admin-button--small admin-button--danger" type="submit" disabled={preventDeleteWhenUsed && Number(item.postCount) > 0} title={preventDeleteWhenUsed && Number(item.postCount) > 0 ? 'Pindahkan artikel ke kategori lain terlebih dahulu.' : undefined}>Hapus</button></ConfirmForm>
+                <ConfirmForm action={deleteAction} fields={{ id: item.id }} message={getDeleteMessage(singular, item, preventDeleteWhenUsed)}><button className="admin-button admin-button--small admin-button--danger" type="submit" disabled={preventDeleteWhenUsed && Number(item.postCount) > 0} title={preventDeleteWhenUsed && Number(item.postCount) > 0 ? 'Pindahkan artikel ke kategori lain terlebih dahulu.' : undefined}>Hapus</button></ConfirmForm>
               </div></td>
             </tr>
           ))}
