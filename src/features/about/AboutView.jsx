@@ -7,9 +7,7 @@ import AboutPortrait from '../../components/about/AboutPortrait';
 import AboutManifesto from '../../components/about/AboutManifesto';
 import AboutBeliefs from '../../components/about/AboutBeliefs';
 import AboutConnect from '../../components/about/AboutConnect';
-import { aboutData } from '../../content/about-data';
-
-export default function AboutView() {
+export default function AboutView({ content }) {
   return (
     <>
       <div className="grain-overlay-body" aria-hidden="true" />
@@ -18,34 +16,35 @@ export default function AboutView() {
 
       <main>
         {/* Section 1: Kalimat pembuka 100vh */}
-        <AboutOpener text={aboutData.openerText} />
+        <AboutOpener text={content.openerText} />
 
         {/* Section 2: Foto editorial + metadata */}
         <div style={{ position: 'relative', zIndex: 10, backgroundColor: 'var(--color-background-ash)' }}>
           <AboutPortrait
-            name={aboutData.name}
-            shortBio={aboutData.shortBio}
-            meta={aboutData.meta}
+            name={content.name}
+            shortBio={content.shortBio}
+            meta={content.meta}
+            portraitImage={content.portraitImage}
           />
 
           {/* Section 3: Teks manifesto long-form */}
-          <AboutManifesto paragraphs={aboutData.manifestoParagraphs} />
+          <AboutManifesto paragraphs={content.manifestoParagraphs} />
         </div>
 
         {/* Section 4: Daftar prinsip — dark background */}
-        <AboutBeliefs beliefs={aboutData.beliefs} />
+        <AboutBeliefs beliefs={content.beliefs} />
 
         {/* Section 5: Kontak penutup */}
         <div style={{ position: 'relative', zIndex: 10, backgroundColor: 'var(--color-background-ash)' }}>
           <AboutConnect
-            email={aboutData.contactEmail}
-            socialLinks={aboutData.socialLinks}
+            email={content.contactEmail}
+            socialLinks={content.socialLinks}
           />
         </div>
       </main>
 
       <div style={{ position: 'relative', zIndex: 10 }}>
-        <Footer />
+        <Footer contact={content} />
       </div>
     </>
   );

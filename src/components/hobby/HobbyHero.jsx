@@ -8,7 +8,7 @@ import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import SplitType from 'split-type';
 
-export default function HobbyHero() {
+export default function HobbyHero({ content }) {
   const line1Ref    = useRef(null);
   const line2Ref    = useRef(null);
   const subtitleRef = useRef(null);
@@ -126,13 +126,13 @@ export default function HobbyHero() {
             ref={line1Ref}
             style={{ color: 'var(--color-ink)' }}
           >
-            Bukan apa yang kamu{' '}
+            {content.titleFirst}{' '}
           </span>
           <span
             ref={line2Ref}
             style={{ color: 'var(--color-espresso)' }}
           >
-            tulis — yang membentukmu.
+            {content.titleSecond}
           </span>
         </h1>
 
@@ -151,8 +151,7 @@ export default function HobbyHero() {
               margin: 0,
             }}
           >
-            Musik. Film. Kata-kata. Dan hal-hal di antaranya. 
-            Sebuah kurasi personal sebagai biografi yang lebih jujur.
+            {content.subtitle}
           </p>
         </div>
       </div>

@@ -57,7 +57,20 @@ Rollback konten cukup mengembalikan `CONTENT_SOURCE=markdown`. Jangan menghapus 
 - snapshot revisi pada setiap penyimpanan dan pemulihan revisi;
 - redirect 301 otomatis ketika slug artikel atau kategori berubah;
 - identitas situs dan metadata utama;
+- pusat Konten Situs untuk Beranda, Notes, Kurasi/Hobi, dan Tentang;
+- editor repeatable untuk menambah, menghapus, dan mengurutkan showcase, musik, buku, tontonan, observasi, timeline, manifesto, dan tautan sosial;
 - perubahan password yang mencabut seluruh sesi aktif.
+
+## Konten Non-Artikel
+
+Route `/admin/content` adalah pusat pengelolaan semua blok yang sebelumnya tertanam di komponen. Data disimpan sebagai dokumen JSON tervalidasi di tabel `site_settings` dan langsung direvalidasi setelah penyimpanan.
+
+- `/admin/content/home`: hero, ticker, pengantar, kutipan, minat, showcase, log, timeline, dan manifesto ringkas.
+- `/admin/content/notes`: current thinking, generator pemikiran, dan hubungan antarcatatan.
+- `/admin/content/hobby`: identitas halaman, musik, tontonan, buku, dan observasi.
+- `/admin/content/about`: profil, foto, metadata, manifesto, prinsip, email, dan sosial.
+
+Untuk aset visual, unggah gambar melalui `/admin/media`, salin URL-nya, lalu gunakan pada field gambar. Default di `src/content/site-content.js` tetap tersedia sebagai fallback bila setting belum pernah disimpan atau database tidak tersedia.
 
 ## Penyimpanan Media
 
@@ -70,7 +83,17 @@ MEDIA_MAX_SIZE_MB=8
 
 File ditulis ke `public/uploads`. Folder ini tidak masuk Git. Mode ini tidak cocok untuk deployment dengan filesystem sementara.
 
-### Production S3-compatible
+### Production Vercel Blob
+
+```env
+MEDIA_STORAGE=blob
+MEDIA_MAX_SIZE_MB=8
+BLOB_READ_WRITE_TOKEN=...
+```
+
+Token biasanya diinjeksi otomatis saat Blob store dihubungkan ke project Vercel.
+
+### Hosting lain dengan S3-compatible
 
 ```env
 MEDIA_STORAGE=s3

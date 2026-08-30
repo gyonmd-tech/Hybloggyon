@@ -1,5 +1,5 @@
 // src/components/IntroDescription.jsx
-export default function IntroDescription() {
+export default function IntroDescription({ content }) {
   return (
     <section
       className="intro-section"
@@ -32,28 +32,7 @@ export default function IntroDescription() {
               color: 'var(--color-ink)',
             }}
           >
-            HyBloggyon adalah{' '}
-            <span
-              style={{
-                backgroundColor: 'var(--color-wasabi)',
-                padding: '0 8px',
-                display: 'inline-block',
-                transform: 'translateY(-2px)',
-              }}
-            >
-              workshop digital
-            </span>{' '}
-            yang didedikasikan untuk preservasi pemikiran — esai panjang, catatan belajar, dan analisis pop-culture dari sudut pandang{' '}
-            <span
-              style={{
-                backgroundColor: 'var(--color-wasabi)',
-                padding: '0 8px',
-                display: 'inline-block',
-                transform: 'translateY(-2px)',
-              }}
-            >
-              filosofis dan puitis.
-            </span>
+            {content.lead}
           </p>
 
           <p
@@ -69,7 +48,7 @@ export default function IntroDescription() {
               textTransform: 'uppercase',
             }}
           >
-            Sebuah ruang kontemplatif yang tidak dikejar metrik engagement — hanya tulisan jujur yang dibiarkan bernapas panjang.
+            {content.meta}
           </p>
         </div>
       </div>

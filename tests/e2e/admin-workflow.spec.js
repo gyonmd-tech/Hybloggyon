@@ -93,4 +93,28 @@ test.describe('workflow admin dengan database', () => {
     await expect(page.getByRole('status')).toContainText('Gambar berhasil diunggah');
     await expect(page.getByText('pixel-integrasi.png')).toBeVisible();
   });
+
+  test('mengelola konten beranda non-artikel dan menerbitkannya', async ({ page, request }) => {
+    await login(page);
+    await page.goto('/admin/content');
+    await expect(page.getByRole('heading', { name: 'Konten situs' })).toBeVisible();
+    await expect(page.getByRole('link', { name: /Beranda/ })).toBeVisible();
+    await expect(page.getByRole('link', { name: /Kurasi \/ Hobi/ })).toBeVisible();
+
+    await page.goto('/admin/content/home');
+    const titleField = page.getByLabel('Judul hero');
+    const originalTitle = await titleField.inputValue();
+    const testTitle = `Field Study ${Date.now().toString(36)}.`;
+    await titleField.fill(testTitle);
+    await page.getByRole('button', { name: 'Simpan & terbitkan' }).click();
+    await expect(page.getByRole('status')).toContainText('langsung diterbitkan', { timeout: 30_000 });
+
+    const publicHome = await request.get('/');
+    expect(publicHome.status()).toBe(200);
+    expect(await publicHome.text()).toContain(testTitle);
+
+    await titleField.fill(originalTitle);
+    await page.getByRole('button', { name: 'Simpan & terbitkan' }).click();
+    await expect(page.getByRole('status')).toContainText('langsung diterbitkan', { timeout: 30_000 });
+  });
 });

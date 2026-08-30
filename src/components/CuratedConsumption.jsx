@@ -1,15 +1,7 @@
 // src/components/CuratedConsumption.jsx
 import { useState } from 'react';
 
-const EXHIBITION_ITEMS = [
-  { title: 'OK COMPUTER', tag: 'RADIOHEAD · MUSIK', img: 'https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?w=1000&q=75&auto=format&fit=crop' },
-  { title: 'STALKER', tag: 'ANDREI TARKOVSKY · FILM', img: 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=1000&q=75&auto=format&fit=crop' },
-  { title: '1984', tag: 'GEORGE ORWELL · BUKU', img: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=1000&q=75&auto=format&fit=crop' },
-  { title: 'NEW JEANS', tag: 'NEWJEANS · K-POP', img: 'https://images.unsplash.com/photo-1493225457124-a1a2a5f36611?w=1000&q=75&auto=format&fit=crop' },
-  { title: 'AKIRA', tag: 'KATSUHIRO OTOMO · ANIME', img: 'https://images.unsplash.com/photo-1554188248-986ada9caac0?w=1000&q=75&auto=format&fit=crop' },
-];
-
-export default function CuratedConsumption() {
+export default function CuratedConsumption({ items }) {
   const [activeIdx, setActiveIdx] = useState(null);
 
   return (
@@ -27,7 +19,7 @@ export default function CuratedConsumption() {
     >
       {/* Desktop Background Images Layer (Hidden on Mobile) */}
       <div className="hide-mobile">
-        {EXHIBITION_ITEMS.map((item, idx) => {
+        {items.map((item, idx) => {
           const isActive = activeIdx === idx;
           return (
             <div
@@ -35,7 +27,7 @@ export default function CuratedConsumption() {
               style={{
                 position: 'absolute',
                 inset: 0,
-                backgroundImage: `url(${item.img})`,
+                backgroundImage: `url(${item.imageUrl})`,
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
                 opacity: isActive ? 0.6 : 0,
@@ -115,7 +107,7 @@ export default function CuratedConsumption() {
         }}
       >
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0' }}>
-          {EXHIBITION_ITEMS.map((item, idx) => {
+          {items.map((item, idx) => {
             const isHovered = activeIdx === idx;
             const isDimmed = activeIdx !== null && !isHovered;
 
@@ -173,7 +165,7 @@ export default function CuratedConsumption() {
           padding: '0 20px 40px 20px'
         }}
       >
-        {EXHIBITION_ITEMS.map((item, idx) => (
+        {items.map((item, idx) => (
           <div key={idx} style={{
             position: 'relative',
             height: '160px',
@@ -188,7 +180,7 @@ export default function CuratedConsumption() {
           }}>
             <div style={{
               position: 'absolute', inset: 0,
-              backgroundImage: `url(${item.img})`, backgroundSize: 'cover', backgroundPosition: 'center',
+              backgroundImage: `url(${item.imageUrl})`, backgroundSize: 'cover', backgroundPosition: 'center',
               filter: 'grayscale(60%) contrast(1.1)',
               opacity: 0.45
             }} />

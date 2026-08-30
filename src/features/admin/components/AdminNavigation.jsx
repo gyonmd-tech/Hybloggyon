@@ -10,6 +10,7 @@ const sections = [
       { href: '/admin', label: 'Ikhtisar', icon: 'space_dashboard', exact: true },
       { href: '/admin/posts', label: 'Artikel', icon: 'article' },
       { href: '/admin/media', label: 'Media', icon: 'perm_media' },
+      { href: '/admin/content', label: 'Konten situs', icon: 'dashboard_customize' },
     ],
   },
   {

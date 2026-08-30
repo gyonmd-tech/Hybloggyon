@@ -1,13 +1,5 @@
 // src/components/LoggedObservations.jsx
-const LOGS = [
-  { id: 'LOG-042', date: '27 MEI 2026', time: '23:14', text: 'Apakah sebuah foto yang difoto ulang masih memiliki aura aslinya? Walter Benjamin tidak pernah sempat menjawab pertanyaan tentang JPEG.', status: 'OPEN' },
-  { id: 'LOG-041', date: '23 MEI 2026', time: '11:32', text: 'Ada jenis kesunyian yang hanya bisa dicapai dengan headphone penuh dan album yang tepat. Bukan isolasi — lebih seperti fokus yang terarah.', status: 'CLOSED' },
-  { id: 'LOG-040', date: '18 MEI 2026', time: '08:07', text: 'Font sans-serif membuat orang membaca lebih cepat, tapi serif membuat orang mengingat lebih lama. Ini bukan tentang estetika — ini tentang arsitektur ingatan.', status: 'OPEN' },
-  { id: 'LOG-039', date: '12 MEI 2026', time: '21:55', text: 'Notebook kosong paling berat adalah yang belum dibuka. Bukan karena isinya — tapi karena kemungkinannya.', status: 'CLOSED' },
-  { id: 'LOG-038', date: '05 MEI 2026', time: '14:20', text: 'Scrolling tidak berakhir karena kita sudah melihat semua — tapi karena kita kelelahan. Itu beda.', status: 'CLOSED' },
-];
-
-export default function LoggedObservations() {
+export default function LoggedObservations({ logs }) {
   return (
     <section
       className="logged-observations-section"
@@ -122,9 +114,9 @@ export default function LoggedObservations() {
             gap: '20px',
           }}
         >
-          {LOGS.map((log) => (
+          {logs.map((log, index) => (
             <div
-              key={log.id}
+              key={`${log.date}-${index}`}
               className="log-card"
               style={{
                 backgroundColor: '#ffffff',

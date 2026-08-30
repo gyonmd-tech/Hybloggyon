@@ -5,30 +5,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const CONNECTIONS = [
-  {
-    from: 'Kebosanan yang Produktif',
-    to: 'Mencatat sebagai Ritual',
-    via: 'Refleksi diri membutuhkan kekosongan sebagai medium.',
-  },
-  {
-    from: 'Internet Sedang Menyusut',
-    to: 'Ketika AI Menulis dan Manusia Mengkurasi',
-    via: 'Kurasi konten adalah resistance terhadap algoritma.',
-  },
-  {
-    from: 'Kecepatan Naratif Wong Kar-wai',
-    to: 'Tentang Waktu yang Tidak Linier',
-    via: 'Waktu dalam seni bisa dilipat, direntangkan, diulang.',
-  },
-  {
-    from: 'Noise sebagai Bahasa',
-    to: 'Kenapa Album Konsep Masih Relevan',
-    via: 'Ketidaknyamanan yang terstruktur menciptakan makna.',
-  },
-];
-
-export default function ConnectedThoughts() {
+export default function ConnectedThoughts({ connections }) {
   const sectionRef = useRef(null);
 
   useEffect(() => {
@@ -75,7 +52,7 @@ export default function ConnectedThoughts() {
         </div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '1px', backgroundColor: 'rgba(255,255,255,0.08)' }}>
-          {CONNECTIONS.map((c, i) => (
+          {connections.map((c, i) => (
             <div
               key={i}
               className="connection-item connection-grid"

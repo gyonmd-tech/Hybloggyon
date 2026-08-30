@@ -18,7 +18,7 @@ import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import LoadingScreen from '../../components/LoadingScreen';
 
-export default function HomeView({ posts }) {
+export default function HomeView({ posts, content, footerContent }) {
   const [loading, setLoading] = useState(true);
 
   return (
@@ -34,10 +34,10 @@ export default function HomeView({ posts }) {
       <Header />
 
       <main>
-        <HeroBanner />
+        <HeroBanner content={content.hero} />
         <div style={{ position: 'relative', zIndex: 10, backgroundColor: 'var(--color-background-ash)' }}>
-          <MarqueeTicker />
-          <IntroDescription />
+          <MarqueeTicker text={content.ticker} />
+          <IntroDescription content={content.intro} />
 
           {/* Navigasi Kategori (Dipindah ke atas agar pengunjung bisa langsung melompat ke topik spesifik) */}
           <ClassificationGrid posts={posts} />
@@ -45,20 +45,20 @@ export default function HomeView({ posts }) {
           <LatestTopics posts={posts} />
           <FeaturedEssays posts={posts} />
 
-          <AccentQuote />
+          <AccentQuote content={content.quote} />
 
           {/* Konten Personal / Sekunder */}
-          <HobbiesScroll />
-          <CuratedConsumption />
-          <LoggedObservations />
+          <HobbiesScroll items={content.hobbies} />
+          <CuratedConsumption items={content.showcase} />
+          <LoggedObservations logs={content.logs} />
 
-          <Timeline />
-          <ManifestoAbout />
+          <Timeline events={content.timeline} />
+          <ManifestoAbout content={content.manifesto} />
         </div>
       </main>
 
       <div style={{ position: 'relative', zIndex: 10 }}>
-        <Footer />
+        <Footer contact={footerContent} />
       </div>
     </>
   );

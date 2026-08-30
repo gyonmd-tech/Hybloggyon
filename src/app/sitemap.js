@@ -1,6 +1,8 @@
 import { getAllPosts } from '../lib/content/posts';
 import { absoluteUrl } from '../config/site';
 
+export const dynamic = 'force-dynamic';
+
 export default async function sitemap() {
   const staticPages = ['/', '/notes', '/archive', '/hobby', '/about'].map((url) => ({
     url: absoluteUrl(url),

@@ -6,15 +6,7 @@ import SplitType from 'split-type';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const THINKING = [
-  { label: 'Membaca sekarang', value: 'The Anatomy of Melancholy — Robert Burton' },
-  { label: 'Mendengarkan', value: 'Portishead — Dummy (loop ke-4 minggu ini)' },
-  { label: 'Memikirkan', value: 'Bagaimana arsip digital berubah menjadi identitas' },
-  { label: 'Sedang ditulis', value: 'Esai panjang tentang "Attention Economy"' },
-  { label: 'Mempertanyakan', value: 'Apakah kuantitas konten adalah lawan dari kualitas pikiran?' },
-];
-
-export default function CurrentThinking() {
+export default function CurrentThinking({ quote, items }) {
   const sectionRef = useRef(null);
   const quoteRef = useRef(null);
 
@@ -74,10 +66,10 @@ export default function CurrentThinking() {
               marginBottom: '32px',
             }}
           >
-            "Menulis adalah cara satu-satunya saya bisa berpikir dengan jelas — bukan sebelum menulis, melainkan selama dan sesudahnya."
+            “{quote.text}”
           </blockquote>
           <p style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'rgba(0,0,0,0.4)', letterSpacing: '0.1em' }}>
-            — Catatan, Maret 2026
+            — {quote.citation}
           </p>
         </div>
 
@@ -87,7 +79,7 @@ export default function CurrentThinking() {
             Status / Live Update
           </span>
           <div className="thinking-list" style={{ display: 'flex', flexDirection: 'column', borderTop: '1px solid rgba(0,0,0,0.1)' }}>
-            {THINKING.map((item, i) => (
+            {items.map((item, i) => (
               <div
                 key={i}
                 className="thinking-row thinking-row-grid"

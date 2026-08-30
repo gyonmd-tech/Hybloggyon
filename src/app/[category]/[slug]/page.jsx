@@ -10,6 +10,7 @@ import {
 import { siteConfig } from '../../../config/site';
 import { findSlugRedirect } from '../../../lib/db/repositories/redirects';
 import { getResolvedSiteProfile } from '../../../lib/content/site-settings';
+import { getResolvedSiteContent } from '../../../lib/content/site-content';
 import {
   buildArticleStructuredData,
   serializeStructuredData,
@@ -19,7 +20,7 @@ export const dynamicParams = true;
 export const revalidate = 300;
 
 export async function generateStaticParams() {
-  return getPostRouteParams();
+  return getContentSource() === 'database' ? [] : getPostRouteParams();
 }
 
 export async function generateMetadata({ params }) {
@@ -76,7 +77,10 @@ export default async function ArticlePage({ params }) {
   }
 
   const navigation = getPostNavigation(post, await getAllPosts());
-  const profile = await getResolvedSiteProfile();
+  const [profile, footerContent] = await Promise.all([
+    getResolvedSiteProfile(),
+    getResolvedSiteContent('about'),
+  ]);
   const serializedSchema = serializeStructuredData(
     buildArticleStructuredData(post, profile),
   );
@@ -92,6 +96,7 @@ export default async function ArticlePage({ params }) {
         relatedPosts={navigation.related}
         previousPost={navigation.previous}
         nextPost={navigation.next}
+        footerContent={footerContent}
       />
     </>
   );

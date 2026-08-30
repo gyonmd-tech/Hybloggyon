@@ -47,6 +47,21 @@ test('artikel memiliki canonical, Open Graph, dan schema BlogPosting', async ({ 
   expect(graph.some((entry) => entry['@type'] === 'BreadcrumbList')).toBe(true);
 });
 
+test('seluruh landing publik memiliki canonical unik dan tetap dapat diindeks', async ({ page, request }) => {
+  for (const route of ['/notes', '/archive', '/hobby', '/about']) {
+    const response = await page.goto(route);
+    expect(response?.status()).toBe(200);
+    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', new RegExp(`${route}$`));
+    const robots = page.locator('meta[name="robots"]');
+    if (await robots.count()) await expect(robots).not.toHaveAttribute('content', /noindex/);
+    await expect(page.locator('meta[name="description"]')).toHaveAttribute('content', /.+/);
+  }
+
+  const sitemap = await (await request.get('/sitemap.xml')).text();
+  for (const route of ['/notes', '/archive', '/hobby', '/about']) expect(sitemap).toContain(route);
+  expect(sitemap).not.toContain('/admin');
+});
+
 test('health endpoint siap dipakai monitor tanpa dapat diindeks', async ({ request }) => {
   const response = await request.get('/api/health');
   expect(response.status()).toBe(200);

@@ -1,7 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { aboutData } from '../content/about-data';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -13,7 +12,7 @@ const FOOTER_NAVIGATION = [
   { label: 'Manifesto', href: '/about' },
 ];
 
-export default function Footer() {
+export default function Footer({ contact }) {
   const footerRef = useRef(null);
 
   useEffect(() => {
@@ -93,7 +92,7 @@ export default function Footer() {
               <div>
                 <h4 style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '0.15em', color: 'var(--color-accent-green)', marginBottom: '32px' }}>KONEKSI</h4>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-                  {[...aboutData.socialLinks, { label: 'Email', url: `mailto:${aboutData.contactEmail}` }].map((link) => (
+                  {[...contact.socialLinks, { label: 'Email', url: `mailto:${contact.contactEmail}` }].map((link) => (
                     <a key={link.label} href={link.url} style={{ fontFamily: 'var(--font-mono)', fontSize: '13px', color: '#ffffff', textDecoration: 'none', transition: 'color 0.2s', opacity: 0.8 }} onMouseEnter={(e) => e.currentTarget.style.opacity = '1'} onMouseLeave={(e) => e.currentTarget.style.opacity = '0.8'}>{link.label} ↗</a>
                   ))}
                 </div>

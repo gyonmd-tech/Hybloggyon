@@ -1,4 +1,13 @@
 /** @type {import('next').NextConfig} */
+const adminSecurityHeaders = [
+  { key: 'Cache-Control', value: 'private, no-store, max-age=0' },
+  { key: 'X-Robots-Tag', value: 'noindex, nofollow, noarchive, noimageindex' },
+  { key: 'X-Frame-Options', value: 'DENY' },
+  { key: 'X-Content-Type-Options', value: 'nosniff' },
+  { key: 'Referrer-Policy', value: 'no-referrer' },
+  { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=()' },
+];
+
 const nextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
@@ -14,15 +23,12 @@ const nextConfig = {
   async headers() {
     return [
       {
+        source: '/admin',
+        headers: adminSecurityHeaders,
+      },
+      {
         source: '/admin/:path*',
-        headers: [
-          { key: 'Cache-Control', value: 'private, no-store, max-age=0' },
-          { key: 'X-Robots-Tag', value: 'noindex, nofollow, noarchive' },
-          { key: 'X-Frame-Options', value: 'DENY' },
-          { key: 'X-Content-Type-Options', value: 'nosniff' },
-          { key: 'Referrer-Policy', value: 'no-referrer' },
-          { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=()' },
-        ],
+        headers: adminSecurityHeaders,
       },
     ];
   },

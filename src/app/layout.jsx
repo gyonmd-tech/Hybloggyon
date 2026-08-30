@@ -6,6 +6,10 @@ import {
   serializeStructuredData,
 } from '../lib/seo/structured-data';
 
+// Konten produksi dikelola dari database. SSR menjaga build tidak bergantung
+// pada koneksi database eksternal sekaligus mempertahankan HTML lengkap untuk SEO.
+export const dynamic = 'force-dynamic';
+
 export async function generateMetadata() {
   const profile = await getResolvedSiteProfile();
   const verification = process.env.GOOGLE_SITE_VERIFICATION?.trim();

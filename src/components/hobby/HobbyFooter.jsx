@@ -1,9 +1,7 @@
 // src/components/hobby/HobbyFooter.jsx
 // Section 6 — Penutup halaman: 120px, border atas 2px, last updated + link kembali
 
-export default function HobbyFooter() {
-  const currentDate = 'Mei 2026';
-
+export default function HobbyFooter({ lastUpdated }) {
   return (
     <div
       style={{
@@ -26,7 +24,7 @@ export default function HobbyFooter() {
           color: 'rgba(18,18,20,0.45)',
         }}
       >
-        — Terakhir diperbarui: {currentDate}
+        — Terakhir diperbarui: {lastUpdated}
       </span>
 
       {/* Kanan: link navigasi */}

@@ -7,7 +7,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
-export default function AboutPortrait({ name, shortBio, meta }) {
+export default function AboutPortrait({ name, shortBio, meta, portraitImage }) {
   const sectionRef = useRef(null);
   const photoRef   = useRef(null);
   const textRef    = useRef(null);
@@ -103,7 +103,7 @@ export default function AboutPortrait({ name, shortBio, meta }) {
             backgroundColor: '#ffffff',
           }}>
             <img
-              src="/images/about/profile.jpg"
+              src={portraitImage}
               alt={`Portrait of ${name}`}
               style={{
                 width: '100%',

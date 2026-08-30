@@ -8,9 +8,7 @@ import ScreeningRoom from '../../components/hobby/ScreeningRoom';
 import ReadingShelf from '../../components/hobby/ReadingShelf';
 import SideGlances from '../../components/hobby/SideGlances';
 import HobbyFooter from '../../components/hobby/HobbyFooter';
-import { hobbyData } from '../../content/hobby-data';
-
-export default function HobbyView() {
+export default function HobbyView({ content, footerContent }) {
   return (
     <>
       <div className="grain-overlay-body" aria-hidden="true" />
@@ -19,7 +17,7 @@ export default function HobbyView() {
 
       <main>
         {/* Section 1: Hero 100vh — Typographic Fog */}
-        <HobbyHero />
+        <HobbyHero content={content.hero} />
 
         <div
           style={{
@@ -29,24 +27,24 @@ export default function HobbyView() {
           }}
         >
           {/* Section 2: RecordCrate — horizontal scroll kartu musik */}
-          <RecordCrate music={hobbyData.music} />
+          <RecordCrate music={content.music} />
 
           {/* Section 3: ScreeningRoom — featured + grid film */}
-          <ScreeningRoom watchlist={hobbyData.watchlist} />
+          <ScreeningRoom watchlist={content.watchlist} />
 
           {/* Section 4: ReadingShelf — daftar vertikal buku */}
-          <ReadingShelf books={hobbyData.books} />
+          <ReadingShelf books={content.books} />
 
           {/* Section 5: SideGlances — grid observasi */}
-          <SideGlances observations={hobbyData.observations} />
+          <SideGlances observations={content.observations} />
 
           {/* Section 6: HobbyFooter — penutup */}
-          <HobbyFooter />
+          <HobbyFooter lastUpdated={content.lastUpdated} />
         </div>
       </main>
 
       <div style={{ position: 'relative', zIndex: 10 }}>
-        <Footer />
+        <Footer contact={footerContent} />
       </div>
     </>
   );

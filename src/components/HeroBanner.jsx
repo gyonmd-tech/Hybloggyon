@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import SplitType from 'split-type';
 
-export default function HeroBanner() {
+export default function HeroBanner({ content }) {
   const titleRef = useRef(null);
   const mobileTitleRef = useRef(null);
   const bgRef = useRef(null);
@@ -166,7 +166,7 @@ export default function HeroBanner() {
           width: '100%',
           height: '120%',
           top: '-10%',
-          backgroundImage: `url('https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=1920&q=100')`,
+          backgroundImage: `url('${content.imageUrl}')`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           filter: 'grayscale(100%) contrast(1.2) brightness(0.9)',
@@ -203,7 +203,7 @@ export default function HeroBanner() {
             clipPath: 'polygon(0 0, 100% 0, 100% 120%, 0 120%)',
           }}
         >
-          Field Study.
+          {content.title}
         </h1>
       </div>
 
@@ -214,12 +214,12 @@ export default function HeroBanner() {
         <div className="hero-row-top">
           <div>
             <span style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'rgba(255,255,255,0.7)', letterSpacing: '0.15em', textTransform: 'uppercase' }}>
-              Edisi Terkini // 2026
+              {content.edition}
             </span>
           </div>
           <div style={{ textAlign: 'right' }}>
             <span className="hero-gps" style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'rgba(255,255,255,0.5)', letterSpacing: '0.15em', textTransform: 'uppercase' }}>
-              -6.2088° S, 106.8456° E
+              {content.coordinates}
             </span>
           </div>
         </div>
@@ -241,7 +241,7 @@ export default function HeroBanner() {
                 marginBottom: '24px',
               }}
             >
-              Field Study.
+              {content.title}
             </h1>
 
             <span
@@ -255,7 +255,7 @@ export default function HeroBanner() {
                 marginBottom: '16px',
               }}
             >
-              [ Ongoing Monograph ]
+              {content.eyebrow}
             </span>
             <p
               style={{
@@ -266,7 +266,7 @@ export default function HeroBanner() {
                 margin: 0,
               }}
             >
-              Workshop digital untuk preservasi pemikiran — esai panjang, catatan belajar, dan analisis pop-culture.
+              {content.description}
             </p>
           </div>
 
@@ -286,7 +286,7 @@ export default function HeroBanner() {
               INVESTIGATING // ACTIVE
             </span>
             <a
-              href="/archive"
+              href={content.ctaUrl}
               className="hero-cta-btn"
               style={{
                 display: 'inline-block',
@@ -309,7 +309,7 @@ export default function HeroBanner() {
                 e.currentTarget.style.transform = 'translateY(0)';
               }}
             >
-              <span>Mulai Membaca</span>
+              <span>{content.ctaLabel}</span>
               <span>→</span>
             </a>
           </div>

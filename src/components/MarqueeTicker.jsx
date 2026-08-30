@@ -1,9 +1,6 @@
 // src/components/MarqueeTicker.jsx
-const TICKER_TEXT =
-  '// CURRENTLY INVESTIGATING: THE FRAGILITY OF DIGITAL ARCHIVES // REVISION 4.0.2 // GRID ENFORCED // SINCE 2021 // ESAI · NOTES · MUSIK · FILM & ANIME // WORKSHOP DIGITAL UNTUK PRESERVASI PEMIKIRAN //';
-
-export default function MarqueeTicker() {
-  const repeated = `${TICKER_TEXT}   ${TICKER_TEXT}   `;
+export default function MarqueeTicker({ text }) {
+  const repeated = `${text}   ${text}   `;
 
   return (
     <div

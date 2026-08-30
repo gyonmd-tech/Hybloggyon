@@ -5,17 +5,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const HOBBIES = [
-  { id: 1, label: 'MUSIK', title: 'MENDENGARKAN\nALBUM PENUH', description: 'Dari Radiohead sampai Fisip Musik — satu album, satu suasana tanpa skip.', tag: '[ LISTENING ]', bg: 'https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=900&q=75', accent: 'var(--color-accent-green)' },
-  { id: 2, label: 'FILM', title: 'MENONTON\nSINEMA PELAN', description: 'Film yang tidak terburu-buru — Tarkovsky, Fassbinder, Ozu, menangkap waktu.', tag: '[ WATCHING ]', bg: 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=900&q=75', accent: 'var(--color-accent-warm)' },
-  { id: 3, label: 'MEMBACA', title: 'BUKU FISIK\nYANG BERAT', description: 'Filosofi, sastra terjemahan, dan buku yang membutuhkan dua kali baca.', tag: '[ READING ]', bg: 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=900&q=75', accent: 'var(--color-wasabi)' },
-  { id: 4, label: 'MENULIS', title: 'CATATAN\nTANGAN PANJANG', description: 'Jurnal analog sebagai jeda dari layar — pena dan kertas bergaris.', tag: '[ WRITING ]', bg: 'https://images.unsplash.com/photo-1455390582262-044cdead277a?w=900&q=75', accent: 'var(--color-accent-green)' },
-  { id: 5, label: 'ARSITEKTUR', title: 'JALAN KAKI\nMELIHAT BANGUNAN', description: 'Brutalism, Bauhaus, dan bangunan tua yang tidak minta maaf.', tag: '[ OBSERVING ]', bg: 'https://images.unsplash.com/photo-1486325212027-8081e485255e?w=900&q=75', accent: 'var(--color-accent-warm)' },
-  { id: 6, label: 'FOTOGRAFI', title: 'MEREKAM\nJEDA KOTA', description: 'Kamera analog, roll hitam putih, dan keindahan di sudut jalan yang terlupakan.', tag: '[ CAPTURING ]', bg: 'https://images.unsplash.com/photo-1516961642265-531546e84af2?w=900&q=75', accent: 'var(--color-wasabi)' },
-  { id: 7, label: 'BERKENDARA', title: 'PERJALANAN\nTANPA TUJUAN', description: 'Menyusuri jalan kosong di tengah malam dengan playlist ambient.', tag: '[ DRIVING ]', bg: 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=900&q=75', accent: 'var(--color-accent-warm)' },
-];
-
-export default function HobbiesScroll() {
+export default function HobbiesScroll({ items }) {
   const containerRef = useRef(null);
   const scrollContainerRef = useRef(null);
 
@@ -97,9 +87,9 @@ export default function HobbiesScroll() {
 
         {/* Mobile: Vertical list of cards */}
         <div className="flex flex-col w-full">
-          {HOBBIES.map((hobby) => (
+          {items.map((hobby, index) => (
             <div
-              key={hobby.id}
+              key={`${hobby.label}-${index}`}
               style={{
                 backgroundColor: '#f8f8f8',
                 borderBottom: '1px solid rgba(0,0,0,0.1)',
@@ -113,7 +103,7 @@ export default function HobbiesScroll() {
                 style={{
                   width: '100%',
                   height: '200px',
-                  backgroundImage: `url('${hobby.bg}')`,
+                  backgroundImage: `url('${hobby.imageUrl}')`,
                   backgroundSize: 'cover',
                   backgroundPosition: 'center',
                   filter: 'grayscale(100%)',
@@ -180,9 +170,9 @@ export default function HobbiesScroll() {
         {/* Right: Horizontal scroll cards */}
         <div style={{ display: 'flex', height: '100%', flexGrow: 1, overflow: 'hidden' }}>
           <div ref={scrollContainerRef} style={{ display: 'flex', height: '100%', willChange: 'transform' }}>
-            {HOBBIES.map((hobby) => (
+            {items.map((hobby, index) => (
               <div
-                key={hobby.id}
+                key={`${hobby.label}-${index}`}
                 className="hobby-white-card"
                 style={{
                   width: '500px', height: '100%', flexShrink: 0,
@@ -192,7 +182,7 @@ export default function HobbiesScroll() {
               >
                 <div
                   className="hobby-parallax-img"
-                  style={{ width: '100%', height: '45%', backgroundImage: `url('${hobby.bg}')`, backgroundSize: 'cover', backgroundPosition: '0% 50%', filter: 'grayscale(100%)' }}
+                  style={{ width: '100%', height: '45%', backgroundImage: `url('${hobby.imageUrl}')`, backgroundSize: 'cover', backgroundPosition: '0% 50%', filter: 'grayscale(100%)' }}
                 />
                 <div style={{ padding: '40px', display: 'flex', flexDirection: 'column', flexGrow: 1, position: 'relative' }}>
                   <div style={{ marginTop: 'auto', position: 'relative', zIndex: 2 }}>
@@ -211,4 +201,3 @@ export default function HobbiesScroll() {
     </>
   );
 }
-

@@ -16,6 +16,10 @@ test('akun admin dapat masuk dan keluar', async ({ page }) => {
 
   await login(page);
   await expect(page.getByRole('heading', { name: 'Selamat datang kembali.' })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Konten situs' })).toBeVisible();
+  await page.goto('/admin/content');
+  await expect(page.getByRole('heading', { name: 'Konten situs' })).toBeVisible();
+  await expect(page.getByRole('link', { name: /Kurasi \/ Hobi/ })).toBeVisible();
   await page.getByRole('button', { name: 'Keluar' }).click();
   await expect(page).toHaveURL(/\/admin\/login/);
 });

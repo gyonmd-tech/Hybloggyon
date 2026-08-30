@@ -19,6 +19,7 @@ export default function ArticleView({
   relatedPosts,
   previousPost,
   nextPost,
+  footerContent,
 }) {
 
   // Scroll progress
@@ -182,7 +183,7 @@ export default function ArticleView({
       </main>
 
       <div style={{ position: 'relative', zIndex: 10 }}>
-        <Footer />
+        <Footer contact={footerContent} />
       </div>
     </>
   );

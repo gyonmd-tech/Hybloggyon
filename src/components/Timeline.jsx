@@ -4,13 +4,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const EVENTS = [
-  { year: '2021', title: 'Awal Mula', desc: 'Versi pertama blog diluncurkan dengan fokus pada tulisan personal dan bereksperimen dengan berbagai gaya penceritaan organik.' },
-  { year: '2023', title: 'Transisi Visual', desc: 'Perubahan ke desain editorial yang lebih kaku, terstruktur, monokromatik, dan mengurangi elemen visual yang tidak perlu.' },
-  { year: '2026', title: 'HyBloggyon v4', desc: 'Iterasi terbaru dengan performa membaca maksimal, tipografi brutalist, dan interaksi bebas batas.' },
-];
-
-export default function Timeline() {
+export default function Timeline({ events }) {
   const containerRef = useRef(null);
   const lineRef = useRef(null);
   const [isMobile, setIsMobile] = useState(false);
@@ -66,7 +60,7 @@ export default function Timeline() {
         </span>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0' }}>
-          {EVENTS.map((event, i) => (
+          {events.map((event, i) => (
             <div
               key={event.year}
               className="tl-node"
@@ -75,7 +69,7 @@ export default function Timeline() {
                 alignItems: 'flex-start',
                 gap: '20px',
                 padding: '28px 0',
-                borderBottom: i < EVENTS.length - 1 ? '1px solid rgba(255,255,255,0.1)' : 'none',
+                borderBottom: i < events.length - 1 ? '1px solid rgba(255,255,255,0.1)' : 'none',
               }}
             >
               {/* Left: Year */}
@@ -112,7 +106,7 @@ export default function Timeline() {
                   color: 'rgba(255,255,255,0.55)',
                   margin: 0,
                 }}>
-                  {event.desc}
+                  {event.description}
                 </p>
               </div>
             </div>
@@ -177,7 +171,7 @@ export default function Timeline() {
             display: 'flex', justifyContent: 'space-around', position: 'relative', zIndex: 2,
           }}
         >
-          {EVENTS.map((event, i) => {
+          {events.map((event, i) => {
             const isTop = i % 2 === 0;
 
             const YearBlock = (
@@ -192,7 +186,7 @@ export default function Timeline() {
                   {event.title}
                 </h4>
                 <p style={{ fontFamily: 'var(--font-mono)', fontSize: '14px', lineHeight: 1.7, color: 'rgba(255,255,255,0.6)', margin: 0 }}>
-                  {event.desc}
+                  {event.description}
                 </p>
               </div>
             );

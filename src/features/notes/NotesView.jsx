@@ -11,7 +11,7 @@ import ConnectedThoughts from '../../components/notes/ConnectedThoughts';
 import CurrentThinking from '../../components/notes/CurrentThinking';
 import RandomThought from '../../components/notes/RandomThought';
 
-export default function NotesView({ posts }) {
+export default function NotesView({ posts, content, footerContent }) {
   const [activeTag, setActiveTag] = useState('Semua');
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -32,14 +32,14 @@ export default function NotesView({ posts }) {
         <div style={{ position: 'relative', zIndex: 10, backgroundColor: 'var(--color-background-ash)' }}>
           <FeaturedNotes posts={posts} />
           <NotesStream posts={posts} activeTag={activeTag} searchQuery={searchQuery} />
-          <ConnectedThoughts />
-          <CurrentThinking />
-          <RandomThought />
+          <ConnectedThoughts connections={content.connections} />
+          <CurrentThinking quote={content.quote} items={content.currentThinking} />
+          <RandomThought thoughts={content.randomThoughts} />
         </div>
       </main>
 
       <div style={{ position: 'relative', zIndex: 10 }}>
-        <Footer />
+        <Footer contact={footerContent} />
       </div>
     </>
   );

@@ -5,7 +5,7 @@ import SplitType from 'split-type';
 
 gsap.registerPlugin(ScrollTrigger);
 
-export default function ManifestoAbout() {
+export default function ManifestoAbout({ content }) {
   const sectionRef = useRef(null);
   const titleRef = useRef(null);
 
@@ -82,7 +82,7 @@ export default function ManifestoAbout() {
             display: 'block',
           }}
         >
-          Sekilas Prinsip
+          {content.eyebrow}
         </span>
         
         <p
@@ -97,8 +97,7 @@ export default function ManifestoAbout() {
             marginBottom: '40px',
           }}
         >
-          Saya menulis untuk berpikir, <br/>
-          <span style={{ fontStyle: 'italic', color: 'var(--color-accent-green)' }}>bukan untuk dilihat.</span>
+          {content.title}
         </p>
 
         <p
@@ -112,12 +111,12 @@ export default function ManifestoAbout() {
             margin: '0 auto 60px auto',
           }}
         >
-          Sebuah ruang arsip digital untuk menuangkan observasi, kritik, dan anomali pikiran. Ruang ini sepenuhnya merdeka dari algoritma dan metrik popularitas. Hanya teks murni, ditulis sebagai draf abadi yang terus berevolusi.
+          {content.description}
         </p>
 
         <div className="manifesto-fade-up" style={{ marginBottom: '80px' }}>
           <a
-            href="/about"
+            href={content.ctaUrl}
             style={{
               display: 'inline-flex',
               alignItems: 'center',
@@ -135,7 +134,7 @@ export default function ManifestoAbout() {
             onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'var(--color-accent-green)'}
             onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'var(--color-ink)'}
           >
-            <span>Baca Manifesto Lengkap</span>
+            <span>{content.ctaLabel}</span>
             <span style={{ fontSize: '16px' }}>&rarr;</span>
           </a>
         </div>
@@ -156,15 +155,15 @@ export default function ManifestoAbout() {
         >
            <div>
              <span style={{ color: 'rgba(0,0,0,0.5)', marginRight: '8px' }}>PENULIS:</span>
-             <span style={{ fontWeight: 600, color: 'var(--color-ink)' }}>Anonim / Editor</span>
+             <span style={{ fontWeight: 600, color: 'var(--color-ink)' }}>{content.author}</span>
            </div>
            <div>
              <span style={{ color: 'rgba(0,0,0,0.5)', marginRight: '8px' }}>LOKASI:</span>
-             <span style={{ fontWeight: 600, color: 'var(--color-ink)' }}>Jakarta, ID</span>
+             <span style={{ fontWeight: 600, color: 'var(--color-ink)' }}>{content.location}</span>
            </div>
            <div>
              <span style={{ color: 'rgba(0,0,0,0.5)', marginRight: '8px' }}>STATUS:</span>
-             <span style={{ fontWeight: 600, color: 'var(--color-accent-green)' }}>● Menulis Aktif</span>
+             <span style={{ fontWeight: 600, color: 'var(--color-accent-green)' }}>{content.status}</span>
            </div>
         </div>
 

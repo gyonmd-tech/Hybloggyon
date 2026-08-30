@@ -1,4 +1,5 @@
 import AboutView from '../../features/about/AboutView';
+import { getResolvedSiteContent } from '../../lib/content/site-content';
 
 export const metadata = {
   title: 'About',
@@ -7,6 +8,6 @@ export const metadata = {
   alternates: { canonical: '/about' },
 };
 
-export default function AboutPage() {
-  return <AboutView />;
+export default async function AboutPage() {
+  return <AboutView content={await getResolvedSiteContent('about')} />;
 }

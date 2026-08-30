@@ -1,5 +1,5 @@
 import 'server-only';
-import { cache } from 'react';
+import { unstable_cache } from 'next/cache';
 import { siteConfig } from '../../config/site.js';
 import { isDatabaseConfigured } from '../db/client.js';
 import { getSiteSetting } from '../db/repositories/settings.js';
@@ -14,7 +14,7 @@ const defaults = {
   postsPerPage: 20,
 };
 
-export const getResolvedSiteProfile = cache(async () => {
+export const getResolvedSiteProfile = unstable_cache(async () => {
   if (!isDatabaseConfigured()) return defaults;
   try {
     const setting = await getSiteSetting('site_profile');
@@ -22,4 +22,4 @@ export const getResolvedSiteProfile = cache(async () => {
   } catch {
     return defaults;
   }
-});
+}, ['resolved-site-profile'], { revalidate: 300, tags: ['site-profile'] });

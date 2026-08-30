@@ -1,5 +1,5 @@
 // src/components/AccentQuote.jsx
-export default function AccentQuote() {
+export default function AccentQuote({ content }) {
   return (
     <section
       style={{
@@ -44,11 +44,7 @@ export default function AccentQuote() {
               marginBottom: '32px', // More breathing room below
             }}
           >
-            "Menulis bukan tentang menyimpan kata — ini tentang{' '}
-            <em style={{ fontStyle: 'normal', color: 'var(--color-wasabi)' }}>
-              belajar berpikir
-            </em>{' '}
-            dengan keras kepala."
+            “{content.text}”
           </blockquote>
 
           <cite
@@ -61,7 +57,7 @@ export default function AccentQuote() {
               fontStyle: 'normal',
             }}
           >
-            — HyBloggyon Manifesto, 2021
+            — {content.citation}
           </cite>
         </div>
       </div>

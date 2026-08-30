@@ -3,10 +3,12 @@
 import { randomUUID } from 'node:crypto';
 import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
-import { revalidatePath } from 'next/cache';
+import { revalidatePath, updateTag } from 'next/cache';
 import { z } from 'zod';
 import { isDatabaseConfigured } from '../../lib/db/client.js';
 import { postEditorInputSchema } from '../../lib/content/contracts.js';
+import { parseSiteContent } from '../../lib/content/site-content-contracts.js';
+import { setSiteSetting } from '../../lib/db/repositories/settings.js';
 import {
   archiveAdminPost,
   createMediaAsset,
@@ -404,11 +406,34 @@ export async function saveSettingsAction(_previousState, formData) {
       postsPerPage: Number(formData.get('postsPerPage') || 20),
     });
     await saveAdminSiteProfile(profile, admin.userId);
+    updateTag('site-profile');
     revalidatePath('/', 'layout');
     revalidatePath('/admin/settings');
     return { ok: true, message: 'Pengaturan situs disimpan.', errors: {} };
   } catch (error) {
     return actionError(error);
+  }
+}
+
+export async function saveSiteContentAction(_previousState, formData) {
+  const section = z.enum(['home', 'notes', 'hobby', 'about']).parse(formData.get('section'));
+  const admin = await requireAdmin(`/admin/content/${section}`);
+  try {
+    const raw = JSON.parse(String(formData.get('content') || '{}'));
+    const content = parseSiteContent(section, raw);
+    await setSiteSetting(`site_content_${section}`, content, admin.userId);
+    updateTag(`site-content-${section}`);
+    const publicPath = section === 'home' ? '/' : `/${section}`;
+    revalidatePath(publicPath);
+    revalidatePath('/sitemap.xml');
+    revalidatePath('/admin/content');
+    revalidatePath(`/admin/content/${section}`);
+    return { ok: true, message: 'Konten halaman disimpan dan langsung diterbitkan.', errors: {} };
+  } catch (error) {
+    if (error instanceof SyntaxError) {
+      return { ...emptyState, message: 'Data formulir tidak dapat dibaca. Muat ulang halaman dan coba lagi.' };
+    }
+    return actionError(error, 'Konten halaman gagal disimpan.');
   }
 }
 
