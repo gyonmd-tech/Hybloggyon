@@ -139,6 +139,7 @@ export default function PostEditor({ post, options }) {
                   ref={editorRef}
                   className="admin-textarea admin-textarea--editor"
                   name="contentMarkdown"
+                  aria-label="Isi Markdown"
                   value={content}
                   onChange={(event) => setContent(event.target.value)}
                   placeholder={'Mulai menulis di sini…\n\n## Subjudul\n\nGagasan utama.'}

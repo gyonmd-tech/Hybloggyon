@@ -93,3 +93,13 @@ Bucket harus menerima operasi `PutObject` dan `DeleteObject` untuk prefix upload
 - Gunakan akun database aplikasi dengan hak minimum terhadap schema aplikasi.
 - Terapkan pembatasan akses jaringan atau proteksi tambahan pada `/admin` bila hosting mendukungnya.
 - Untuk mengganti password darurat, isi env bootstrap sementara dan jalankan kembali `npm run admin:create` dengan email yang sama.
+
+## Pengujian End-to-End
+
+Setelah production build tersedia, isi `E2E_ADMIN_EMAIL` dan `E2E_ADMIN_PASSWORD` dengan akun khusus staging/CI, lalu jalankan:
+
+```bash
+npm run test:e2e
+```
+
+Jangan menggunakan akun production untuk pengujian otomatis. Alur cutover dan rollback lengkap berada di `Docs/RELEASE.md`.

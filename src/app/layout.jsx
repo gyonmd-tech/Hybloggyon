@@ -1,17 +1,33 @@
 import '../styles/global.css';
-import { siteConfig } from '../config/site';
+import { absoluteUrl, siteConfig } from '../config/site';
 import { getResolvedSiteProfile } from '../lib/content/site-settings';
+import {
+  buildSiteStructuredData,
+  serializeStructuredData,
+} from '../lib/seo/structured-data';
 
 export async function generateMetadata() {
   const profile = await getResolvedSiteProfile();
+  const verification = process.env.GOOGLE_SITE_VERIFICATION?.trim();
   return {
     metadataBase: new URL(siteConfig.url),
+    applicationName: profile.siteName,
     title: { default: profile.siteTitle, template: `%s — ${profile.siteName}` },
     description: profile.description,
-    alternates: { canonical: '/' },
+    authors: [{ name: profile.authorName, url: '/about' }],
+    creator: profile.authorName,
+    publisher: profile.authorName,
+    alternates: {
+      canonical: '/',
+      types: { 'application/rss+xml': absoluteUrl('/feed.xml') },
+    },
+    manifest: '/manifest.webmanifest',
+    icons: { icon: '/favicon.svg' },
+    verification: verification ? { google: verification } : undefined,
+    formatDetection: { telephone: false },
     openGraph: {
       type: 'website', locale: siteConfig.locale, siteName: profile.siteName,
-      title: profile.siteTitle, description: profile.description,
+      url: '/', title: profile.siteTitle, description: profile.description,
       images: profile.defaultOgImage ? [profile.defaultOgImage] : [],
     },
     twitter: {
@@ -27,10 +43,17 @@ export const viewport = {
   themeColor: '#f4f4f5',
 };
 
-export default function RootLayout({ children }) {
+export default async function RootLayout({ children }) {
+  const profile = await getResolvedSiteProfile();
+  const structuredData = serializeStructuredData(buildSiteStructuredData(profile));
+
   return (
     <html lang={siteConfig.language} className="scroll-smooth">
       <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: structuredData }}
+        />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link

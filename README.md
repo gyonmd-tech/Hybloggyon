@@ -31,12 +31,19 @@ Buka `http://localhost:3000`.
 | `npm run lint` | Memeriksa kualitas kode |
 | `npm run content:check` | Memvalidasi frontmatter, URL, isi, dan cover artikel |
 | `npm run content:import` | Mengimpor konten Markdown ke PostgreSQL secara idempotent |
+| `npm run content:audit` | Membandingkan konten Markdown dan database sebelum cutover |
+| `npm run seo:check` | Mengaudit canonical, metadata, tanggal, dan gambar sosial artikel |
+| `npm run env:check` | Memeriksa kelengkapan environment dan koneksi |
+| `npm run env:check:production` | Memeriksa seluruh syarat konfigurasi production |
 | `npm run db:generate` | Menghasilkan migration SQL dari schema Drizzle |
 | `npm run db:migrations:check` | Memvalidasi konsistensi riwayat migration |
 | `npm run db:migrate` | Menjalankan migration PostgreSQL |
 | `npm run db:seed` | Mengisi kategori dan setting dasar |
 | `npm run db:check` | Memeriksa koneksi serta jumlah record |
 | `npm run admin:create` | Membuat atau mereset akun pemilik dari environment |
+| `npm run test:e2e` | Menjalankan workflow browser Playwright |
+| `npm run cutover:check` | Pemeriksaan ketat sebelum cutover pertama |
+| `npm run release:check` | Pemeriksaan release setelah database menjadi sumber utama |
 
 ## Struktur
 
@@ -95,17 +102,20 @@ MEDIA_STORAGE=local
 
 `NEXT_PUBLIC_SITE_URL` digunakan untuk canonical URL, sitemap, robots, dan structured data. Konfigurasi lama `VITE_TMDB_API_KEY` masih dibaca sementara agar halaman Kurasi tidak langsung rusak saat migrasi.
 
-`DATABASE_URL` adalah secret server dan tidak boleh memakai prefix `NEXT_PUBLIC_`. Biarkan `CONTENT_SOURCE=markdown` saat menyiapkan database. Panduan database terdapat di `Docs/DATABASE.md`; aktivasi panel, akun pemilik, impor konten, dan media dijelaskan di `Docs/ADMIN.md`.
+`DATABASE_URL` adalah secret server dan tidak boleh memakai prefix `NEXT_PUBLIC_`. Biarkan `CONTENT_SOURCE=markdown` saat menyiapkan database. Panduan database terdapat di `Docs/DATABASE.md`; aktivasi panel dijelaskan di `Docs/ADMIN.md`; staging, cutover, release, dan rollback berada di `Docs/RELEASE.md`; panduan discovery berada di `Docs/SEO.md`.
 
 ## SEO Dasar
 
 - HTML halaman dan artikel diprerender.
 - Metadata, canonical, Open Graph, dan Twitter Card dibuat di server.
-- Artikel memiliki structured data `Article`.
+- Situs memiliki structured data `WebSite` dan `Person`; artikel memakai `BlogPosting` dan breadcrumb.
 - `sitemap.xml` dan `robots.txt` dibuat otomatis.
+- RSS tersedia di `/feed.xml` dan terhubung dari metadata halaman.
+- Manifest tersedia di `/manifest.webmanifest`.
+- Health check untuk monitoring tersedia di `/api/health` dan tidak dapat diindeks.
 - Route artikel memvalidasi kategori dan slug; route yang salah menghasilkan HTTP 404.
 - Bahasa dokumen adalah Bahasa Indonesia (`lang="id"`).
 
 ## Status Migrasi
 
-Fase 0–1 tercatat di `Docs/MIGRATION-BASELINE.md`. Fase 2 menambahkan fondasi PostgreSQL. Fase 3 menyediakan panel admin lengkap, autentikasi, workflow editorial, revisi, media, pengaturan SEO, dan importir Markdown. Konten publik tetap membaca Markdown sampai proses cutover dilakukan.
+Fase 0–1 tercatat di `Docs/MIGRATION-BASELINE.md`. Fase 2 menambahkan fondasi PostgreSQL. Fase 3 menyediakan panel admin lengkap dan workflow editorial. Fase 4 menambahkan readiness guard, audit paritas, CI database, pengujian browser, serta runbook cutover. Fase 5 melengkapi SEO teknis, RSS, manifest, structured data, health monitoring, dan audit SEO otomatis. Konten publik tetap membaca Markdown sampai proses cutover dilakukan.

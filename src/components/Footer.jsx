@@ -59,9 +59,6 @@ export default function Footer() {
           .footer-brand-col { grid-column: span 1; }
           .footer-news-col { grid-column: span 1; }
           .footer-nav-cols { flex-direction: column !important; gap: 32px !important; }
-          .footer-newsletter-form { flex-direction: column !important; }
-          .footer-newsletter-form input { border-bottom: 1px solid rgba(255,255,255,0.2) !important; }
-          .footer-newsletter-form button { border-left: none !important; border-top: 1px solid rgba(255,255,255,0.2) !important; }
           .footer-bottom { flex-direction: column !important; align-items: flex-start !important; gap: 12px !important; }
         }
       `}</style>
@@ -104,18 +101,21 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Col 3: Newsletter */}
+          {/* Col 3: Feed */}
           <div className="footer-reveal footer-news-col">
-            <h4 style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '0.15em', color: 'var(--color-accent-green)', marginBottom: '32px' }}>DISPATCH / NEWSLETTER</h4>
+            <h4 style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', letterSpacing: '0.15em', color: 'var(--color-accent-green)', marginBottom: '32px' }}>DISPATCH / RSS</h4>
             <p style={{ fontFamily: 'var(--font-mono)', fontSize: '13px', color: 'rgba(255,255,255,0.7)', marginBottom: '24px', lineHeight: 1.6, maxWidth: '400px' }}>
-              Dapatkan pembaruan asinkron langsung ke kotak masuk Anda. Tidak ada spam, hanya intisari tulisan murni.
+              Ikuti tulisan terbaru melalui pembaca feed pilihan Anda. Tanpa akun, pelacak, atau kotak masuk tambahan.
             </p>
-            <div className="footer-newsletter-form" style={{ display: 'flex', border: '1px solid rgba(255,255,255,0.2)', maxWidth: '400px' }}>
-              <input type="email" placeholder="Alamat email Anda" style={{ flex: 1, background: 'transparent', border: 'none', padding: '16px 24px', fontFamily: 'var(--font-mono)', fontSize: '12px', color: '#fff', outline: 'none' }} />
-              <button style={{ padding: '16px 32px', background: '#fff', color: 'var(--color-ink)', borderLeft: '1px solid rgba(255,255,255,0.2)', fontFamily: 'var(--font-mono)', fontSize: '11px', fontWeight: 600, letterSpacing: '0.1em', cursor: 'pointer', transition: 'background-color 0.2s' }} onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'var(--color-wasabi)'} onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#fff'}>
-                KIRIM
-              </button>
-            </div>
+            <a
+              href="/feed.xml"
+              type="application/rss+xml"
+              style={{ display: 'inline-flex', padding: '16px 24px', background: '#fff', color: 'var(--color-ink)', border: '1px solid rgba(255,255,255,0.2)', fontFamily: 'var(--font-mono)', fontSize: '11px', fontWeight: 600, letterSpacing: '0.1em', textDecoration: 'none', transition: 'background-color 0.2s' }}
+              onMouseEnter={(event) => event.currentTarget.style.backgroundColor = 'var(--color-wasabi)'}
+              onMouseLeave={(event) => event.currentTarget.style.backgroundColor = '#fff'}
+            >
+              IKUTI RSS ↗
+            </a>
           </div>
 
         </div>
