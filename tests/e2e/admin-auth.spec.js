@@ -8,7 +8,7 @@ async function login(page) {
   await page.getByLabel('Email').fill(email);
   await page.getByLabel('Password').fill(password);
   await page.getByRole('button', { name: 'Masuk ke ruang kerja' }).click();
-  await expect(page).toHaveURL(/\/admin$/);
+  await expect(page).toHaveURL(/\/admin$/, { timeout: 30_000 });
 }
 
 test('akun admin dapat masuk dan keluar', async ({ page }) => {
@@ -40,12 +40,14 @@ test('media production dapat diunggah dan dihapus kembali', async ({ page }) => 
   });
   await page.getByLabel('Alt text').first().fill('Uji sementara penyimpanan media');
   await page.getByRole('button', { name: 'Unggah gambar' }).click();
-  await expect(page.getByRole('status')).toContainText('Gambar berhasil diunggah');
+  await expect(page.getByRole('status')).toContainText('Gambar berhasil diunggah', {
+    timeout: 30_000,
+  });
 
   const card = page.locator('.admin-media-card').filter({ hasText: fileName });
   await expect(card).toBeVisible();
   await expect(card.locator('img')).toHaveAttribute('src', /blob\.vercel-storage\.com/);
   page.once('dialog', (dialog) => dialog.accept());
   await card.getByRole('button', { name: 'Hapus' }).click();
-  await expect(card).toHaveCount(0);
+  await expect(card).toHaveCount(0, { timeout: 30_000 });
 });
