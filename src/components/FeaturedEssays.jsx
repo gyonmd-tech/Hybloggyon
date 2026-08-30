@@ -13,30 +13,18 @@ const CATEGORY_IMAGES = {
   'musik':      'https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=1600&q=75',
 };
 
-// ── Load semua MDX posts ──────────────────────────────────────────────────────
-const mdxModules = import.meta.glob('/src/content/posts/*.mdx', { eager: true });
-
-const ALL_POSTS = Object.values(mdxModules)
-  .map(mod => mod.frontmatter)
-  .filter(p => p?.slug && p?.title)
-  .sort((a, b) => new Date(b.date) - new Date(a.date));
-
-// Prioritaskan featured: true, kalau kurang dari 3 tambah dari terbaru
-const featuredPosts = ALL_POSTS.filter(p => p.featured === true);
-const fillerPosts   = ALL_POSTS.filter(p => p.featured !== true);
-const sourcePosts   = [...featuredPosts, ...fillerPosts].slice(0, 3);
-
-const ESSAYS = sourcePosts.map((p, i) => ({
-  id:       i + 1,
-  tag:      `${(p.category ?? 'esai').toUpperCase().replace('-', ' & ')} // ${(p.tags?.[0] ?? 'refleksi').toUpperCase()}`,
-  title:    p.title,
-  subtitle: p.subtitle ?? p.excerpt ?? '',
-  href:     `/${p.category}/${p.slug}`,
-  image:    CATEGORY_IMAGES[p.category] ?? CATEGORY_IMAGES['esai'],
-}));
-
-export default function FeaturedEssays() {
+export default function FeaturedEssays({ posts }) {
   const containerRef = useRef(null);
+  const featuredPosts = posts.filter((post) => post.featured);
+  const fillerPosts = posts.filter((post) => !post.featured);
+  const essays = [...featuredPosts, ...fillerPosts].slice(0, 3).map((post, index) => ({
+    id: index + 1,
+    tag: `${post.category.toUpperCase().replace('-', ' & ')} // ${(post.tags?.[0] ?? 'refleksi').toUpperCase()}`,
+    title: post.title,
+    subtitle: post.subtitle || post.excerpt,
+    href: post.url,
+    image: CATEGORY_IMAGES[post.category] ?? CATEGORY_IMAGES.esai,
+  }));
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -152,7 +140,7 @@ export default function FeaturedEssays() {
       </div>
 
       {/* Essay panels */}
-      {ESSAYS.map((essay, i) => (
+      {essays.map((essay) => (
         <a
           key={essay.id}
           href={essay.href}

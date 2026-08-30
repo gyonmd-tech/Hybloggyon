@@ -1,7 +1,8 @@
-// src/components/Header.jsx
+'use client';
+
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useLocation } from 'react-router-dom';
+import { usePathname } from 'next/navigation';
 
 const NAV_ITEMS = [
   { label: 'HOME', href: '/' },
@@ -19,11 +20,8 @@ export default function Header() {
   const [hoveredPath, setHoveredPath] = useState(null);
   
   // Always render both and hide via CSS to avoid hydration mismatch
-  const location = useLocation();
+  const pathname = usePathname();
   const closeTimerRef = useRef(null);
-
-  // Close mobile menu on route change
-  useEffect(() => { setMobileMenuOpen(false); }, [location]);
 
   // Lock body scroll when mobile menu open
   useEffect(() => {
@@ -88,11 +86,12 @@ export default function Header() {
             >✕</button>
 
             {NAV_ITEMS.map((item, i) => {
-              const isActive = location.pathname === item.href || (item.href !== '/' && location.pathname.startsWith(item.href));
+              const isActive = pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href));
               return (
                 <motion.a
                   key={item.label}
                   href={item.href}
+                  onClick={() => setMobileMenuOpen(false)}
                   initial={{ opacity: 0, x: -30 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: i * 0.06, type: 'spring', stiffness: 400, damping: 25 }}
@@ -219,7 +218,7 @@ export default function Header() {
                 >
                   <nav style={{ display: 'flex', alignItems: 'center', gap: '8px', position: 'relative' }} onMouseLeave={() => setHoveredPath(null)}>
                     {NAV_ITEMS.map((item, i) => {
-                      const isActive = location.pathname === item.href || (item.href !== '/' && location.pathname.startsWith(item.href));
+                      const isActive = pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href));
                       const isHovered = hoveredPath === item.href;
                       return (
                         <motion.a

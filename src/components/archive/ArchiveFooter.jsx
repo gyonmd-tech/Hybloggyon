@@ -1,7 +1,7 @@
 // src/components/archive/ArchiveFooter.jsx
 // Penutup yang lebih elegant, clear, dengan spacing yang lebih lega
 
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 
 export default function ArchiveFooter({ totalPosts }) {
   return (
@@ -48,7 +48,7 @@ export default function ArchiveFooter({ totalPosts }) {
       </div>
 
       <Link
-        to="/"
+        href="/"
         style={{
           fontFamily:      'var(--font-mono)',
           fontSize:        '12px',

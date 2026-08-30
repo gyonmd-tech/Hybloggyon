@@ -3,7 +3,7 @@ import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import SplitType from 'split-type';
 
-export default function NoteMinimalHero({ tag, date, readTime, title }) {
+export default function NoteMinimalHero({ date, readTime, title }) {
   const titleRef = useRef(null);
   const metaRef = useRef(null);
 

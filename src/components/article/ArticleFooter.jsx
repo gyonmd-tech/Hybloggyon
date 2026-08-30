@@ -2,7 +2,7 @@
 // Penutup artikel: navigasi prev/next + tombol kembali ke arsip.
 
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { getCategoryColor } from '../../lib/categoryColors';
 
 function NavCard({ post, direction }) {
@@ -17,7 +17,7 @@ function NavCard({ post, direction }) {
 
   return (
     <Link
-      to={`/${post.category}/${post.slug}`}
+      href={`/${post.category}/${post.slug}`}
       style={{
         flex:            1,
         display:         'block',
@@ -106,7 +106,7 @@ export default function ArticleFooter({ prevPost, nextPost }) {
       {/* Tombol Kembali ke Arsip */}
       <div style={{ display: 'flex', justifyContent: 'center', marginTop: prevPost || nextPost ? '0' : '0' }}>
         <Link
-          to="/archive"
+          href="/archive"
           style={{
             fontFamily:      'var(--font-mono)',
             fontSize:        '12px',

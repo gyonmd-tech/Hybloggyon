@@ -1,24 +1,14 @@
 // src/components/LatestTopics.jsx
 
-// ── Load semua MDX posts secara dinamis ──────────────────────────────────────
-const mdxModules = import.meta.glob('/src/content/posts/*.mdx', { eager: true });
-
-const ALL_POSTS = Object.values(mdxModules)
-  .map(mod => mod.frontmatter)
-  .filter(p => p?.slug && p?.title)
-  .sort((a, b) => new Date(b.date) - new Date(a.date));
-
-// Ambil 5 terbaru
-const TOPICS = ALL_POSTS.slice(0, 5).map((p, i) => ({
-  num: String(i + 1).padStart(2, '0'),
-  category: (p.category ?? 'notes').toUpperCase().replace('-', ' & '),
-  title: p.title,
-  date: new Date(p.date).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }).toUpperCase(),
-  readTime: `${p.readingTime ?? 5} MIN READ`,
-  href: `/${p.category}/${p.slug}`,
-}));
-
-export default function LatestTopics() {
+export default function LatestTopics({ posts }) {
+  const topics = posts.slice(0, 5).map((post, index) => ({
+    num: String(index + 1).padStart(2, '0'),
+    category: post.category.toUpperCase().replace('-', ' & '),
+    title: post.title,
+    date: new Date(post.date).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }).toUpperCase(),
+    readTime: `${post.readingTime} MIN READ`,
+    href: post.url,
+  }));
   return (
     <>
       <section
@@ -71,8 +61,8 @@ export default function LatestTopics() {
                 }}
               >
                 Journal Indices —{' '}
-                <span className="article-counter" data-target={TOPICS.length}>
-                  {TOPICS.length}
+                <span className="article-counter" data-target={topics.length}>
+                  {topics.length}
                 </span>{' '}
                 Entries
               </p>
@@ -81,7 +71,7 @@ export default function LatestTopics() {
 
           {/* Topics List */}
           <div style={{ padding: '0' }}>
-            {TOPICS.map((topic) => (
+            {topics.map((topic) => (
               <a
                 key={topic.num}
                 href={topic.href}

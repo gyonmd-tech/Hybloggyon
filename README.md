@@ -1,205 +1,111 @@
 # HyBloggyon
 
-**Personal editorial blog** built as a static React app — long-form essays, learning notes, and pop-culture writing (music, film & anime), with a Neo-Brutalist Editorial visual language.
+Blog editorial pribadi berbasis Next.js. Halaman publik dirender dari server dan data access sudah mendukung PostgreSQL, sementara Markdown tetap menjadi sumber aktif sampai migrasi konten selesai diverifikasi.
 
-No CMS. No backend. You write MDX, push to Git, and Vercel deploys.
+## Stack
 
-**Live demo:** [hybloggyon.vercel.app](https://hybloggyon.vercel.app/)
+- Next.js 16 App Router
+- React 19
+- Tailwind CSS 4 + design tokens
+- GSAP dan Framer Motion
+- Markdown dengan `gray-matter` dan `react-markdown`
+- PostgreSQL + Drizzle ORM
+- Deployment: Vercel
 
----
+## Menjalankan Proyek
 
-## Features
-
-- **MDX content** — write posts as Markdown + React components
-- **Four categories** — `esai`, `notes`, `musik`, `film-anime`
-- **Editorial homepage** — scrollytelling layout with GSAP + Framer Motion
-- **Reading experience** — article pages with TOC, reading progress, related notes
-- **Archive & search** — filter by category; notes search by tag
-- **About & Hobby pages** — manifesto + curated books / music / films
-- **Design system** — CSS tokens, zero border-radius, hard shadows, hairline borders
-- **SEO-ready** — `react-helmet-async` per page
-- **One-click deploy** — Vercel SPA rewrites included
-
----
-
-## Tech Stack
-
-| Layer | Choice |
-|---|---|
-| Framework | React 19 + Vite 8 |
-| Routing | React Router v7 |
-| Content | MDX (`@mdx-js/rollup`) |
-| Styling | Tailwind CSS v4 + CSS design tokens |
-| Animation | GSAP 3 + Framer Motion 12 |
-| SEO | react-helmet-async |
-| Deploy | Vercel |
-
----
-
-## Quick Start
-
-**Requirements:** Node.js 20+
+Persyaratan: Node.js 20 atau lebih baru.
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/HyBloggyon.git
-cd HyBloggyon
 npm install
 npm run dev
 ```
 
-Open [http://localhost:5173](http://localhost:5173).
+Buka `http://localhost:3000`.
 
-| Script | Description |
+| Perintah | Fungsi |
 |---|---|
-| `npm run dev` | Local development server |
-| `npm run build` | Production build → `dist/` |
-| `npm run preview` | Preview production build |
-| `npm run lint` | ESLint |
+| `npm run dev` | Menjalankan development server |
+| `npm run build` | Membuat production build Next.js |
+| `npm start` | Menjalankan production build |
+| `npm run lint` | Memeriksa kualitas kode |
+| `npm run content:check` | Memvalidasi frontmatter, URL, isi, dan cover artikel |
+| `npm run content:import` | Mengimpor konten Markdown ke PostgreSQL secara idempotent |
+| `npm run db:generate` | Menghasilkan migration SQL dari schema Drizzle |
+| `npm run db:migrations:check` | Memvalidasi konsistensi riwayat migration |
+| `npm run db:migrate` | Menjalankan migration PostgreSQL |
+| `npm run db:seed` | Mengisi kategori dan setting dasar |
+| `npm run db:check` | Memeriksa koneksi serta jumlah record |
+| `npm run admin:create` | Membuat atau mereset akun pemilik dari environment |
 
-### Optional: TMDb API key
+## Struktur
 
-The Hobby page can load film posters from [TMDb](https://www.themoviedb.org/). Create a `.env` file (already gitignored):
+```text
+src/
+├── app/                 # Route, metadata, sitemap, robots, dan server entry
+├── features/            # Tampilan per domain halaman
+│   ├── about/
+│   ├── archive/
+│   ├── article/
+│   ├── hobby/
+│   ├── home/
+│   ├── notes/
+│   └── admin/            # Aksi dan komponen ruang editorial
+├── components/          # Komponen UI reusable
+├── config/              # Konfigurasi situs
+├── content/
+│   └── posts/           # Sumber Markdown sementara
+├── lib/
+│   ├── content/         # Kontrak dan adapter sumber konten
+│   ├── auth/            # Password, session, dan proteksi admin
+│   ├── db/              # Schema, client, dan repository PostgreSQL
+│   └── media/           # Penyimpanan lokal/S3-compatible
+└── styles/              # Design system publik dan admin
+```
+
+`src/app` menangani pekerjaan server dan routing. `src/features` menangani tampilan interaktif. Komponen tidak boleh membaca file konten sendiri; seluruh data artikel masuk dari `src/lib/content/posts.js` melalui route server.
+
+## Menambah Artikel Selama Masa Transisi
+
+1. Tambahkan file `src/content/posts/{slug}.mdx`.
+2. Gunakan Markdown standar dan frontmatter yang didokumentasikan di `Docs/CONTENT.md`.
+3. Pastikan `slug` sama dengan nama file.
+4. Jalankan:
+
+```bash
+npm run content:check
+npm run build
+```
+
+URL artikel tetap memakai `/{category}/{slug}`. Kategori yang tersedia: `esai`, `notes`, `musik`, dan `film-anime`.
+
+## Environment
+
+Salin `.env.example` menjadi `.env.local` bila diperlukan.
 
 ```env
-VITE_TMDB_API_KEY=your_tmdb_v3_api_key
+NEXT_PUBLIC_SITE_URL=https://domain-utama.example
+NEXT_PUBLIC_TMDB_API_KEY=
+DATABASE_URL=postgresql://user:password@host:5432/hybloggyon
+DATABASE_SSL=require
+DATABASE_POOL_MAX=1
+CONTENT_SOURCE=markdown
+MEDIA_STORAGE=local
 ```
 
-Without it, the page falls back to typography-only cards.
+`NEXT_PUBLIC_SITE_URL` digunakan untuk canonical URL, sitemap, robots, dan structured data. Konfigurasi lama `VITE_TMDB_API_KEY` masih dibaca sementara agar halaman Kurasi tidak langsung rusak saat migrasi.
 
----
+`DATABASE_URL` adalah secret server dan tidak boleh memakai prefix `NEXT_PUBLIC_`. Biarkan `CONTENT_SOURCE=markdown` saat menyiapkan database. Panduan database terdapat di `Docs/DATABASE.md`; aktivasi panel, akun pemilik, impor konten, dan media dijelaskan di `Docs/ADMIN.md`.
 
-## Project Structure
+## SEO Dasar
 
-```
-HyBloggyon/
-├── public/images/          # Covers, hero, about, OG images
-├── src/
-│   ├── content/
-│   │   ├── posts/          # ← All MDX articles live here
-│   │   ├── about-data.js   # About page copy
-│   │   └── hobby-data.js   # Hobby page lists
-│   ├── components/         # UI by domain (about, article, notes, …)
-│   ├── pages/              # Route pages
-│   ├── hooks/              # Article data hooks
-│   ├── utils/              # MDX helpers, dates, reading time
-│   ├── animations/         # GSAP intro sequences
-│   └── styles/global.css   # Design tokens + Tailwind
-├── Docs/                   # Guides (content, design, customize)
-├── vercel.json             # SPA rewrites
-└── package.json
-```
+- HTML halaman dan artikel diprerender.
+- Metadata, canonical, Open Graph, dan Twitter Card dibuat di server.
+- Artikel memiliki structured data `Article`.
+- `sitemap.xml` dan `robots.txt` dibuat otomatis.
+- Route artikel memvalidasi kategori dan slug; route yang salah menghasilkan HTTP 404.
+- Bahasa dokumen adalah Bahasa Indonesia (`lang="id"`).
 
-> **Note:** A root `content/` folder may exist as legacy samples. The site reads **`src/content/posts/`** only.
+## Status Migrasi
 
----
-
-## Adding a Post
-
-1. Create `src/content/posts/your-slug.mdx`
-2. Add frontmatter + body
-3. Put cover at `public/images/covers/{category}/your-slug.webp`
-4. Commit and push — Vercel redeploys automatically
-
-```mdx
----
-title: "Your Title"
-subtitle: "Optional subtitle"
-category: "esai"
-tags: ["tag1", "tag2"]
-date: "2026-07-01"
-slug: "your-slug"
-featured: false
-excerpt: "One-sentence summary for cards and SEO."
-coverImage: "/images/covers/esai/your-slug.webp"
-readingTime: 5
-pullQuote: "Optional short quote."
----
-
-Your writing starts here…
-```
-
-**`slug` must match the filename** (without `.mdx`).
-
-URL pattern: `/{category}/{slug}`  
-Example: `/esai/tentang-keheningan-sebagai-bahasa`
-
-Full workflow, templates, and image rules → **[Docs/CONTENT.md](Docs/CONTENT.md)**
-
----
-
-## Deploy to Vercel
-
-1. Push the repo to GitHub
-2. Import the project at [vercel.com/new](https://vercel.com/new)
-3. Confirm settings:
-
-| Setting | Value |
-|---|---|
-| Framework | Vite |
-| Build command | `npm run build` |
-| Output directory | `dist` |
-| Node.js | 20.x |
-
-4. (Optional) Add `VITE_TMDB_API_KEY` under **Environment Variables**
-5. Deploy
-
-`vercel.json` already rewrites all routes to `index.html` for client-side routing. Every push to `main` triggers a new deploy.
-
-**Custom domain:** Project Settings → Domains in the Vercel dashboard.
-
----
-
-## Customize for Your Blog
-
-| What | Where |
-|---|---|
-| Site name / nav | `src/components/Header.jsx`, page `<Helmet>` titles |
-| About copy | `src/content/about-data.js` |
-| Hobby lists | `src/content/hobby-data.js` |
-| Colors, fonts, rules | `src/styles/global.css` + [Docs/DESIGN.md](Docs/DESIGN.md) |
-| Sample posts | Replace files in `src/content/posts/` |
-
-Step-by-step forking guide → **[Docs/CUSTOMIZE.md](Docs/CUSTOMIZE.md)**
-
----
-
-## Documentation
-
-| Doc | Purpose |
-|---|---|
-| [Docs/CONTENT.md](Docs/CONTENT.md) | Write & publish posts, templates, images |
-| [Docs/DESIGN.md](Docs/DESIGN.md) | Visual system, tokens, anti-patterns |
-| [Docs/CUSTOMIZE.md](Docs/CUSTOMIZE.md) | Make this blog yours after forking |
-
----
-
-## Design Principles (short)
-
-- **Neo-Brutalist Editorial** — print-magazine grid, hairline borders, thin large type
-- **No rounded corners** — `border-radius: 0` everywhere
-- **Hard shadows only** — e.g. `4px 4px 0`, never soft blur
-- **Token colors only** — use CSS variables, not generic Tailwind palette colors
-- **Controlled motion** — editorial reveals; no bounce/elastic playfulness
-
-Details → [Docs/DESIGN.md](Docs/DESIGN.md)
-
----
-
-## Contributing
-
-Issues and PRs are welcome — especially bug fixes, accessibility, docs, and content tooling.
-
-1. Fork and create a branch
-2. Keep changes aligned with the design system
-3. Run `npm run build` before opening a PR
-4. Describe *why* the change helps
-
----
-
-## License
-
-This project is intended to be open source. Add a `LICENSE` file of your choice (e.g. MIT) before publishing the public repo.
-
----
-
-*A digital workshop for preserving thought — built to be forked, rewritten, and made your own.*
+Fase 0–1 tercatat di `Docs/MIGRATION-BASELINE.md`. Fase 2 menambahkan fondasi PostgreSQL. Fase 3 menyediakan panel admin lengkap, autentikasi, workflow editorial, revisi, media, pengaturan SEO, dan importir Markdown. Konten publik tetap membaca Markdown sampai proses cutover dilakukan.

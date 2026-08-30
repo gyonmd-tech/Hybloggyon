@@ -102,6 +102,6 @@ Avoid introducing:
 | Colors, fonts, spacing tokens | `src/styles/global.css` |
 | Homepage sequence | `src/pages/HomePage.jsx` + `src/components/*` |
 | Intro animation | `src/animations/introSequence.js` |
-| Article MDX elements | `src/components/article/MDXComponents.jsx` |
+| Article Markdown elements | `src/components/article/MarkdownComponents.jsx` |
 
 When in doubt: match an existing section’s borders, type scale, and motion — don’t invent a new visual dialect.

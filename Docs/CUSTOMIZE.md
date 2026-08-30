@@ -38,7 +38,7 @@ Portrait image is wired in `src/components/about/AboutPortrait.jsx` (typically u
 
 Edit **`src/content/hobby-data.js`** for music, books, films, and side glances.
 
-Film posters can use TMDb IDs when `VITE_TMDB_API_KEY` is set (see README). Without a key, typography fallbacks still render.
+Film posters can use TMDb IDs when `NEXT_PUBLIC_TMDB_API_KEY` is set (see README). Without a key, typography fallbacks still render.
 
 ---
 
@@ -86,7 +86,7 @@ To remove a page: delete the route, nav link in `Header.jsx`, and unused compone
 
 ```env
 # .env (local) — never commit
-VITE_TMDB_API_KEY=your_key
+NEXT_PUBLIC_TMDB_API_KEY=your_key
 ```
 
 On Vercel: **Settings → Environment Variables** → same key → Redeploy.
@@ -102,7 +102,7 @@ On Vercel: **Settings → Environment Variables** → same key → Redeploy.
 - [ ] `LICENSE` chosen and added
 - [ ] README demo URL / clone URL updated
 - [ ] `npm run build` passes
-- [ ] Vercel deploy + SPA routing checked (`/archive`, deep article URLs)
+- [ ] Vercel deploy + deep routes checked (`/archive`, article URLs, dan halaman 404)
 
 ---
 

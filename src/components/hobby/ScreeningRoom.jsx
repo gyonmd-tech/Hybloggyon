@@ -7,7 +7,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const TMDB_KEY      = import.meta.env.VITE_TMDB_API_KEY;
+const TMDB_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY;
 const IMG_BASE_W1280 = 'https://image.tmdb.org/t/p/w1280';
 const IMG_BASE_W780  = 'https://image.tmdb.org/t/p/w780';
 
@@ -43,16 +43,17 @@ function FilmFallback({ title, style = {} }) {
   );
 }
 
-// ── Fetch backdrop dari TMDb ─────────────────────────────────────────────
-async function fetchBackdrop(tmdbId, size = 'w1280') {
+// ── Fetch backdrop dari TMDb (movie atau tv) ─────────────────────────────
+async function fetchBackdrop(tmdbId, size = 'w1280', mediaType = 'movie') {
   const width = size === 'w780' ? 780 : 1280;
   const height = size === 'w780' ? 438 : 720;
   const dummyImg = `https://picsum.photos/seed/${tmdbId}/${width}/${height}`;
 
   if (!TMDB_KEY || TMDB_KEY === 'your_tmdb_api_key_here') return dummyImg;
   try {
+    const kind = ['tv', 'anime', 'series'].includes(mediaType) ? 'tv' : 'movie';
     const res  = await fetch(
-      `https://api.themoviedb.org/3/movie/${tmdbId}/images?api_key=${TMDB_KEY}`
+      `https://api.themoviedb.org/3/${kind}/${tmdbId}/images?api_key=${TMDB_KEY}`
     );
     const data = await res.json();
     const path = data.backdrops?.[0]?.file_path;
@@ -69,8 +70,8 @@ function FeaturedFilm({ film, bannerRef, textRef }) {
   const [imgUrl, setImgUrl] = useState(null);
 
   useEffect(() => {
-    fetchBackdrop(film.tmdbId, 'w1280').then(setImgUrl);
-  }, [film.tmdbId]);
+    fetchBackdrop(film.tmdbId, 'w1280', film.mediaType ?? film.type).then(setImgUrl);
+  }, [film.tmdbId, film.mediaType, film.type]);
 
   return (
     <div style={{ marginBottom: '40px' }}>
@@ -220,8 +221,8 @@ function GridFilmItem({ film }) {
   const [imgUrl, setImgUrl] = useState(null);
 
   useEffect(() => {
-    fetchBackdrop(film.tmdbId, 'w780').then(setImgUrl);
-  }, [film.tmdbId]);
+    fetchBackdrop(film.tmdbId, 'w780', film.mediaType ?? film.type).then(setImgUrl);
+  }, [film.tmdbId, film.mediaType, film.type]);
 
   return (
     <div
@@ -293,6 +294,7 @@ function GridFilmItem({ film }) {
           }}
         >
           {film.year} · {film.genre}
+          {film.oneWord ? ` · "${film.oneWord}"` : ''}
         </span>
       </div>
     </div>

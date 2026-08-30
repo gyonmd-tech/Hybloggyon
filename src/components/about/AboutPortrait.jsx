@@ -103,7 +103,7 @@ export default function AboutPortrait({ name, shortBio, meta }) {
             backgroundColor: '#ffffff',
           }}>
             <img
-              src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=900&q=90"
+              src="/images/about/profile.jpg"
               alt={`Portrait of ${name}`}
               style={{
                 width: '100%',
@@ -111,7 +111,6 @@ export default function AboutPortrait({ name, shortBio, meta }) {
                 objectFit: 'cover',
                 objectPosition: 'center top',
                 display: 'block',
-                filter: 'grayscale(100%) contrast(1.1)', // Sleek B&W
               }}
             />
           </div>

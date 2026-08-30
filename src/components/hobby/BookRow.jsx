@@ -43,18 +43,31 @@ export default function BookRow({ book }) {
 
     const fetchCover = async () => {
       try {
-        // Coba Google Books
-        const res  = await fetch(
-          `https://www.googleapis.com/books/v1/volumes?q=isbn:${book.isbn}`
-        );
-        const data = await res.json();
-        const url  = data.items?.[0]?.volumeInfo?.imageLinks?.thumbnail;
-        if (url && !cancelled) {
-          setCoverUrl(url.replace('http:', 'https:').replace('zoom=1', 'zoom=3'));
+        // 1) Coba Google Books via ISBN
+        if (book.isbn) {
+          const res  = await fetch(
+            `https://www.googleapis.com/books/v1/volumes?q=isbn:${book.isbn}`
+          );
+          const data = await res.json();
+          const url  = data.items?.[0]?.volumeInfo?.imageLinks?.thumbnail;
+          if (url && !cancelled) {
+            setCoverUrl(url.replace('http:', 'https:').replace('zoom=1', 'zoom=3'));
+            return;
+          }
+        }
+
+        // 2) Fallback: cari by judul + penulis
+        const q = encodeURIComponent(`intitle:${book.title}+inauthor:${book.author}`);
+        const res2  = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${q}&maxResults=1`);
+        const data2 = await res2.json();
+        const url2  = data2.items?.[0]?.volumeInfo?.imageLinks?.thumbnail;
+        if (url2 && !cancelled) {
+          setCoverUrl(url2.replace('http:', 'https:').replace('zoom=1', 'zoom=3'));
           return;
         }
-        // Fallback Open Library
-        if (!cancelled) {
+
+        // 3) Open Library by ISBN
+        if (book.isbn && !cancelled) {
           setCoverUrl(`https://covers.openlibrary.org/b/isbn/${book.isbn}-M.jpg`);
         }
       } catch {
@@ -64,7 +77,7 @@ export default function BookRow({ book }) {
 
     fetchCover();
     return () => { cancelled = true; };
-  }, [book.isbn]);
+  }, [book.isbn, book.title, book.author]);
 
   const status = STATUS_CONFIG[book.status] ?? STATUS_CONFIG.queue;
 

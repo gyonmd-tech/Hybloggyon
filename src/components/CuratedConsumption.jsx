@@ -1,5 +1,5 @@
 // src/components/CuratedConsumption.jsx
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 const EXHIBITION_ITEMS = [
   { title: 'OK COMPUTER', tag: 'RADIOHEAD · MUSIK', img: 'https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?w=1000&q=75&auto=format&fit=crop' },

@@ -4,7 +4,7 @@
 // CTA menggunakan Link untuk navigasi ke halaman artikel.
 
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { getCategoryColor } from '../../lib/categoryColors';
 
 function formatDate(dateStr) {
@@ -142,7 +142,7 @@ export default function ArchiveCard({ post, index }) {
 
         {/* CTA — Link ke halaman artikel */}
         <Link
-          to={articleUrl}
+          href={articleUrl}
           style={{
             fontFamily:      'var(--font-mono)',
             fontSize:        '10px',

@@ -47,11 +47,6 @@ export default function ArchiveGrid({
 
   const INITIAL_LIMIT = 16; // 4 kolom × 4 baris
 
-  // Reset expand state ketika filter berubah
-  useEffect(() => {
-    setIsExpanded(false);
-  }, [filterKey]);
-
   // GSAP load awal — hanya sekali
   useEffect(() => {
     if (didInit.current) return;

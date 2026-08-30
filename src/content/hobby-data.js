@@ -74,6 +74,7 @@ export const hobbyData = {
       year: "2024",
       genre: "Drama",
       tmdbId: 1004549,
+      mediaType: "movie",
       impression:
         "Payal Kapadia membangun film tentang kesendirian di kota besar dengan cara yang anehnya intim. Tidak ada plot besar, hanya keseharian tiga perempuan Mumbai yang bergerak di bawah cahaya neon dan hujan. Saya tidak bisa berhenti memikirkan shot terakhirnya selama tiga hari setelah menontonnya.",
       oneWord: "Mengendap",
@@ -84,40 +85,105 @@ export const hobbyData = {
         year: "2024",
         genre: "Drama / Comedy",
         tmdbId: 1241982,
+        mediaType: "movie",
         type: "film",
+        impression:
+          "Eksplorasi kehidupan malam yang liar, penuh energi, sekaligus getir. Menyeimbangkan komedi situasi yang kacau dengan realitas pahit kelas pekerja.",
+        oneWord: "Liar",
       },
       {
         title: "The Substance",
         year: "2024",
         genre: "Body Horror",
         tmdbId: 933260,
+        mediaType: "movie",
         type: "film",
+        impression:
+          "Sebuah satire industri kecantikan yang brutal dan ekstrem. Visualnya mencengangkan sekaligus tidak nyaman untuk dilihat, menghadirkan teror psikologis dan fisik yang intens.",
+        oneWord: "Gila",
       },
       {
         title: "Frieren: Beyond Journey's End",
         year: "2023",
         genre: "Fantasy / Anime",
         tmdbId: 209867,
+        mediaType: "tv",
         type: "anime",
+        impression:
+          "Sebuah mahakarya fantasi yang tidak fokus pada pertempuran melawan raja iblis, melainkan apa yang terjadi setelah petualangan itu usai. Renungan mendalam tentang waktu, penyesalan, dan koneksi manusia.",
+        oneWord: "Melankolis",
       },
       {
-        title: "Perfect Days",
-        year: "2023",
-        genre: "Drama / Slow Cinema",
-        tmdbId: 897087,
-        type: "film",
+        title: "Young Sheldon",
+        year: "2017 - 2024",
+        genre: "Comedy / Coming-of-Age",
+        tmdbId: 71728,
+        mediaType: "tv",
+        type: "series",
+        impression:
+          "Spin-off yang luar biasa hangat. Lebih dari sekadar menceritakan masa kecil ilmuwan jenius yang eksentrik, serial ini adalah surat cinta untuk dinamika keluarga Cooper di Texas yang penuh tawa sekaligus air mata.",
+        oneWord: "Hangat",
       },
       {
-        title: "I Saw the TV Glow",
+        title: "Mischievous Kiss: Love in Tokyo",
+        year: "2013",
+        genre: "Romance / Comedy / J-Drama",
+        tmdbId: 64793,
+        mediaType: "tv",
+        type: "series",
+        impression:
+          "Adaptasi manga klasik Jepang yang sangat adiktif. Dinamika cinta benci antara Kotoko yang ceria namun ceroboh dengan Naoki yang super jenius dan dingin selalu berhasil memicu nostalgia romansa sekolah yang manis.",
+        oneWord: "Nostalgia",
+      },
+      {
+        title: "Drawing Closer",
         year: "2024",
-        genre: "Horror / Coming-of-age",
-        tmdbId: 1009291,
+        genre: "Romance / Melodrama / Film Jepang",
+        tmdbId: 1291559,
+        mediaType: "movie",
         type: "film",
+        impression:
+          "Kisah cinta yang mengharukan tentang dua orang muda yang sama-sama menghadapi vonis sisa usia yang singkat. Alih-alih larut dalam kesedihan, mereka memilih untuk melukis warna-warna indah di sisa waktu bersama.",
+        oneWord: "Menyentuh",
+      },
+      {
+        title: "The Gift of Your Heart",
+        year: "2024",
+        genre: "Fantasy / Romance / J-Drama",
+        tmdbId: 240772,
+        mediaType: "tv",
+        type: "series",
+        impression:
+          "Sebuah melodrama fantasi yang sangat menguras emosi. Pengorbanan panca indera demi menyelamatkan orang yang dicintai menghadirkan kisah cinta yang penuh kegetiran, namun diselimuti visual kota Nagasaki yang indah.",
+        oneWord: "Tangis",
+      },
+      {
+        title: "The Pacific",
+        year: "2010",
+        genre: "War / History / Mini-Series",
+        tmdbId: 16997,
+        mediaType: "tv",
+        type: "series",
+        impression:
+          "Pendamping yang sempurna untuk Band of Brothers, namun dengan pendekatan yang jauh lebih mentah, brutal, dan menyoroti kerusakan psikologis para prajurit di medan perang Pasifik yang kejam.",
+        oneWord: "Brutal",
+      },
+      {
+        title: "Dune (Part One & Two)",
+        year: "2021 - 2024",
+        genre: "Sci-Fi / Adventure / Epic",
+        tmdbId: 693134,
+        mediaType: "movie",
+        type: "film",
+        impression:
+          "Sinema dalam skala paling megah. Denis Villeneuve berhasil menerjemahkan fiksi ilmiah kompleks milik Frank Herbert menjadi sebuah visual safari gurun yang magis, megah, dan penuh dengan intrik politik mesianik.",
+        oneWord: "Megah",
       },
     ],
   },
 
   books: [
+    // ── Sedang dibaca ────────────────────────────────────────────────────────
     {
       title: "The Wager",
       author: "David Grann",
@@ -126,6 +192,15 @@ export const hobbyData = {
       impression:
         "Kisah kapal karam abad 18 yang berubah jadi pertanyaan tentang siapa yang berhak mendefinisikan kebenaran.",
     },
+    {
+      title: "Orb: On the Movements of the Earth",
+      author: "Uoto",
+      isbn: "9781975379193",
+      status: "reading",
+      impression:
+        "Perjuangan menegakkan kebenaran ilmiah dan teori heliosentris di era dogma agama yang ketat. Kisah tentang pencarian kebenaran yang berbahaya namun memikat.",
+    },
+    // ── Selesai dibaca ───────────────────────────────────────────────────────
     {
       title: "Invisible Cities",
       author: "Italo Calvino",
@@ -143,6 +218,39 @@ export const hobbyData = {
         "Mengubah cara saya melihat gambar iklan, lukisan, dan tubuh manusia. Selamanya.",
     },
     {
+      title: "Sang Alkemis",
+      author: "Paulo Coelho",
+      isbn: "9780062315007",
+      status: "done",
+      impression:
+        "Kisah alegoris tentang Santiago, seorang gembala muda yang mengikuti impian dan petualangannya untuk menemukan takdir serta harta karun di gurun Mesir.",
+    },
+    {
+      title: "Dunia Sophie",
+      author: "Jostein Gaarder",
+      isbn: "9780374530716",
+      status: "done",
+      impression:
+        "Sebuah novel filsafat yang mengemas sejarah pemikiran barat dari masa Yunani kuno hingga abad modern lewat petualangan misterius seorang gadis remaja bernama Sophie.",
+    },
+    {
+      title: "Seorang Puasawan",
+      author: "Franz Kafka",
+      isbn: "9780805210170",
+      status: "done",
+      impression:
+        "Eksplorasi mendalam tentang keterasingan eksistensial, seni, dan kepuasan batin yang mustahil dipahami oleh masyarakat umum melalui sudut pandang seorang seniman kelaparan.",
+    },
+    {
+      title: "Gagal Menjadi Manusia",
+      author: "Osamu Dazai",
+      isbn: "9780811204811",
+      status: "done",
+      impression:
+        "Sebuah potret psikologis yang jujur dan kelam mengenai keterasingan diri, keputusasaan, ketidakmampuan untuk memahami sesama manusia, dan pencarian identitas yang hancur.",
+    },
+    // ── Antrean ──────────────────────────────────────────────────────────────
+    {
       title: "The Ministry for the Future",
       author: "Kim Stanley Robinson",
       isbn: "9780316300131",
@@ -157,6 +265,14 @@ export const hobbyData = {
       status: "queue",
       impression:
         "Ditulis 1993, set di California 2024. Saya takut memulainya karena mungkin terlalu akurat.",
+    },
+    {
+      title: "The Brothers Karamazov",
+      author: "Fyodor Dostoevsky",
+      isbn: "9780374528379",
+      status: "queue",
+      impression:
+        "Sebuah mahakarya sastra klasik Rusia yang menyelami dinamika keluarga, moralitas, kehendak bebas, iman, dan konflik internal manusia dalam pencarian spiritualitas.",
     },
   ],
 

@@ -10,9 +10,18 @@ lerna-debug.log*
 node_modules
 dist
 dist-ssr
+.next
+out
 *.local
 .env
 .env.*
+!.env.example
+
+# Local manuscripts / drafts — keep on disk, never push
+Finally-Narasi-Pertama.docx
+*.docx
+private/
+public/uploads/
 
 # Editor directories and files
 .vscode/*

@@ -3,7 +3,6 @@
 
 import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
-import { getCategoryColor } from '../../lib/categoryColors';
 
 function estimateReadTime(text = '') {
   const words = text.trim().split(/\s+/).length;
@@ -17,21 +16,18 @@ function formatDate(dateStr) {
 }
 
 export default function ArticleHero({ frontmatter, rawContent }) {
-  const badgeRef = useRef(null);
   const titleRef = useRef(null);
   const subRef   = useRef(null);
   const metaRef  = useRef(null);
 
-  const cat      = getCategoryColor(frontmatter?.category);
-  const readTime = estimateReadTime(rawContent);
+  const readTime = frontmatter?.readingTime || estimateReadTime(rawContent);
   const date     = formatDate(frontmatter?.date);
   const tags     = frontmatter?.tags ?? [];
 
   useEffect(() => {
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
-      tl.fromTo(badgeRef.current, { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5 })
-        .fromTo(titleRef.current,  { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8 }, '-=0.2')
+      tl.fromTo(titleRef.current,  { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8 })
         .fromTo(subRef.current,    { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6 }, '-=0.4')
         .fromTo(metaRef.current,   { opacity: 0 },        { opacity: 1, duration: 0.5 },       '-=0.2');
     });

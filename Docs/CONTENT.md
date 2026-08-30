@@ -18,7 +18,7 @@ Add cover to public/images/covers/{category}/
         ↓
 git add → commit → push
         ↓
-Vercel redeploys (~30–60s)
+Next.js prerenders the updated article during deployment
 ```
 
 ---
@@ -278,7 +278,8 @@ Save to `public/images/posts/` and reference with alt text:
 - [ ] `category` is valid
 - [ ] Cover exists and path matches `coverImage`
 - [ ] Image compressed
-- [ ] `npm run build` succeeds (optional but recommended)
+- [ ] `npm run content:check` succeeds
+- [ ] `npm run build` succeeds
 - [ ] `git push` → wait for Vercel
 
 ---

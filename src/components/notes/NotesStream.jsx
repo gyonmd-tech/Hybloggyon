@@ -5,23 +5,6 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
-// ── Load semua posts dari MDX (semua kategori untuk stream) ───────────────────
-const mdxModules = import.meta.glob('/src/content/posts/*.mdx', { eager: true });
-
-const ALL_NOTES = Object.values(mdxModules)
-  .map(m => m.frontmatter)
-  .filter(p => p?.slug && p?.title)
-  .sort((a, b) => new Date(b.date) - new Date(a.date))
-  .map((p, i) => ({
-    id:       p.slug,
-    tag:      p.tags?.[0] ?? p.category,
-    date:     new Date(p.date).toLocaleDateString('id-ID', { day: 'numeric', month: 'short' }),
-    title:    p.title,
-    readTime: `${p.readingTime ?? 4} min`,
-    href:     `/${p.category}/${p.slug}`,
-    category: p.category,
-  }));
-
 const TAG_COLORS = {
   'filosofi':   'var(--color-wasabi)',
   'teknologi':  'var(--color-accent-green)',
@@ -34,12 +17,28 @@ const TAG_COLORS = {
   'refleksi':   'var(--color-wasabi)',
   'membaca':    'var(--color-muted-apricot)',
   'buku':       'var(--color-muted-apricot)',
+  'the-narrative': 'var(--color-wasabi)',
+  'sosial':     'var(--color-muted-apricot)',
+  'identitas':  'var(--color-accent-warm)',
+  'eksistensial': 'var(--color-accent-green)',
+  'pengantar':  'var(--color-wasabi)',
+  'kesepian':   'var(--color-surface-dim)',
+  'cinta':      'var(--color-accent-warm)',
 };
 
-export default function NotesStream({ activeTag, searchQuery }) {
+export default function NotesStream({ posts, activeTag, searchQuery }) {
   const sectionRef = useRef(null);
+  const notes = posts.map((post) => ({
+    id: post.slug,
+    tag: post.tags?.[0] ?? post.category,
+    date: new Date(post.date).toLocaleDateString('id-ID', { day: 'numeric', month: 'short' }),
+    title: post.title,
+    readTime: `${post.readingTime} min`,
+    href: post.url,
+    category: post.category,
+  }));
 
-  const filtered = ALL_NOTES.filter((n) => {
+  const filtered = notes.filter((n) => {
     const tagMatch = !activeTag || activeTag === 'Semua' ||
       (n.tag ?? '').toLowerCase() === activeTag.toLowerCase();
     const queryMatch = !searchQuery || n.title.toLowerCase().includes(searchQuery.toLowerCase());

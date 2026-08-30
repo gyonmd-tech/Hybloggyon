@@ -1,21 +1,11 @@
 import { useState, useRef, useEffect } from 'react';
 
-// ── Derive tags dari data MDX ─────────────────────────────────────────────────
-const mdxModules = import.meta.glob('/src/content/posts/*.mdx', { eager: true });
-const ALL_POSTS  = Object.values(mdxModules).map(m => m.frontmatter).filter(Boolean);
-const TOTAL_COUNT = ALL_POSTS.length;
-
-// Kumpulkan semua tag unik dari frontmatter, kapitalkan untuk tampilan
-const allTags = ALL_POSTS.flatMap(p => p.tags ?? []);
-const uniqueTags = [...new Set(allTags)]
-  .slice(0, 8) // Maks 8 tag agar tidak overflow
-  .map(t => t.charAt(0).toUpperCase() + t.slice(1));
-
-const TAGS = ['Semua', ...uniqueTags];
-
-export default function NotesSearch({ onSearch, onTagSelect, activeTag }) {
+export default function NotesSearch({ posts, onSearch, onTagSelect, activeTag }) {
   const [query, setQuery] = useState('');
   const inputRef = useRef(null);
+  const tags = ['Semua', ...new Set(posts.flatMap((post) => post.tags ?? []))]
+    .slice(0, 9)
+    .map((tag) => tag.charAt(0).toUpperCase() + tag.slice(1));
 
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -111,7 +101,7 @@ export default function NotesSearch({ onSearch, onTagSelect, activeTag }) {
           </div>
 
           <span className="notes-search-count" style={{ fontFamily: 'var(--font-mono)', fontSize: '11px', color: 'rgba(0,0,0,0.5)', letterSpacing: '0.1em' }}>
-            {query ? `...mencari` : `${TOTAL_COUNT} entries`}
+            {query ? '...mencari' : `${posts.length} entries`}
           </span>
 
           {/* Escape / Back to Top Button */}
@@ -147,7 +137,7 @@ export default function NotesSearch({ onSearch, onTagSelect, activeTag }) {
             scrollbarWidth: 'none',
           }}
         >
-          {TAGS.map((tag) => (
+          {tags.map((tag) => (
             <button
               key={tag}
               onClick={() => onTagSelect?.(tag)}

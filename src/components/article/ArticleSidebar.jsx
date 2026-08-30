@@ -2,7 +2,7 @@
 // Sidebar sticky: metadata, TOC, dan artikel terkait.
 
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 import { getCategoryColor } from '../../lib/categoryColors';
 import TableOfContents from './TableOfContents';
 
@@ -36,7 +36,7 @@ function RelatedArticle({ post }) {
 
   return (
     <Link
-      to={`/${post.category}/${post.slug}`}
+      href={`/${post.category}/${post.slug}`}
       style={{
         display:       'block',
         textDecoration:'none',

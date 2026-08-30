@@ -5,33 +5,27 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
 
-// ── Load notes dari MDX ───────────────────────────────────────────────────────
-const mdxModules = import.meta.glob('/src/content/posts/*.mdx', { eager: true });
-
 const ACCENT_COLORS = [
   'var(--color-accent-green)',
   'var(--color-accent-warm)',
   'var(--color-wasabi)',
 ];
 
-const FEATURED = Object.values(mdxModules)
-  .map(m => m.frontmatter)
-  .filter(p => p?.slug && p?.category === 'notes')
-  .sort((a, b) => new Date(b.date) - new Date(a.date))
-  .slice(0, 3)
-  .map((p, i) => ({
-    id:       p.slug,
-    tag:      p.tags?.[0] ?? 'notes',
-    date:     new Date(p.date).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }),
-    title:    p.title,
-    excerpt:  p.excerpt ?? '',
-    readTime: `${p.readingTime ?? 3} menit`,
-    href:     `/notes/${p.slug}`,
-    accent:   ACCENT_COLORS[i % ACCENT_COLORS.length],
-  }));
-
-export default function FeaturedNotes() {
+export default function FeaturedNotes({ posts }) {
   const sectionRef = useRef(null);
+  const featured = posts
+    .filter((post) => post.category === 'notes')
+    .slice(0, 3)
+    .map((post, index) => ({
+      id: post.slug,
+      tag: post.tags?.[0] ?? 'notes',
+      date: new Date(post.date).toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }),
+      title: post.title,
+      excerpt: post.excerpt,
+      readTime: `${post.readingTime} menit`,
+      href: post.url,
+      accent: ACCENT_COLORS[index % ACCENT_COLORS.length],
+    }));
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -78,7 +72,7 @@ export default function FeaturedNotes() {
         </div>
 
         <div className="featured-notes-grid">
-          {FEATURED.map((note) => (
+          {featured.map((note) => (
             <a
               key={note.id}
               href={note.href}

@@ -11,35 +11,33 @@ export default function HeroBanner() {
   useEffect(() => {
     const ctx = gsap.context(() => {
       // 1. Cinematic Background Reveal
-      gsap.fromTo(bgRef.current,
-        { scale: 1.15, filter: 'grayscale(100%) contrast(1) brightness(0)' },
-        { scale: 1, filter: 'grayscale(100%) contrast(1.2) brightness(0.9)', duration: 2.5, ease: 'power3.out', delay: 1.5 }
-      );
+      if (bgRef.current) {
+        gsap.fromTo(bgRef.current,
+          { scale: 1.15, filter: 'grayscale(100%) contrast(1) brightness(0)' },
+          { scale: 1, filter: 'grayscale(100%) contrast(1.2) brightness(0.9)', duration: 2.5, ease: 'power3.out', delay: 1.5 }
+        );
+      }
 
       // 2. Title Character Stagger (Desktop)
       if (titleRef.current) {
         const text = new SplitType(titleRef.current, { types: 'chars' });
         gsap.set(titleRef.current, { overflow: 'hidden' });
         
-        gsap.fromTo(text.chars, 
-          { y: 120, opacity: 0, rotateX: -40 },
-          { 
-            y: 0, 
-            opacity: 1, 
-            rotateX: 0, 
-            duration: 1.2, 
-            stagger: 0.05, 
-            ease: 'expo.out', 
-            delay: 2.2,
-            onComplete: () => { text.revert(); }
-          }
-        );
-
-        // Animate the center description alongside the title
-        gsap.fromTo('.hero-center-desc',
-          { y: 20, opacity: 0 },
-          { y: 0, opacity: 1, duration: 1.5, ease: 'power2.out', delay: 3.0 }
-        );
+        if (text.chars.length > 0) {
+          gsap.fromTo(text.chars,
+            { y: 120, opacity: 0, rotateX: -40 },
+            {
+              y: 0,
+              opacity: 1,
+              rotateX: 0,
+              duration: 1.2,
+              stagger: 0.05,
+              ease: 'expo.out',
+              delay: 2.2,
+              onComplete: () => { text.revert(); }
+            }
+          );
+        }
       }
 
       // 2b. Title Stagger (Mobile)
@@ -47,26 +45,31 @@ export default function HeroBanner() {
         const mobileText = new SplitType(mobileTitleRef.current, { types: 'chars' });
         gsap.set(mobileTitleRef.current, { overflow: 'hidden' });
         
-        gsap.fromTo(mobileText.chars, 
-          { y: 60, opacity: 0 },
-          { 
-            y: 0, 
-            opacity: 1, 
-            duration: 1, 
-            stagger: 0.03, 
-            ease: 'expo.out', 
-            delay: 2.2,
-            onComplete: () => { mobileText.revert(); }
-          }
-        );
+        if (mobileText.chars.length > 0) {
+          gsap.fromTo(mobileText.chars,
+            { y: 60, opacity: 0 },
+            {
+              y: 0,
+              opacity: 1,
+              duration: 1,
+              stagger: 0.03,
+              ease: 'expo.out',
+              delay: 2.2,
+              onComplete: () => { mobileText.revert(); }
+            }
+          );
+        }
       }
 
       // 3. Corner Frame Reveal
       if (frameRef.current) {
-        gsap.fromTo(frameRef.current.children,
-          { opacity: 0, y: 20 },
-          { opacity: 1, y: 0, duration: 1.5, stagger: 0.2, ease: 'power2.out', delay: 2.6 }
-        );
+        const frameChildren = Array.from(frameRef.current.children);
+        if (frameChildren.length > 0) {
+          gsap.fromTo(frameChildren,
+            { opacity: 0, y: 20 },
+            { opacity: 1, y: 0, duration: 1.5, stagger: 0.2, ease: 'power2.out', delay: 2.6 }
+          );
+        }
       }
     });
 
@@ -283,7 +286,7 @@ export default function HeroBanner() {
               INVESTIGATING // ACTIVE
             </span>
             <a
-              href="/esai"
+              href="/archive"
               className="hero-cta-btn"
               style={{
                 display: 'inline-block',
