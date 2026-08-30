@@ -46,7 +46,8 @@ Rollback konten cukup mengembalikan `CONTENT_SOURCE=markdown`. Jangan menghapus 
 
 ## Kemampuan Editorial
 
-- dashboard status publikasi dan aktivitas terakhir;
+- dashboard status publikasi, grafik ritme publikasi, kedalaman arsip, dan aktivitas terakhir;
+- halaman statistik dan system log dengan filter level/pencarian pada `/admin/system`;
 - pencarian, filter, paginasi, arsip, dan hapus artikel;
 - editor Markdown dengan toolbar dan pratinjau tersanitasi;
 - draft, terjadwal, terbit, dan arsip;
@@ -63,12 +64,18 @@ Rollback konten cukup mengembalikan `CONTENT_SOURCE=markdown`. Jangan menghapus 
 
 ## Konten Non-Artikel
 
-Route `/admin/content` adalah pusat pengelolaan semua blok yang sebelumnya tertanam di komponen. Data disimpan sebagai dokumen JSON tervalidasi di tabel `site_settings` dan langsung direvalidasi setelah penyimpanan.
+Route `/admin/content` adalah pusat pengelolaan semua blok yang sebelumnya tertanam di komponen. Setelah memilih halaman, admin memilih satu bagian pada page flow lalu mengeditnya di `/admin/content/:section/:group`. Dengan begitu hero, showcase, timeline, musik, buku, atau tautan sosial tidak tercampur dalam satu formulir panjang. Data tetap disimpan sebagai dokumen JSON tervalidasi di tabel `site_settings` dan langsung direvalidasi setelah penyimpanan.
 
 - `/admin/content/home`: hero, ticker, pengantar, kutipan, minat, showcase, log, timeline, dan manifesto ringkas.
 - `/admin/content/notes`: current thinking, generator pemikiran, dan hubungan antarcatatan.
 - `/admin/content/hobby`: identitas halaman, musik, tontonan, buku, dan observasi.
 - `/admin/content/about`: profil, foto, metadata, manifesto, prinsip, email, dan sosial.
+
+## Statistik dan system log
+
+Dashboard menampilkan status artikel, ritme publikasi enam bulan, jumlah revisi, media, seri, dan aktivitas terbaru. `/admin/system` menampilkan status koneksi database, driver storage, sesi/admin aktif, ukuran media, serta activity stream yang dapat dicari dan difilter.
+
+Event yang dicatat mencakup login/logout, perubahan password, CRUD artikel/taksonomi/media, pemulihan revisi, pengaturan situs, dan penerbitan konten halaman. Tabel `system_logs` dibuat melalui migrasi Drizzle dan tidak pernah tersedia pada route publik.
 
 Untuk aset visual, unggah gambar melalui `/admin/media`, salin URL-nya, lalu gunakan pada field gambar. Default di `src/content/site-content.js` tetap tersedia sebagai fallback bila setting belum pernah disimpan atau database tidak tersedia.
 

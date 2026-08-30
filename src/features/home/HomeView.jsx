@@ -1,34 +1,23 @@
-'use client';
-
-import { useState } from 'react';
-import { AnimatePresence } from 'framer-motion';
+import dynamic from 'next/dynamic';
 import HeroBanner from '../../components/HeroBanner';
 import MarqueeTicker from '../../components/MarqueeTicker';
 import IntroDescription from '../../components/IntroDescription';
 import LatestTopics from '../../components/LatestTopics';
 import FeaturedEssays from '../../components/FeaturedEssays';
 import AccentQuote from '../../components/AccentQuote';
-import HobbiesScroll from '../../components/HobbiesScroll';
-import CuratedConsumption from '../../components/CuratedConsumption';
 import LoggedObservations from '../../components/LoggedObservations';
 import ClassificationGrid from '../../components/ClassificationGrid';
-import Timeline from '../../components/Timeline';
-import ManifestoAbout from '../../components/ManifestoAbout';
 import Header from '../../components/Header';
-import Footer from '../../components/Footer';
-import LoadingScreen from '../../components/LoadingScreen';
+
+const HobbiesScroll = dynamic(() => import('../../components/HobbiesScroll'));
+const CuratedConsumption = dynamic(() => import('../../components/CuratedConsumption'));
+const Timeline = dynamic(() => import('../../components/Timeline'));
+const ManifestoAbout = dynamic(() => import('../../components/ManifestoAbout'));
+const Footer = dynamic(() => import('../../components/Footer'));
 
 export default function HomeView({ posts, content, footerContent }) {
-  const [loading, setLoading] = useState(true);
-
   return (
     <>
-      <AnimatePresence>
-        {loading && (
-          <LoadingScreen key="loader" onComplete={() => setLoading(false)} />
-        )}
-      </AnimatePresence>
-
       <div className="grain-overlay-body" aria-hidden="true" />
 
       <Header />

@@ -230,6 +230,28 @@ export const adminSessions = pgTable(
   ],
 );
 
+export const systemLogs = pgTable(
+  'system_logs',
+  {
+    id: uuid('id').primaryKey().defaultRandom(),
+    level: varchar('level', { length: 16 }).notNull().default('info'),
+    action: varchar('action', { length: 80 }).notNull(),
+    entityType: varchar('entity_type', { length: 80 }).notNull().default('system'),
+    entityId: text('entity_id'),
+    message: text('message').notNull(),
+    metadata: jsonb('metadata').notNull().default({}),
+    actorId: uuid('actor_id').references(() => adminUsers.id, {
+      onDelete: 'set null',
+    }),
+    createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => [
+    index('system_logs_created_at_idx').on(table.createdAt),
+    index('system_logs_action_idx').on(table.action),
+    index('system_logs_actor_id_idx').on(table.actorId),
+  ],
+);
+
 export const categoriesRelations = relations(categories, ({ many }) => ({
   posts: many(posts),
 }));
@@ -274,4 +296,12 @@ export const adminUsersRelations = relations(adminUsers, ({ many }) => ({
   sessions: many(adminSessions),
   mediaAssets: many(mediaAssets),
   revisions: many(postRevisions),
+  systemLogs: many(systemLogs),
+}));
+
+export const systemLogsRelations = relations(systemLogs, ({ one }) => ({
+  actor: one(adminUsers, {
+    fields: [systemLogs.actorId],
+    references: [adminUsers.id],
+  }),
 }));

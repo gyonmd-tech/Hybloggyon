@@ -1,3 +1,5 @@
+'use client';
+
 // src/components/CuratedConsumption.jsx
 import { useState } from 'react';
 

@@ -12,6 +12,7 @@ export default async function AdminDashboardPage() {
   await requireAdmin('/admin');
   const dashboard = await getAdminDashboard();
   const { counts } = dashboard;
+  const maxPublication = Math.max(1, ...dashboard.publications.map((item) => item.value));
   return (
     <>
       <AdminPageHeader
@@ -45,6 +46,24 @@ export default async function AdminDashboardPage() {
         </article>
       </section>
 
+      <section className="admin-insight-grid">
+        <article className="admin-panel admin-publication-chart">
+          <div className="admin-panel-header"><div><h2 className="admin-panel-title">Ritme publikasi</h2><p className="admin-help">Enam bulan terakhir</p></div><span className="material-symbols-outlined" aria-hidden="true">bar_chart</span></div>
+          <div className="admin-chart-body">
+            {dashboard.publications.length ? dashboard.publications.map((item) => <div className="admin-chart-column" key={item.month.toISOString()}><strong>{item.value}</strong><i style={{ '--bar-size': `${Math.max(14, item.value / maxPublication * 100)}%` }} /><span>{new Intl.DateTimeFormat('id-ID', { month: 'short' }).format(item.month)}</span></div>) : <p className="admin-help">Belum ada data publikasi pada periode ini.</p>}
+          </div>
+        </article>
+        <article className="admin-panel admin-library-metrics">
+          <div className="admin-panel-header"><h2 className="admin-panel-title">Kedalaman arsip</h2><Link href="/admin/system" className="admin-button admin-button--small admin-button--ghost">Buka statistik</Link></div>
+          <div className="admin-metric-list">
+            <div><span>Revisi tersimpan</span><strong>{dashboard.revisionCount}</strong></div>
+            <div><span>Aset media</span><strong>{dashboard.mediaCount}</strong></div>
+            <div><span>Seri editorial</span><strong>{dashboard.seriesCount}</strong></div>
+            <div><span>Taksonomi</span><strong>{dashboard.categoryCount + dashboard.tagCount}</strong></div>
+          </div>
+        </article>
+      </section>
+
       <section className="admin-grid admin-grid--dashboard">
         <div className="admin-panel">
           <div className="admin-panel-header">
@@ -73,12 +92,9 @@ export default async function AdminDashboardPage() {
         </div>
 
         <aside className="admin-panel">
-          <div className="admin-panel-header"><h2 className="admin-panel-title">Struktur arsip</h2></div>
-          <div className="admin-panel-body admin-form-stack">
-            <div><p className="admin-kicker">Kategori</p><p className="admin-stat-value" style={{ fontSize: 42 }}>{dashboard.categoryCount}</p></div>
-            <div><p className="admin-kicker">Tag aktif</p><p className="admin-stat-value" style={{ fontSize: 42 }}>{dashboard.tagCount}</p></div>
-            <div><p className="admin-kicker">Diarsipkan</p><p className="admin-stat-value" style={{ fontSize: 42 }}>{counts.archived}</p></div>
-            <Link href="/admin/categories" className="admin-button">Rapikan taksonomi</Link>
+          <div className="admin-panel-header"><h2 className="admin-panel-title">Aktivitas terkini</h2><Link href="/admin/system" className="admin-button admin-button--small admin-button--ghost">Semua log</Link></div>
+          <div className="admin-activity-mini">
+            {dashboard.recentActivity.length ? dashboard.recentActivity.map((item) => <article key={item.id}><span className={`admin-activity-dot admin-activity-dot--${item.level}`} /><div><strong>{item.message}</strong><p>{item.actorName || 'System'} · {formatDate(item.createdAt)}</p></div></article>) : <p className="admin-help">Aktivitas berikutnya akan tercatat di sini.</p>}
           </div>
         </aside>
       </section>

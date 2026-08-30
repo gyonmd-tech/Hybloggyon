@@ -21,6 +21,7 @@ import {
   getAdminUserWithPassword,
   getMediaAssetById,
   markAdminLogin,
+  recordSystemLog,
   restorePostRevision,
   saveAdminPost,
   saveAdminSiteProfile,
@@ -124,10 +125,13 @@ export async function loginAction(_previousState, formData) {
   clearLoginAttempts(limiterKey);
   await createAdminSession(admin.id);
   await markAdminLogin(admin.id);
+  await recordSystemLog({ actorId: admin.id, level: 'security', action: 'auth.login', entityType: 'session', message: 'Admin berhasil masuk ke panel.' });
   redirect(returnTo);
 }
 
 export async function logoutAction() {
+  const admin = await requireAdmin('/admin');
+  await recordSystemLog({ actorId: admin.userId, level: 'security', action: 'auth.logout', entityType: 'session', message: 'Admin keluar dari panel.' });
   await destroyCurrentAdminSession();
   redirect('/admin/login');
 }
@@ -173,6 +177,7 @@ export async function savePostAction(_previousState, formData) {
       scheduledAt: input.scheduledAt ? new Date(input.scheduledAt) : null,
       publishedAt: input.publishedAt ? new Date(input.publishedAt) : null,
     }, admin.userId, postId);
+    await recordSystemLog({ actorId: admin.userId, action: postId ? 'post.updated' : 'post.created', entityType: 'post', entityId: saved.id, message: `${input.title} ${postId ? 'diperbarui' : 'dibuat'}.`, metadata: { status: input.status, route: saved.route } });
     revalidateEditorialPaths(saved.route);
     if (saved.previousRoute) revalidatePath(saved.previousRoute);
     redirect(`/admin/posts/${saved.id}/edit?saved=1`);
@@ -183,17 +188,19 @@ export async function savePostAction(_previousState, formData) {
 }
 
 export async function archivePostAction(formData) {
-  await requireAdmin('/admin/posts');
+  const admin = await requireAdmin('/admin/posts');
   const id = z.string().uuid().parse(formData.get('id'));
   await archiveAdminPost(id);
+  await recordSystemLog({ actorId: admin.userId, action: 'post.archived', entityType: 'post', entityId: id, message: 'Artikel dipindahkan ke arsip.' });
   revalidateEditorialPaths();
   redirect('/admin/posts?archived=1');
 }
 
 export async function deletePostAction(formData) {
-  await requireAdmin('/admin/posts');
+  const admin = await requireAdmin('/admin/posts');
   const id = z.string().uuid().parse(formData.get('id'));
   await deleteAdminPost(id);
+  await recordSystemLog({ actorId: admin.userId, level: 'warning', action: 'post.deleted', entityType: 'post', entityId: id, message: 'Artikel dihapus permanen.' });
   revalidateEditorialPaths();
   redirect('/admin/posts?deleted=1');
 }
@@ -203,12 +210,13 @@ export async function restoreRevisionAction(formData) {
   const postId = z.string().uuid().parse(formData.get('postId'));
   const revisionId = z.string().uuid().parse(formData.get('revisionId'));
   const result = await restorePostRevision(postId, revisionId, admin.userId);
+  await recordSystemLog({ actorId: admin.userId, action: 'post.revision_restored', entityType: 'post', entityId: postId, message: 'Revisi artikel dipulihkan.', metadata: { revisionId } });
   revalidateEditorialPaths(result.route);
   redirect(`/admin/posts/${postId}/edit?restored=1`);
 }
 
 export async function saveCategoryAction(_previousState, formData) {
-  await requireAdmin('/admin/categories');
+  const admin = await requireAdmin('/admin/categories');
   try {
     const value = taxonomySchema.parse({
       id: optionalUuid(formData.get('id')) || undefined,
@@ -217,6 +225,7 @@ export async function saveCategoryAction(_previousState, formData) {
       description: formData.get('description') || '',
     });
     await saveCategory(value);
+    await recordSystemLog({ actorId: admin.userId, action: value.id ? 'category.updated' : 'category.created', entityType: 'category', entityId: value.id, message: `Kategori ${value.name} disimpan.` });
     revalidateEditorialPaths();
     revalidatePath('/admin/categories');
     return { ok: true, message: value.id ? 'Kategori diperbarui.' : 'Kategori dibuat.', errors: {} };
@@ -226,13 +235,15 @@ export async function saveCategoryAction(_previousState, formData) {
 }
 
 export async function deleteCategoryAction(formData) {
-  await requireAdmin('/admin/categories');
-  await deleteCategory(z.string().uuid().parse(formData.get('id')));
+  const admin = await requireAdmin('/admin/categories');
+  const id = z.string().uuid().parse(formData.get('id'));
+  await deleteCategory(id);
+  await recordSystemLog({ actorId: admin.userId, level: 'warning', action: 'category.deleted', entityType: 'category', entityId: id, message: 'Kategori dihapus.' });
   revalidatePath('/admin/categories');
 }
 
 export async function saveTagAction(_previousState, formData) {
-  await requireAdmin('/admin/tags');
+  const admin = await requireAdmin('/admin/tags');
   try {
     const value = taxonomySchema.pick({ id: true, name: true, slug: true }).parse({
       id: optionalUuid(formData.get('id')) || undefined,
@@ -240,6 +251,7 @@ export async function saveTagAction(_previousState, formData) {
       slug: formData.get('slug') || slugify(formData.get('name')),
     });
     await saveTag(value);
+    await recordSystemLog({ actorId: admin.userId, action: value.id ? 'tag.updated' : 'tag.created', entityType: 'tag', entityId: value.id, message: `Tag ${value.name} disimpan.` });
     revalidatePath('/admin/tags');
     return { ok: true, message: value.id ? 'Tag diperbarui.' : 'Tag dibuat.', errors: {} };
   } catch (error) {
@@ -248,13 +260,15 @@ export async function saveTagAction(_previousState, formData) {
 }
 
 export async function deleteTagAction(formData) {
-  await requireAdmin('/admin/tags');
-  await deleteTag(z.string().uuid().parse(formData.get('id')));
+  const admin = await requireAdmin('/admin/tags');
+  const id = z.string().uuid().parse(formData.get('id'));
+  await deleteTag(id);
+  await recordSystemLog({ actorId: admin.userId, level: 'warning', action: 'tag.deleted', entityType: 'tag', entityId: id, message: 'Tag dihapus.' });
   revalidatePath('/admin/tags');
 }
 
 export async function saveSeriesAction(_previousState, formData) {
-  await requireAdmin('/admin/series');
+  const admin = await requireAdmin('/admin/series');
   try {
     const value = taxonomySchema.parse({
       id: optionalUuid(formData.get('id')) || undefined,
@@ -263,6 +277,7 @@ export async function saveSeriesAction(_previousState, formData) {
       description: formData.get('description') || '',
     });
     await saveSeries(value);
+    await recordSystemLog({ actorId: admin.userId, action: value.id ? 'series.updated' : 'series.created', entityType: 'series', entityId: value.id, message: `Seri ${value.name} disimpan.` });
     revalidatePath('/admin/series');
     return { ok: true, message: value.id ? 'Seri diperbarui.' : 'Seri dibuat.', errors: {} };
   } catch (error) {
@@ -271,8 +286,10 @@ export async function saveSeriesAction(_previousState, formData) {
 }
 
 export async function deleteSeriesAction(formData) {
-  await requireAdmin('/admin/series');
-  await deleteSeries(z.string().uuid().parse(formData.get('id')));
+  const admin = await requireAdmin('/admin/series');
+  const id = z.string().uuid().parse(formData.get('id'));
+  await deleteSeries(id);
+  await recordSystemLog({ actorId: admin.userId, level: 'warning', action: 'series.deleted', entityType: 'series', entityId: id, message: 'Seri dihapus.' });
   revalidatePath('/admin/series');
 }
 
@@ -318,6 +335,7 @@ export async function uploadMediaAction(_previousState, formData) {
       throw error;
     }
     revalidatePath('/admin/media');
+    await recordSystemLog({ actorId: admin.userId, action: 'media.uploaded', entityType: 'media', message: `${file.name} diunggah ke pustaka media.`, metadata: { mimeType: file.type, sizeBytes: file.size } });
     return { ok: true, message: 'Gambar berhasil diunggah.', errors: {} };
   } catch (error) {
     return actionError(error, 'Gambar gagal diunggah.');
@@ -350,6 +368,7 @@ export async function importMediaUrlAction(_previousState, formData) {
       uploadedById: admin.userId,
     });
     revalidatePath('/admin/media');
+    await recordSystemLog({ actorId: admin.userId, action: 'media.imported', entityType: 'media', message: `${value.fileName} ditambahkan dari URL eksternal.` });
     return { ok: true, message: 'URL gambar ditambahkan ke pustaka.', errors: {} };
   } catch (error) {
     return actionError(error);
@@ -357,13 +376,14 @@ export async function importMediaUrlAction(_previousState, formData) {
 }
 
 export async function updateMediaAction(_previousState, formData) {
-  await requireAdmin('/admin/media');
+  const admin = await requireAdmin('/admin/media');
   try {
     const id = z.string().uuid().parse(formData.get('id'));
     await updateMediaAsset(id, {
       altText: String(formData.get('altText') || '').trim().slice(0, 500),
       caption: String(formData.get('caption') || '').trim().slice(0, 1000),
     });
+    await recordSystemLog({ actorId: admin.userId, action: 'media.updated', entityType: 'media', entityId: id, message: 'Metadata media diperbarui.' });
     revalidatePath('/admin/media');
     return { ok: true, message: 'Metadata gambar diperbarui.', errors: {} };
   } catch (error) {
@@ -372,12 +392,13 @@ export async function updateMediaAction(_previousState, formData) {
 }
 
 export async function deleteMediaAction(formData) {
-  await requireAdmin('/admin/media');
+  const admin = await requireAdmin('/admin/media');
   const id = z.string().uuid().parse(formData.get('id'));
   const asset = await getMediaAssetById(id);
   if (asset) {
     await deleteStoredImage(asset);
     await deleteMediaAsset(id);
+    await recordSystemLog({ actorId: admin.userId, level: 'warning', action: 'media.deleted', entityType: 'media', entityId: id, message: `${asset.fileName} dihapus dari pustaka media.` });
   }
   revalidatePath('/admin/media');
 }
@@ -406,6 +427,7 @@ export async function saveSettingsAction(_previousState, formData) {
       postsPerPage: Number(formData.get('postsPerPage') || 20),
     });
     await saveAdminSiteProfile(profile, admin.userId);
+    await recordSystemLog({ actorId: admin.userId, action: 'settings.updated', entityType: 'settings', message: 'Profil dan pengaturan situs diperbarui.' });
     updateTag('site-profile');
     revalidatePath('/', 'layout');
     revalidatePath('/admin/settings');
@@ -417,17 +439,20 @@ export async function saveSettingsAction(_previousState, formData) {
 
 export async function saveSiteContentAction(_previousState, formData) {
   const section = z.enum(['home', 'notes', 'hobby', 'about']).parse(formData.get('section'));
-  const admin = await requireAdmin(`/admin/content/${section}`);
+  const group = String(formData.get('group') || 'all');
+  const admin = await requireAdmin(`/admin/content/${section}/${group}`);
   try {
     const raw = JSON.parse(String(formData.get('content') || '{}'));
     const content = parseSiteContent(section, raw);
     await setSiteSetting(`site_content_${section}`, content, admin.userId);
+    await recordSystemLog({ actorId: admin.userId, action: 'site_content.published', entityType: 'site_content', entityId: section, message: `Konten ${section} / ${group} diperbarui dan diterbitkan.`, metadata: { section, group } });
     updateTag(`site-content-${section}`);
     const publicPath = section === 'home' ? '/' : `/${section}`;
     revalidatePath(publicPath);
     revalidatePath('/sitemap.xml');
     revalidatePath('/admin/content');
     revalidatePath(`/admin/content/${section}`);
+    revalidatePath(`/admin/content/${section}/${group}`);
     return { ok: true, message: 'Konten halaman disimpan dan langsung diterbitkan.', errors: {} };
   } catch (error) {
     if (error instanceof SyntaxError) {
@@ -450,6 +475,7 @@ export async function changePasswordAction(_previousState, formData) {
       throw new Error('Password saat ini tidak cocok.');
     }
     await updateAdminPassword(admin.userId, await hashPassword(newPassword));
+    await recordSystemLog({ actorId: admin.userId, level: 'security', action: 'auth.password_changed', entityType: 'admin_user', entityId: admin.userId, message: 'Password admin diperbarui dan semua sesi lama ditutup.' });
     await destroyCurrentAdminSession();
     redirect('/admin/login?passwordChanged=1');
   } catch (error) {

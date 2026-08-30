@@ -25,6 +25,7 @@ const sections = [
     label: 'Sistem',
     items: [
       { href: '/admin/settings', label: 'Pengaturan', icon: 'tune' },
+      { href: '/admin/system', label: 'Statistik & log', icon: 'monitoring' },
       { href: '/', label: 'Lihat situs', icon: 'open_in_new', external: true },
     ],
   },
@@ -34,7 +35,7 @@ function isActive(pathname, item) {
   return item.exact ? pathname === item.href : pathname.startsWith(item.href);
 }
 
-export default function AdminNavigation() {
+export default function AdminNavigation({ onNavigate }) {
   const pathname = usePathname();
   return (
     <>
@@ -48,24 +49,13 @@ export default function AdminNavigation() {
                 href={item.href}
                 className={`admin-nav-link ${isActive(pathname, item) ? 'is-active' : ''}`}
                 target={item.external ? '_blank' : undefined}
+                onClick={onNavigate}
               >
                 <span className="material-symbols-outlined" aria-hidden="true">{item.icon}</span>
                 <span>{item.label}</span>
               </Link>
             ))}
           </div>
-        ))}
-      </nav>
-      <nav className="admin-mobile-bar" aria-label="Navigasi admin seluler">
-        {sections.flatMap((section) => section.items).slice(0, 5).map((item) => (
-          <Link
-            key={item.href}
-            href={item.href}
-            className={`admin-mobile-link ${isActive(pathname, item) ? 'is-active' : ''}`}
-          >
-            <span className="material-symbols-outlined" aria-hidden="true">{item.icon}</span>
-            <span>{item.label}</span>
-          </Link>
         ))}
       </nav>
     </>

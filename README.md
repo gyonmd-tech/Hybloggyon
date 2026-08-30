@@ -133,14 +133,13 @@ Aturan arsitektur:
 | Route | Fungsi |
 |---|---|
 | `/admin` | Ikhtisar editorial dan statistik. |
+| `/admin/system` | Kesehatan database/storage, sesi aktif, dan audit activity log. |
 | `/admin/posts` | Daftar, filter, edit, arsip, dan hapus artikel. |
 | `/admin/posts/new` | Membuat artikel baru. |
 | `/admin/media` | Unggah media, URL eksternal, alt text, caption, dan hapus aset. |
 | `/admin/content` | Pusat konten non-artikel. |
-| `/admin/content/home` | Beranda dan showcase. |
-| `/admin/content/notes` | Blok editorial halaman Notes. |
-| `/admin/content/hobby` | Musik, film, buku, dan observasi. |
-| `/admin/content/about` | Profil, manifesto, kontak, dan sosial. |
+| `/admin/content/:section` | Page flow suatu halaman, dibagi menjadi kartu bagian yang fokus. |
+| `/admin/content/:section/:group` | Editor satu kelompok konten; misalnya hero, showcase, musik, atau sosial. |
 | `/admin/categories` | Kategori artikel. |
 | `/admin/tags` | Tag artikel. |
 | `/admin/series` | Seri dan urutan artikel. |

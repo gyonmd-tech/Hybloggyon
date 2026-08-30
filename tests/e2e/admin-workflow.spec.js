@@ -107,6 +107,9 @@ test.describe('workflow admin dengan database', () => {
     await expect(page.getByRole('link', { name: /Kurasi \/ Hobi/ })).toBeVisible();
 
     await page.goto('/admin/content/home');
+    await expect(page.getByRole('heading', { name: 'Beranda' })).toBeVisible();
+    await expect(page.locator('.admin-content-card[href="/admin/content/home/hero"]')).toBeVisible();
+    await page.goto('/admin/content/home/hero');
     const titleField = page.getByLabel('Judul hero');
     const originalTitle = await titleField.inputValue();
     const testTitle = `Field Study ${Date.now().toString(36)}.`;

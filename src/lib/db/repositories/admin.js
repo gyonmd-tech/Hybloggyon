@@ -6,6 +6,7 @@ import {
   count,
   desc,
   eq,
+  gt,
   ilike,
   max,
   or,
@@ -23,6 +24,7 @@ import {
   series,
   siteSettings,
   slugRedirects,
+  systemLogs,
   tags,
 } from '../schema.js';
 import { slugify } from '../../slugify.js';
@@ -103,13 +105,29 @@ async function createRevision(transaction, postId, editorId, input, categoryId, 
 
 export async function getAdminDashboard() {
   const database = getDatabase();
-  const [statusRows, [categoryTotal], [tagTotal], recentPosts] = await Promise.all([
+  const sixMonthsAgo = new Date();
+  sixMonthsAgo.setUTCMonth(sixMonthsAgo.getUTCMonth() - 5, 1);
+  sixMonthsAgo.setUTCHours(0, 0, 0, 0);
+  const [
+    statusRows,
+    [categoryTotal],
+    [tagTotal],
+    [seriesTotal],
+    [mediaTotal],
+    [revisionTotal],
+    recentPosts,
+    publicationRows,
+    recentActivity,
+  ] = await Promise.all([
     database
       .select({ status: posts.status, value: count() })
       .from(posts)
       .groupBy(posts.status),
     database.select({ value: count() }).from(categories),
     database.select({ value: count() }).from(tags),
+    database.select({ value: count() }).from(series),
+    database.select({ value: count() }).from(mediaAssets),
+    database.select({ value: count() }).from(postRevisions),
     database
       .select({
         id: posts.id,
@@ -123,6 +141,29 @@ export async function getAdminDashboard() {
       .innerJoin(categories, eq(posts.categoryId, categories.id))
       .orderBy(desc(posts.updatedAt))
       .limit(7),
+    database
+      .select({
+        month: sql`date_trunc('month', ${posts.publishedAt})`,
+        value: count(),
+      })
+      .from(posts)
+      .where(and(eq(posts.status, 'published'), gt(posts.publishedAt, sixMonthsAgo)))
+      .groupBy(sql`date_trunc('month', ${posts.publishedAt})`)
+      .orderBy(sql`date_trunc('month', ${posts.publishedAt})`),
+    database
+      .select({
+        id: systemLogs.id,
+        level: systemLogs.level,
+        action: systemLogs.action,
+        entityType: systemLogs.entityType,
+        message: systemLogs.message,
+        actorName: adminUsers.displayName,
+        createdAt: systemLogs.createdAt,
+      })
+      .from(systemLogs)
+      .leftJoin(adminUsers, eq(systemLogs.actorId, adminUsers.id))
+      .orderBy(desc(systemLogs.createdAt))
+      .limit(5),
   ]);
 
   const counts = { all: 0, draft: 0, scheduled: 0, published: 0, archived: 0 };
@@ -135,7 +176,99 @@ export async function getAdminDashboard() {
     counts,
     categoryCount: Number(categoryTotal.value),
     tagCount: Number(tagTotal.value),
+    seriesCount: Number(seriesTotal.value),
+    mediaCount: Number(mediaTotal.value),
+    revisionCount: Number(revisionTotal.value),
     recentPosts,
+    publications: publicationRows.map((row) => ({
+      month: new Date(row.month),
+      value: Number(row.value),
+    })),
+    recentActivity,
+  };
+}
+
+export async function recordSystemLog({
+  actorId = null,
+  level = 'info',
+  action,
+  entityType = 'system',
+  entityId = null,
+  message,
+  metadata = {},
+}) {
+  try {
+    await getDatabase().insert(systemLogs).values({
+      actorId,
+      level,
+      action,
+      entityType,
+      entityId: entityId ? String(entityId) : null,
+      message,
+      metadata,
+    });
+  } catch (error) {
+    console.error('[system-log]', action, error);
+  }
+}
+
+export async function listSystemLogs({ search = '', level = 'all', page = 1 } = {}) {
+  const database = getDatabase();
+  const safePage = Math.max(1, Number(page) || 1);
+  const pageSize = 30;
+  const conditions = [];
+  if (search.trim()) {
+    const pattern = `%${search.trim()}%`;
+    conditions.push(or(
+      ilike(systemLogs.message, pattern),
+      ilike(systemLogs.action, pattern),
+      ilike(systemLogs.entityType, pattern),
+    ));
+  }
+  if (['info', 'warning', 'error', 'security'].includes(level)) {
+    conditions.push(eq(systemLogs.level, level));
+  }
+  const where = conditions.length ? and(...conditions) : undefined;
+  const [rows, [totalRow], [activeSessionTotal], [adminTotal], [settingTotal], [mediaBytes]] = await Promise.all([
+    database
+      .select({
+        id: systemLogs.id,
+        level: systemLogs.level,
+        action: systemLogs.action,
+        entityType: systemLogs.entityType,
+        entityId: systemLogs.entityId,
+        message: systemLogs.message,
+        metadata: systemLogs.metadata,
+        actorName: adminUsers.displayName,
+        actorEmail: adminUsers.email,
+        createdAt: systemLogs.createdAt,
+      })
+      .from(systemLogs)
+      .leftJoin(adminUsers, eq(systemLogs.actorId, adminUsers.id))
+      .where(where)
+      .orderBy(desc(systemLogs.createdAt))
+      .limit(pageSize)
+      .offset((safePage - 1) * pageSize),
+    database.select({ value: count() }).from(systemLogs).where(where),
+    database.select({ value: count() }).from(adminSessions).where(gt(adminSessions.expiresAt, new Date())),
+    database.select({ value: count() }).from(adminUsers).where(eq(adminUsers.isActive, true)),
+    database.select({ value: count() }).from(siteSettings),
+    database.select({ value: sql`coalesce(sum(${mediaAssets.sizeBytes}), 0)` }).from(mediaAssets),
+  ]);
+  const total = Number(totalRow.value);
+  return {
+    logs: rows,
+    total,
+    page: safePage,
+    pageCount: Math.max(1, Math.ceil(total / pageSize)),
+    health: {
+      database: 'connected',
+      activeSessions: Number(activeSessionTotal.value),
+      activeAdmins: Number(adminTotal.value),
+      settings: Number(settingTotal.value),
+      mediaBytes: Number(mediaBytes.value),
+      storage: process.env.MEDIA_STORAGE || 'local',
+    },
   };
 }
 
