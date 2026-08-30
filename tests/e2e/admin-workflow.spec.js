@@ -79,26 +79,31 @@ test.describe('workflow admin dengan database', () => {
   test('mengunggah gambar dan memperbarui metadata media', async ({ page }) => {
     await login(page);
     await page.goto('/admin/media');
+    const fileName = `pixel-integrasi-${Date.now()}.png`;
     const pixel = Buffer.from(
       'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=',
       'base64',
     );
     await page.getByLabel('File gambar').setInputFiles({
-      name: 'pixel-integrasi.png',
+      name: fileName,
       mimeType: 'image/png',
       buffer: pixel,
     });
     await page.getByLabel('Alt text').first().fill('Pixel pengujian integrasi');
     await page.getByRole('button', { name: 'Unggah gambar' }).click();
     await expect(page.getByRole('status')).toContainText('Gambar berhasil diunggah');
-    await expect(page.getByText('pixel-integrasi.png')).toBeVisible();
+    const card = page.locator('.admin-media-card').filter({ hasText: fileName });
+    await expect(card).toBeVisible();
+    page.once('dialog', (dialog) => dialog.accept());
+    await card.getByRole('button', { name: 'Hapus' }).click();
+    await expect(card).toHaveCount(0);
   });
 
   test('mengelola konten beranda non-artikel dan menerbitkannya', async ({ page, request }) => {
     await login(page);
     await page.goto('/admin/content');
     await expect(page.getByRole('heading', { name: 'Konten situs' })).toBeVisible();
-    await expect(page.getByRole('link', { name: /Beranda/ })).toBeVisible();
+    await expect(page.locator('.admin-content-card[href="/admin/content/home"]')).toBeVisible();
     await expect(page.getByRole('link', { name: /Kurasi \/ Hobi/ })).toBeVisible();
 
     await page.goto('/admin/content/home');
