@@ -21,7 +21,9 @@ test.describe('workflow admin dengan database', () => {
     await page.getByLabel('Email').fill(email);
     await page.getByLabel('Password').fill('password-yang-salah');
     await page.getByRole('button', { name: 'Masuk ke ruang kerja' }).click();
-    await expect(page.getByRole('alert')).toContainText('Email atau password tidak cocok');
+    await expect(page.locator('.admin-notice[role="alert"]')).toContainText(
+      'Email atau password tidak cocok',
+    );
   });
 
   test('membuat seri, menerbitkan artikel, menyimpan revisi, dan membuat redirect slug', async ({ page, request }) => {
