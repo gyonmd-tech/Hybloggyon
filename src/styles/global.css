@@ -79,19 +79,19 @@
   --radius-full: 0px;
 
   /* === Typography === */
-  --font-sans:         Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  --font-heading:      'Arial Narrow', Inter, ui-sans-serif, system-ui, sans-serif;
-  --font-display:      Inter, ui-sans-serif, system-ui, sans-serif;
-  --font-mono:         'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
+  --font-sans:         'Plus Jakarta Sans', sans-serif;
+  --font-heading:      'Satoshi', 'Plus Jakarta Sans', sans-serif;
+  --font-display:      'Plus Jakarta Sans', sans-serif;
+  --font-mono:         'Space Mono', monospace;
 
   /* === Custom Font Utilities (explicit for Tailwind v4) === */
   --text-meta-mono:   11px;
   --text-body-md:     14px;
 
   /* Heading font families — used by font-heading utility */
-  --font-heading:      'Arial Narrow', Inter, ui-sans-serif, system-ui, sans-serif;
-  --font-display:      Inter, ui-sans-serif, system-ui, sans-serif;
-  --font-mono:         'SFMono-Regular', Consolas, 'Liberation Mono', monospace;
+  --font-heading:      'Satoshi', 'Plus Jakarta Sans', sans-serif;
+  --font-display:      'Plus Jakarta Sans', sans-serif;
+  --font-mono:         'Space Mono', monospace;
 
   /* === Spacing (8px grid) === */
   --spacing-base:       8px;
@@ -151,7 +151,7 @@ html {
 }
 
 body {
-  font-family: var(--font-mono);
+  font-family: 'Space Mono', monospace;
   font-weight: 400;
   font-size: 14px;
   line-height: 1.65;
@@ -230,47 +230,6 @@ button { cursor: pointer; border: none; background: none; font: inherit; color: 
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.01'/%3E%3C/svg%3E");
   pointer-events: none;
   z-index: 9999;
-}
-
-/* Critical hero: server-rendered, optimized image, and zero delayed JS reveal. */
-.hero-section--fast {
-  position: sticky;
-  top: 0;
-  z-index: 0;
-  width: 100%;
-  height: 100svh;
-  min-height: 620px;
-  overflow: hidden;
-  background: #000;
-  color: #fff;
-}
-.hero-section--fast .hero-image { filter: grayscale(1) contrast(1.12) brightness(.82); }
-.hero-fast-overlay { position: absolute; inset: 0; z-index: 1; background: linear-gradient(180deg, rgba(0,0,0,.12), rgba(0,0,0,.38) 48%, #000 100%); }
-.hero-frame { position: absolute; inset: 48px; z-index: 3; display: flex; flex-direction: column; justify-content: space-between; pointer-events: none; }
-.hero-row-top, .hero-row-bottom { display: flex; justify-content: space-between; align-items: flex-start; gap: 32px; }
-.hero-row-bottom { align-items: flex-end; }
-.hero-row-top > span, .hero-eyebrow, .hero-investigating { font: 10px/1.5 var(--font-mono); letter-spacing: .15em; text-transform: uppercase; }
-.hero-row-top > span { color: rgba(255,255,255,.62); }
-.hero-center { position: absolute; inset: 50% auto auto 50%; z-index: 2; width: 100%; transform: translate(-50%, -50%); text-align: center; }
-.hero-center h1 { margin: 0; color: #fff; font: 300 clamp(80px, 16vw, 240px)/.88 var(--font-heading); letter-spacing: -.065em; text-shadow: 0 10px 40px rgba(0,0,0,.45); }
-.hero-desc-block { max-width: 360px; }
-.hero-desc-block p { margin: 0; color: rgba(255,255,255,.78); font: 12px/1.7 var(--font-mono); }
-.hero-eyebrow { display: block; margin-bottom: 14px; color: var(--color-accent-green); }
-.hero-align-right { text-align: right; pointer-events: auto; }
-.hero-investigating { display: block; margin-bottom: 18px; color: rgba(255,255,255,.38); }
-.hero-cta-btn { display: inline-flex; align-items: center; justify-content: space-between; gap: 28px; padding: 15px 26px; background: #fff; color: #000; font: 700 10px/1 var(--font-mono); letter-spacing: .12em; text-transform: uppercase; transition: background .2s ease, transform .2s ease; }
-.hero-cta-btn:hover { background: var(--color-wasabi); transform: translateY(-3px); }
-
-@media (max-width: 768px) {
-  .hero-section--fast { min-height: 560px; }
-  .hero-frame { inset: 20px; justify-content: flex-end; padding-bottom: 64px; }
-  .hero-row-top { display: none; }
-  .hero-row-bottom { width: 100%; flex-direction: column; align-items: flex-start; gap: 28px; }
-  .hero-desc-block { max-width: 100%; }
-  .hero-desc-block h1 { margin: 0 0 18px; color: #fff; font: 300 clamp(48px, 15vw, 68px)/.92 var(--font-heading); letter-spacing: -.055em; }
-  .hero-align-right, .hero-cta-btn { width: 100%; text-align: left; }
-  .hero-investigating { display: none; }
-  .hero-cta-btn { padding: 17px 20px; }
 }
 
 /* Horizontal scroll — hobby cards */

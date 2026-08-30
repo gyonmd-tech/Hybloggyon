@@ -1,5 +1,3 @@
-'use client';
-
 // src/components/HobbiesScroll.jsx
 import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
