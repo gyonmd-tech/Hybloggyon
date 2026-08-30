@@ -13,6 +13,7 @@ const nextConfig = {
   poweredByHeader: false,
   images: {
     formats: ['image/avif', 'image/webp'],
+    qualities: [72, 75],
     minimumCacheTTL: 2678400,
     remotePatterns: [
       { protocol: 'https', hostname: 'images.unsplash.com' },
