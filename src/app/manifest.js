@@ -13,10 +13,10 @@ export default function manifest() {
     lang: siteConfig.language,
     icons: [
       {
-        src: '/favicon.svg',
-        sizes: 'any',
-        type: 'image/svg+xml',
-        purpose: 'any',
+        src: '/fav.png',
+        sizes: '1254x1254',
+        type: 'image/png',
+        purpose: 'any maskable',
       },
     ],
   };

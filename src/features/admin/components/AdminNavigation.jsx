@@ -32,6 +32,7 @@ const sections = [
 ];
 
 function isActive(pathname, item) {
+  if (item.external) return pathname === item.href;
   return item.exact ? pathname === item.href : pathname.startsWith(item.href);
 }
 
@@ -50,6 +51,7 @@ export default function AdminNavigation({ onNavigate }) {
                 className={`admin-nav-link ${isActive(pathname, item) ? 'is-active' : ''}`}
                 target={item.external ? '_blank' : undefined}
                 onClick={onNavigate}
+                title={item.label}
               >
                 <span className="material-symbols-outlined" aria-hidden="true">{item.icon}</span>
                 <span>{item.label}</span>

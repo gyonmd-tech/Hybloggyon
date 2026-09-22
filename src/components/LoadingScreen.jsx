@@ -101,10 +101,11 @@ export default function LoadingScreen({ onComplete }) {
             justifyContent: 'center',
           }}
         >
-          <svg width="1em" height="1em" viewBox="0 0 100 100" fill="currentColor">
-            {/* Bentuk bintang tajam khas brutalist */}
-            <path d="M50 0 C50 35 65 50 100 50 C65 50 50 65 50 100 C50 65 35 50 0 50 C35 50 50 35 50 0 Z" />
-          </svg>
+          <img
+            src="/fav.png"
+            alt=""
+            style={{ width: '.52em', height: '.52em', borderRadius: '.14em', objectFit: 'cover', boxShadow: '0 .08em .22em rgba(0,0,0,.3)' }}
+          />
         </motion.div>
 
         {/* Bintang Y2K Bayangan (Belakang, berputar terbalik) */}
@@ -118,9 +119,11 @@ export default function LoadingScreen({ onComplete }) {
             zIndex: -1,
           }}
         >
-          <svg width="1em" height="1em" viewBox="0 0 100 100" fill="currentColor">
-            <path d="M50 0 C50 35 65 50 100 50 C65 50 50 65 50 100 C50 65 35 50 0 50 C35 50 50 35 50 0 Z" />
-          </svg>
+          <img
+            src="/fav.png"
+            alt=""
+            style={{ width: '.55em', height: '.55em', borderRadius: '.14em', objectFit: 'cover', filter: 'grayscale(1) brightness(2)' }}
+          />
         </motion.div>
 
         {/* HUD: Angka Persentase di Tengah Bintang */}

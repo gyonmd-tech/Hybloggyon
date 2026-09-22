@@ -69,9 +69,12 @@ export default function Footer({ contact }) {
 
           {/* Col 1: Brand */}
           <div className="footer-reveal footer-brand-col">
-            <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(40px, 6vw, 80px)', fontWeight: 800, letterSpacing: '-0.03em', margin: '0 0 24px 0', lineHeight: 1 }}>
-              HyBloggyon.
-            </h2>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '18px', marginBottom: '24px' }}>
+              <img src="/fav.png" alt="" width="72" height="72" style={{ width: 'clamp(52px, 6vw, 72px)', height: 'clamp(52px, 6vw, 72px)', borderRadius: '20px', objectFit: 'cover' }} />
+              <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(40px, 6vw, 80px)', fontWeight: 800, letterSpacing: '-0.03em', margin: 0, lineHeight: 1 }}>
+                HyBloggyon.
+              </h2>
+            </div>
             <p style={{ fontFamily: 'var(--font-mono)', fontSize: '14px', color: 'rgba(255,255,255,0.5)', maxWidth: '300px', lineHeight: 1.6 }}>
               Arsip digital dan eksperimen pikiran. Dibangun dengan fokus pada keterbacaan dan keheningan antarmuka.
             </p>

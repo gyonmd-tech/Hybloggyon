@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import AdminPageHeader from '../../../features/admin/components/AdminPageHeader';
+import DashboardCharts from '../../../features/admin/components/DashboardCharts';
 import EmptyState from '../../../features/admin/components/EmptyState';
 import { getAdminDashboard } from '../../../lib/db/repositories/admin';
 import { requireAdmin } from '../../../lib/auth/session';
@@ -46,7 +47,9 @@ export default async function AdminDashboardPage() {
         </article>
       </section>
 
-      <section className="admin-insight-grid">
+      <DashboardCharts publications={dashboard.publications} counts={counts} />
+
+      <section className="admin-insight-grid admin-insight-grid--legacy">
         <article className="admin-panel admin-publication-chart">
           <div className="admin-panel-header"><div><h2 className="admin-panel-title">Ritme publikasi</h2><p className="admin-help">Enam bulan terakhir</p></div><span className="material-symbols-outlined" aria-hidden="true">bar_chart</span></div>
           <div className="admin-chart-body">

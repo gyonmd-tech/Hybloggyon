@@ -74,6 +74,10 @@ export default function Header() {
               alignItems: 'flex-start', padding: '80px 32px', gap: '4px',
             }}
           >
+            <a href="/" aria-label="HyBloggyon" style={{ position: 'absolute', top: '24px', left: '24px', display: 'inline-flex', alignItems: 'center', gap: '10px', color: '#fff', textDecoration: 'none', fontFamily: 'var(--font-heading)', fontWeight: 700 }}>
+              <img src="/fav.png" alt="" width="38" height="38" style={{ width: '38px', height: '38px', borderRadius: '11px', objectFit: 'cover' }} />
+              <span>HyBloggyon</span>
+            </a>
             {/* Close button */}
             <button
               onClick={() => setMobileMenuOpen(false)}
@@ -145,21 +149,13 @@ export default function Header() {
                 gap: '10px',
               }}
             >
-              {/* Custom editorial mark: Typewriter style ligature/monogram */}
-              <div style={{
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                width: '32px', height: '32px',
-                border: '1px solid rgba(255,255,255,0.4)',
-                backgroundColor: '#ffffff',
-                color: 'var(--color-ink)',
-                fontFamily: 'var(--font-mono)',
-                fontWeight: 700,
-                fontSize: '14px',
-                letterSpacing: '-0.05em',
-                lineHeight: 1,
-              }}>
-                Hy
-              </div>
+              <img
+                src="/fav.png"
+                alt=""
+                width="32"
+                height="32"
+                style={{ width: '32px', height: '32px', borderRadius: '9px', objectFit: 'cover' }}
+              />
 
               {/* Wordmark */}
               <span style={{

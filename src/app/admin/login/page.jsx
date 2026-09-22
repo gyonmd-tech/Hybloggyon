@@ -20,9 +20,12 @@ export default async function AdminLoginPage({ searchParams }) {
   return (
     <main className="admin-root admin-login">
       <section className="admin-login-story" aria-label="HyBloggyon Editorial Desk">
-        <div className="admin-brand-copy">
-          <strong>HyBloggyon</strong>
-          <span>Private editorial system / 2026</span>
+        <div className="admin-login-brand">
+          <img src="/fav.png" alt="" width="48" height="48" />
+          <div className="admin-brand-copy">
+            <strong>HyBloggyon</strong>
+            <span>Private editorial system / 2026</span>
+          </div>
         </div>
         <h2 className="admin-login-title">
           Gagasan masuk.<br />Tulisan <em>keluar.</em>
