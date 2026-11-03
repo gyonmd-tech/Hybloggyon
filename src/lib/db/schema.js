@@ -230,6 +230,16 @@ export const adminSessions = pgTable(
   ],
 );
 
+export const loginAttempts = pgTable(
+  'login_attempts',
+  {
+    key: varchar('key', { length: 80 }).primaryKey(),
+    count: integer('count').notNull().default(0),
+    resetAt: timestamp('reset_at', { withTimezone: true }).notNull(),
+  },
+  (table) => [index('login_attempts_reset_at_idx').on(table.resetAt)],
+);
+
 export const systemLogs = pgTable(
   'system_logs',
   {
