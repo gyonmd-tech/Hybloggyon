@@ -1,4 +1,5 @@
 import { getAllPosts } from '../lib/content/posts';
+import { getCategories } from '../lib/content/categories';
 import { absoluteUrl } from '../config/site';
 
 export const dynamic = 'force-dynamic';
@@ -11,6 +12,15 @@ export default async function sitemap() {
     priority: url === '/' ? 1 : 0.7,
   }));
 
+  const categoryPages = (await getCategories())
+    .filter((category) => category.count > 0 && category.href !== '/notes')
+    .map((category) => ({
+      url: absoluteUrl(category.href),
+      lastModified: new Date(),
+      changeFrequency: 'weekly',
+      priority: 0.6,
+    }));
+
   const articles = (await getAllPosts())
     .filter((post) => !post.noIndex)
     .map((post) => ({
@@ -20,5 +30,5 @@ export default async function sitemap() {
       priority: 0.8,
     }));
 
-  return [...staticPages, ...articles];
+  return [...staticPages, ...categoryPages, ...articles];
 }

@@ -39,6 +39,7 @@ import {
 import { clearLoginAttempts, consumeLoginAttempt } from '../../lib/auth/login-rate-limit.js';
 import { hashPassword, verifyPassword } from '../../lib/auth/password.js';
 import { slugify } from '../../lib/slugify.js';
+import { RESERVED_CATEGORY_SLUGS } from '../../lib/content/categories.js';
 import { deleteStoredImage, storeImage } from '../../lib/media/storage.js';
 
 const emptyState = { ok: false, message: '', errors: {} };
@@ -224,6 +225,9 @@ export async function saveCategoryAction(_previousState, formData) {
       slug: formData.get('slug') || slugify(formData.get('name')),
       description: formData.get('description') || '',
     });
+    if (RESERVED_CATEGORY_SLUGS.includes(value.slug)) {
+      return { ...emptyState, message: `Slug "${value.slug}" dipakai halaman lain di situs.`, errors: { slug: ['Pilih slug lain.'] } };
+    }
     await saveCategory(value);
     await recordSystemLog({ actorId: admin.userId, action: value.id ? 'category.updated' : 'category.created', entityType: 'category', entityId: value.id, message: `Kategori ${value.name} disimpan.` });
     revalidateEditorialPaths();

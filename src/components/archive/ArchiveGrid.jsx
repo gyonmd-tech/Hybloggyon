@@ -40,12 +40,12 @@ export default function ArchiveGrid({
   totalFiltered,
   filterKey,
   activeFolder,
+  categories,
 }) {
   const sectionRef = useRef(null);
   const didInit    = useRef(false);
-  const [isExpanded, setIsExpanded] = useState(false);
-
-  const INITIAL_LIMIT = 16; // 4 kolom × 4 baris
+  const PAGE_SIZE = 16; // 4 kolom × 4 baris
+  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
 
   // GSAP load awal — hanya sekali
   useEffect(() => {
@@ -79,16 +79,14 @@ export default function ArchiveGrid({
     return () => clearTimeout(timer);
   }, []);
 
-  const sectionLabels = {
-    semua:       'SEMUA TULISAN',
-    esai:        'ESAI',
-    notes:       'NOTES',
-    musik:       'MUSIK',
-    'film-anime':'FILM & ANIME',
-  };
+  const activeCategory = categories.find((category) => category.slug === activeFolder);
+  const sectionLabel = activeFolder === 'semua'
+    ? 'SEMUA TULISAN'
+    : activeCategory?.name.toUpperCase() ?? 'ARSIP';
 
-  const visiblePosts = isExpanded ? posts : posts.slice(0, INITIAL_LIMIT);
-  const hasMore = posts.length > INITIAL_LIMIT;
+  const visiblePosts = posts.slice(0, visibleCount);
+  const remaining = posts.length - visibleCount;
+  const hasMore = remaining > 0;
 
   return (
     <section
@@ -119,7 +117,7 @@ export default function ArchiveGrid({
           color:         'var(--color-ink)',
           margin:        0,
         }}>
-          {sectionLabels[activeFolder] ?? 'ARSIP'}
+          {sectionLabel}
         </h2>
 
         <span style={{
@@ -163,7 +161,7 @@ export default function ArchiveGrid({
         </AnimatePresence>
 
         {/* Gradient overlay & Show More Button */}
-        {!isExpanded && hasMore && (
+        {hasMore && (
           <div style={{
             position: 'absolute',
             bottom: 0,
@@ -179,7 +177,7 @@ export default function ArchiveGrid({
             zIndex: 10,
           }}>
             <button
-              onClick={() => setIsExpanded(true)}
+              onClick={() => setVisibleCount((count) => count + PAGE_SIZE)}
               style={{
                 pointerEvents:   'auto',
                 fontFamily:      'var(--font-mono)',
@@ -202,7 +200,7 @@ export default function ArchiveGrid({
                 e.currentTarget.style.color           = 'var(--color-background)';
               }}
             >
-              TAMPILKAN SEMUA ↓
+              TAMPILKAN {Math.min(remaining, PAGE_SIZE)} LAGI ↓
             </button>
           </div>
         )}

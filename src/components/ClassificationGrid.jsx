@@ -1,13 +1,14 @@
 // src/components/ClassificationGrid.jsx
 
-export default function ClassificationGrid({ posts }) {
-  const countByCategory = (category) => posts.filter((post) => post.category === category).length;
-  const classes = [
-    { id: '01', name: 'ESAI', slug: 'esai', count: countByCategory('esai'), desc: 'Tulisan reflektif panjang.', href: '/archive' },
-    { id: '02', name: 'NOTES', slug: 'notes', count: countByCategory('notes'), desc: 'Catatan belajar & log.', href: '/notes' },
-    { id: '03', name: 'MUSIK', slug: 'musik', count: countByCategory('musik'), desc: 'Analisis dan ulasan album.', href: '/archive' },
-    { id: '04', name: 'FILM', slug: 'film-anime', count: countByCategory('film-anime'), desc: 'Sinema dan pergerakan.', href: '/archive' },
-  ];
+export default function ClassificationGrid({ categories }) {
+  const classes = categories.map((category, index) => ({
+    id: String(index + 1).padStart(2, '0'),
+    name: category.name.toUpperCase(),
+    slug: category.slug,
+    count: category.count,
+    desc: category.description,
+    href: category.href,
+  }));
   return (
     <section
       className="classification-section"
@@ -42,7 +43,7 @@ export default function ClassificationGrid({ posts }) {
         
         .desktop-class-grid {
           display: grid;
-          grid-template-columns: repeat(4, 1fr);
+          grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
           gap: 1px;
           background-color: rgba(255,255,255,0.15);
           border: 1px solid rgba(255,255,255,0.15);

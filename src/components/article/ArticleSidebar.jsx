@@ -3,7 +3,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { getCategoryColor } from '../../lib/categoryColors';
+import { getCategoryColor, getCategoryHref } from '../../lib/categoryColors';
 import TableOfContents from './TableOfContents';
 
 function formatDate(dateStr) {
@@ -126,7 +126,7 @@ export default function ArticleSidebar({
 
           {/* Badge Kategori */}
           <div style={{ marginTop: '4px' }}>
-            <span style={{
+            <Link href={getCategoryHref(frontmatter.category)} style={{
               fontFamily:      'var(--font-mono)',
               fontSize:        '10px',
               letterSpacing:   '0.1em',
@@ -136,9 +136,10 @@ export default function ArticleSidebar({
               backgroundColor: cat.bg,
               padding:         '3px 8px',
               display:         'inline-block',
+              textDecoration:  'none',
             }}>
               {cat.label}
-            </span>
+            </Link>
           </div>
 
           {/* Tags */}
