@@ -1,80 +1,82 @@
-import { useEffect, useRef } from 'react';
-import { gsap } from 'gsap';
-import SplitType from 'split-type';
+// Animasi masuk hero memakai CSS, jadi langsung berjalan dari HTML server
+// tanpa menunggu JavaScript dimuat. Durasi dan easing meniru versi GSAP lama.
+const HERO_ANIMATION_CSS = `
+  @keyframes hero-bg-in {
+    from { transform: scale(1.15); filter: grayscale(100%) contrast(1) brightness(0.35); }
+    to   { transform: scale(1);    filter: grayscale(100%) contrast(1.2) brightness(0.9); }
+  }
+  @keyframes hero-char-in {
+    from { opacity: 0; transform: translateY(120px) rotateX(-40deg); }
+    to   { opacity: 1; transform: none; }
+  }
+  @keyframes hero-char-in-mobile {
+    from { opacity: 0; transform: translateY(60px); }
+    to   { opacity: 1; transform: none; }
+  }
+  @keyframes hero-frame-in {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: none; }
+  }
+  .hero-image { animation: hero-bg-in 1.8s cubic-bezier(0.215, 0.61, 0.355, 1) both; }
+  .hero-word { display: inline-block; white-space: nowrap; }
+  .hero-char {
+    display: inline-block;
+    animation: hero-char-in 1s cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation-delay: calc(0.1s + var(--i) * 0.04s);
+  }
+  .hero-char--mobile { animation-name: hero-char-in-mobile; animation-duration: 0.9s; }
+  .hero-frame > * { animation: hero-frame-in 0.9s cubic-bezier(0.25, 0.46, 0.45, 0.94) both; }
+  .hero-frame > .hero-row-top { animation-delay: 0.35s; }
+  .hero-frame > .hero-row-bottom { animation-delay: 0.2s; }
+`;
+
+// Judul dipecah per huruf di server agar animasi stagger tidak butuh SplitType.
+function AnimatedTitle({ text, mobile = false }) {
+  let index = 0;
+  return text.split(' ').map((word, wordIndex, words) => (
+    <span key={wordIndex}>
+      <span className="hero-word" aria-hidden="true">
+        {Array.from(word).map((char) => (
+          <span
+            key={index}
+            className={mobile ? 'hero-char hero-char--mobile' : 'hero-char'}
+            style={{ '--i': index++ }}
+          >
+            {char}
+          </span>
+        ))}
+      </span>
+      {wordIndex < words.length - 1 ? ' ' : null}
+    </span>
+  ));
+}
+
+// Gambar Unsplash diminta dalam ukuran sesuai layar dan format WebP;
+// URL lain (misalnya file lokal) dipakai apa adanya.
+function heroImageSources(url) {
+  let parsed;
+  try {
+    parsed = new URL(url);
+  } catch {
+    return { src: url };
+  }
+  if (parsed.hostname !== 'images.unsplash.com') return { src: url };
+
+  const variant = (width) => {
+    const next = new URL(parsed);
+    next.searchParams.set('w', String(width));
+    next.searchParams.set('q', '70');
+    next.searchParams.set('fm', 'webp');
+    return next.toString();
+  };
+  return {
+    src: variant(1280),
+    srcSet: [768, 1280, 1920].map((width) => `${variant(width)} ${width}w`).join(', '),
+  };
+}
 
 export default function HeroBanner({ content }) {
-  const titleRef = useRef(null);
-  const mobileTitleRef = useRef(null);
-  const bgRef = useRef(null);
-  const frameRef = useRef(null);
-
-  useEffect(() => {
-    const ctx = gsap.context(() => {
-      // 1. Cinematic Background Reveal
-      if (bgRef.current) {
-        gsap.fromTo(bgRef.current,
-          { scale: 1.15, filter: 'grayscale(100%) contrast(1) brightness(0)' },
-          { scale: 1, filter: 'grayscale(100%) contrast(1.2) brightness(0.9)', duration: 2.5, ease: 'power3.out', delay: 1.5 }
-        );
-      }
-
-      // 2. Title Character Stagger (Desktop)
-      if (titleRef.current) {
-        const text = new SplitType(titleRef.current, { types: 'chars' });
-        gsap.set(titleRef.current, { overflow: 'hidden' });
-        
-        if (text.chars.length > 0) {
-          gsap.fromTo(text.chars,
-            { y: 120, opacity: 0, rotateX: -40 },
-            {
-              y: 0,
-              opacity: 1,
-              rotateX: 0,
-              duration: 1.2,
-              stagger: 0.05,
-              ease: 'expo.out',
-              delay: 2.2,
-              onComplete: () => { text.revert(); }
-            }
-          );
-        }
-      }
-
-      // 2b. Title Stagger (Mobile)
-      if (mobileTitleRef.current) {
-        const mobileText = new SplitType(mobileTitleRef.current, { types: 'chars' });
-        gsap.set(mobileTitleRef.current, { overflow: 'hidden' });
-        
-        if (mobileText.chars.length > 0) {
-          gsap.fromTo(mobileText.chars,
-            { y: 60, opacity: 0 },
-            {
-              y: 0,
-              opacity: 1,
-              duration: 1,
-              stagger: 0.03,
-              ease: 'expo.out',
-              delay: 2.2,
-              onComplete: () => { mobileText.revert(); }
-            }
-          );
-        }
-      }
-
-      // 3. Corner Frame Reveal
-      if (frameRef.current) {
-        const frameChildren = Array.from(frameRef.current.children);
-        if (frameChildren.length > 0) {
-          gsap.fromTo(frameChildren,
-            { opacity: 0, y: 20 },
-            { opacity: 1, y: 0, duration: 1.5, stagger: 0.2, ease: 'power2.out', delay: 2.6 }
-          );
-        }
-      }
-    });
-
-    return () => ctx.revert();
-  }, []);
+  const image = heroImageSources(content.imageUrl);
 
   return (
     <section
@@ -89,6 +91,7 @@ export default function HeroBanner({ content }) {
         backgroundColor: '#000000', // Pure OLED Black
       }}
     >
+      <style>{HERO_ANIMATION_CSS}</style>
       <style>{`
         .hero-frame {
           position: absolute;
@@ -158,7 +161,6 @@ export default function HeroBanner({ content }) {
 
       {/* Background image - HD Contrast */}
       <div
-        ref={bgRef}
         className="hero-image"
         style={{
           position: 'absolute',
@@ -166,13 +168,19 @@ export default function HeroBanner({ content }) {
           width: '100%',
           height: '120%',
           top: '-10%',
-          backgroundImage: `url('${content.imageUrl}')`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
           filter: 'grayscale(100%) contrast(1.2) brightness(0.9)',
           willChange: 'transform, filter',
         }}
-      />
+      >
+        <img
+          src={image.src}
+          srcSet={image.srcSet}
+          sizes="100vw"
+          alt=""
+          fetchPriority="high"
+          style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center', display: 'block' }}
+        />
+      </div>
 
       {/* Pure OLED Black Fade Overlay */}
       <div
@@ -190,7 +198,7 @@ export default function HeroBanner({ content }) {
       {/* Dead Center Title (Desktop Only) */}
       <div className="hero-center hide-mobile">
         <h1
-          ref={titleRef}
+          aria-label={content.title}
           style={{
             fontFamily: 'var(--font-heading)',
             fontWeight: 300,
@@ -203,12 +211,12 @@ export default function HeroBanner({ content }) {
             clipPath: 'polygon(0 0, 100% 0, 100% 120%, 0 120%)',
           }}
         >
-          {content.title}
+          <AnimatedTitle text={content.title} />
         </h1>
       </div>
 
       {/* The 4-Corner Frame Layout */}
-      <div className="hero-frame" ref={frameRef}>
+      <div className="hero-frame">
         
         {/* Top Row (Desktop Only) */}
         <div className="hero-row-top">
@@ -230,7 +238,7 @@ export default function HeroBanner({ content }) {
             {/* Mobile Title */}
             <h1 
               className="hide-desktop"
-              ref={mobileTitleRef}
+              aria-label={content.title}
               style={{
                 fontFamily: 'var(--font-heading)',
                 fontWeight: 300,
@@ -241,7 +249,7 @@ export default function HeroBanner({ content }) {
                 marginBottom: '24px',
               }}
             >
-              {content.title}
+              <AnimatedTitle text={content.title} mobile />
             </h1>
 
             <span

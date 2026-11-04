@@ -1,7 +1,5 @@
 'use client';
 
-import { useState } from 'react';
-import { AnimatePresence } from 'framer-motion';
 import HeroBanner from '../../components/HeroBanner';
 import MarqueeTicker from '../../components/MarqueeTicker';
 import IntroDescription from '../../components/IntroDescription';
@@ -16,19 +14,10 @@ import Timeline from '../../components/Timeline';
 import ManifestoAbout from '../../components/ManifestoAbout';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
-import LoadingScreen from '../../components/LoadingScreen';
 
 export default function HomeView({ posts, categories, content, footerContent }) {
-  const [loading, setLoading] = useState(true);
-
   return (
     <>
-      <AnimatePresence>
-        {loading && (
-          <LoadingScreen key="loader" onComplete={() => setLoading(false)} />
-        )}
-      </AnimatePresence>
-
       <div className="grain-overlay-body" aria-hidden="true" />
 
       <Header />
