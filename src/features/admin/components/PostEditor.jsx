@@ -522,6 +522,9 @@ export default function PostEditor({ post, options }) {
               {post?.categorySlug && post?.slug && post.status === 'published' ? (
                 <a href={`/${post.categorySlug}/${post.slug}`} target="_blank" className="admin-button" rel="noreferrer"><span className="material-symbols-outlined" aria-hidden="true">open_in_new</span>Lihat artikel</a>
               ) : null}
+              {post?.id ? (
+                <a href={`/admin/preview/${post.id}`} target="_blank" className="admin-button" rel="noreferrer" title="Menampilkan versi terakhir yang sudah disimpan."><span className="material-symbols-outlined" aria-hidden="true">preview</span>Pratinjau di situs</a>
+              ) : null}
             </div>
           </section>
 

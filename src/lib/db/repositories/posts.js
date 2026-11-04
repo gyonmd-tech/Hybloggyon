@@ -135,3 +135,25 @@ export async function listPublishedRouteParams() {
     .where(publishedWhere())
     .orderBy(asc(categories.slug), asc(posts.slug));
 }
+
+export async function listPublicCategories() {
+  return getDatabase()
+    .select({ slug: categories.slug, name: categories.name, description: categories.description })
+    .from(categories)
+    .orderBy(asc(categories.createdAt), asc(categories.name));
+}
+
+// Untuk pratinjau admin: mengabaikan status sehingga draft dan jadwal ikut terbaca.
+export async function findPostForPreview(id) {
+  const rows = await getDatabase()
+    .select({ ...postSelection(true), status: posts.status })
+    .from(posts)
+    .innerJoin(categories, eq(posts.categoryId, categories.id))
+    .leftJoin(series, eq(posts.seriesId, series.id))
+    .leftJoin(mediaAssets, eq(posts.coverAssetId, mediaAssets.id))
+    .where(eq(posts.id, id))
+    .limit(1);
+
+  const [post] = await attachTags(rows);
+  return post ? { status: post.status, post: toPublicPost(post) } : null;
+}

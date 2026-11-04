@@ -1,5 +1,6 @@
 import ArchiveView from '../../features/archive/ArchiveView';
 import { getAllPosts } from '../../lib/content/posts';
+import { getCategories } from '../../lib/content/categories';
 
 export const metadata = {
   title: 'Archive',
@@ -8,5 +9,6 @@ export const metadata = {
 };
 
 export default async function ArchivePage() {
-  return <ArchiveView posts={await getAllPosts()} />;
+  const [posts, categories] = await Promise.all([getAllPosts(), getCategories()]);
+  return <ArchiveView posts={posts} categories={categories} />;
 }

@@ -18,7 +18,7 @@ import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import LoadingScreen from '../../components/LoadingScreen';
 
-export default function HomeView({ posts, content, footerContent }) {
+export default function HomeView({ posts, categories, content, footerContent }) {
   const [loading, setLoading] = useState(true);
 
   return (
@@ -40,7 +40,7 @@ export default function HomeView({ posts, content, footerContent }) {
           <IntroDescription content={content.intro} />
 
           {/* Navigasi Kategori (Dipindah ke atas agar pengunjung bisa langsung melompat ke topik spesifik) */}
-          <ClassificationGrid posts={posts} />
+          <ClassificationGrid categories={categories} />
 
           <LatestTopics posts={posts} />
           <FeaturedEssays posts={posts} />

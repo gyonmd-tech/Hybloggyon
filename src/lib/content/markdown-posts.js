@@ -76,13 +76,28 @@ export function getPostNavigation(post, allPosts = getAllPosts()) {
   return {
     previous: index >= 0 && index < allPosts.length - 1 ? allPosts[index + 1] : null,
     next: index > 0 ? allPosts[index - 1] : null,
-    related: allPosts
-      .filter(
-        (candidate) =>
-          candidate.url !== post.url && candidate.category === post.category,
-      )
-      .slice(0, 3),
+    related: getRelatedPosts(post, allPosts),
   };
+}
+
+// Skor: satu seri paling kuat, lalu tag yang sama, lalu kategori yang sama.
+// Nilai seri diurutkan dari yang terbaru karena allPosts sudah urut tanggal.
+function getRelatedPosts(post, allPosts, limit = 3) {
+  const postTags = new Set(post.tags.map((tag) => tag.toLowerCase()));
+
+  return allPosts
+    .filter((candidate) => candidate.url !== post.url)
+    .map((candidate, order) => {
+      let score = 0;
+      if (post.series && candidate.series === post.series) score += 4;
+      score += candidate.tags.filter((tag) => postTags.has(tag.toLowerCase())).length * 2;
+      if (candidate.category === post.category) score += 1;
+      return { candidate, score, order };
+    })
+    .filter(({ score }) => score > 0)
+    .sort((a, b) => b.score - a.score || a.order - b.order)
+    .slice(0, limit)
+    .map(({ candidate }) => candidate);
 }
 
 export function getPostRouteParams() {

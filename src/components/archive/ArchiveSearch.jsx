@@ -6,13 +6,7 @@
 import { useRef } from 'react';
 import { getCategoryColor } from '../../lib/categoryColors';
 
-const TABS = [
-  { id: 'semua',      label: 'SEMUA' },
-  { id: 'esai',       label: 'ESAI' },
-  { id: 'notes',      label: 'NOTES' },
-  { id: 'musik',      label: 'MUSIK' },
-  { id: 'film-anime', label: 'FILM & ANIME' },
-];
+const ALL_TAB = { id: 'semua', label: 'SEMUA' };
 
 export default function ArchiveSearch({
   searchQuery,
@@ -20,8 +14,13 @@ export default function ArchiveSearch({
   filteredCount,
   activeFolder,
   setActiveFolder,
+  categories,
 }) {
   const inputRef = useRef(null);
+  const tabs = [
+    ALL_TAB,
+    ...categories.map((category) => ({ id: category.slug, label: category.name.toUpperCase() })),
+  ];
 
   function handleKeyDown(e) {
     if (e.key === 'Escape') {
@@ -148,7 +147,7 @@ export default function ArchiveSearch({
 
       {/* ── Chips kategori ── */}
       <div className="archive-filter-row">
-        {TABS.map(tab => {
+        {tabs.map(tab => {
           const isActive = activeFolder === tab.id;
           const catColor = tab.id === 'semua' 
             ? { bg: 'var(--color-ink)', text: 'var(--color-background)' } 

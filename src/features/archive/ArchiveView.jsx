@@ -6,7 +6,7 @@ import ArchiveSearch from '../../components/archive/ArchiveSearch';
 import ArchiveGrid from '../../components/archive/ArchiveGrid';
 import ArchiveFooter from '../../components/archive/ArchiveFooter';
 
-export default function ArchiveView({ posts }) {
+export default function ArchiveView({ posts, categories }) {
   const [activeFolder, setActiveFolder] = useState('semua');
   const [searchQuery,  setSearchQuery]  = useState('');
 
@@ -46,6 +46,7 @@ export default function ArchiveView({ posts }) {
         filteredCount={filteredPosts.length}
         activeFolder={activeFolder}
         setActiveFolder={setActiveFolder}
+        categories={categories}
       />
 
       {/* Section 3 — Grid dengan fitur Show More (Gradient) */}
@@ -55,6 +56,7 @@ export default function ArchiveView({ posts }) {
         totalFiltered={filteredPosts.length}
         filterKey={filterKey}
         activeFolder={activeFolder}
+        categories={categories}
       />
 
       {/* Section 4 — Footer minimal */}
