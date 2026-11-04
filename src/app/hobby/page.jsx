@@ -1,5 +1,6 @@
 import HobbyView from '../../features/hobby/HobbyView';
 import { getResolvedSiteContent } from '../../lib/content/site-content';
+import { withTmdbBackdrops } from '../../lib/media/tmdb';
 
 export const metadata = {
   title: 'Kurasi',
@@ -13,5 +14,6 @@ export default async function HobbyPage() {
     getResolvedSiteContent('hobby'),
     getResolvedSiteContent('about'),
   ]);
-  return <HobbyView content={content} footerContent={footerContent} />;
+  const watchlist = await withTmdbBackdrops(content.watchlist);
+  return <HobbyView content={{ ...content, watchlist }} footerContent={footerContent} />;
 }

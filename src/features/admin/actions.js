@@ -346,7 +346,7 @@ export async function importMediaUrlAction(_previousState, formData) {
   const admin = await requireAdmin('/admin/media');
   try {
     const schema = z.object({
-      publicUrl: z.url('URL gambar tidak valid.'),
+      publicUrl: z.url({ protocol: /^https$/, error: 'URL gambar harus valid dan memakai https://.' }),
       fileName: z.string().trim().min(1).max(255),
       altText: z.string().trim().max(500).default(''),
       caption: z.string().trim().max(1000).default(''),

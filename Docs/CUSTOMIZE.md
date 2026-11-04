@@ -38,7 +38,7 @@ Portrait image is wired in `src/components/about/AboutPortrait.jsx` (typically u
 
 Edit **`src/content/hobby-data.js`** for music, books, films, and side glances.
 
-Film posters can use TMDb IDs when `NEXT_PUBLIC_TMDB_API_KEY` is set (see README). Without a key, typography fallbacks still render.
+Film posters can use TMDb IDs when `TMDB_API_KEY` is set (see README). Backdrops are fetched on the server and cached for 24 hours. Without a key, typography fallbacks still render.
 
 ---
 
@@ -86,7 +86,7 @@ To remove a page: delete the route, nav link in `Header.jsx`, and unused compone
 
 ```env
 # .env (local) — never commit
-NEXT_PUBLIC_TMDB_API_KEY=your_key
+TMDB_API_KEY=your_key
 ```
 
 On Vercel: **Settings → Environment Variables** → same key → Redeploy.
