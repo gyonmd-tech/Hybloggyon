@@ -102,8 +102,8 @@ export async function loginAction(_previousState, formData) {
     : '/admin';
   const requestHeaders = await headers();
   const remoteAddress = requestHeaders.get('x-forwarded-for')?.split(',')[0]?.trim() || 'local';
-  const limiterKey = `${remoteAddress}:${email || 'unknown'}`;
-  const rateLimit = consumeLoginAttempt(limiterKey);
+  const limiterIdentity = { email, remoteAddress };
+  const rateLimit = await consumeLoginAttempt(limiterIdentity);
 
   if (!rateLimit.allowed) {
     return {
@@ -122,7 +122,7 @@ export async function loginAction(_previousState, formData) {
     return { ...emptyState, message: 'Email atau password tidak cocok.' };
   }
 
-  clearLoginAttempts(limiterKey);
+  await clearLoginAttempts(limiterIdentity);
   await createAdminSession(admin.id);
   await markAdminLogin(admin.id);
   await recordSystemLog({ actorId: admin.id, level: 'security', action: 'auth.login', entityType: 'session', message: 'Admin berhasil masuk ke panel.' });

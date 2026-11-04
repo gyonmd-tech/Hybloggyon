@@ -28,6 +28,7 @@ Schema berada di `src/lib/db/schema.js` dan migration tersimpan di folder `drizz
 | `site_settings` | Konfigurasi situs berbentuk JSON |
 | `admin_users` | Identitas admin; password hanya disimpan sebagai hash |
 | `admin_sessions` | Session dengan token yang sudah di-hash |
+| `login_attempts` | Penghitung rate limit login per email dan per IP (kunci di-hash) |
 
 Repository publik membaca artikel `published` yang tanggal publikasinya sudah berlaku. Artikel `scheduled` ikut dibaca hanya setelah `scheduled_at` terlewati, sehingga publikasi terjadwal tidak membutuhkan proses cron terpisah. Draft, artikel terjadwal yang belum jatuh tempo, arsip, user, session, dan revision tidak pernah dikirim melalui kontrak konten publik.
 

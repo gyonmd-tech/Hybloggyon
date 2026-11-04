@@ -15,6 +15,13 @@
       "when": 1788091892483,
       "tag": "0001_daily_ben_urich",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1793706580816,
+      "tag": "0002_login_attempts",
+      "breakpoints": true
     }
   ]
 }
