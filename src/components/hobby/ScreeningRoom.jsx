@@ -1,15 +1,11 @@
 // src/components/hobby/ScreeningRoom.jsx
-// Section 3 — Featured film + grid film lainnya. Backdrop dari TMDb API per-item.
+// Section 3 — Featured film + grid film lainnya. Backdrop TMDb disiapkan di server (lib/media/tmdb.js).
 
 import { useState, useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 gsap.registerPlugin(ScrollTrigger);
-
-const TMDB_KEY = process.env.NEXT_PUBLIC_TMDB_API_KEY;
-const IMG_BASE_W1280 = 'https://image.tmdb.org/t/p/w1280';
-const IMG_BASE_W780  = 'https://image.tmdb.org/t/p/w780';
 
 // ── Fallback tipografis jika gambar gagal ──────────────────────────────────
 function FilmFallback({ title, style = {} }) {
@@ -43,35 +39,10 @@ function FilmFallback({ title, style = {} }) {
   );
 }
 
-// ── Fetch backdrop dari TMDb (movie atau tv) ─────────────────────────────
-async function fetchBackdrop(tmdbId, size = 'w1280', mediaType = 'movie') {
-  const width = size === 'w780' ? 780 : 1280;
-  const height = size === 'w780' ? 438 : 720;
-  const dummyImg = `https://picsum.photos/seed/${tmdbId}/${width}/${height}`;
-
-  if (!TMDB_KEY || TMDB_KEY === 'your_tmdb_api_key_here') return dummyImg;
-  try {
-    const kind = ['tv', 'anime', 'series'].includes(mediaType) ? 'tv' : 'movie';
-    const res  = await fetch(
-      `https://api.themoviedb.org/3/${kind}/${tmdbId}/images?api_key=${TMDB_KEY}`
-    );
-    const data = await res.json();
-    const path = data.backdrops?.[0]?.file_path;
-    if (!path) return dummyImg;
-    const base = size === 'w780' ? IMG_BASE_W780 : IMG_BASE_W1280;
-    return `${base}${path}`;
-  } catch {
-    return dummyImg;
-  }
-}
-
 // ── Featured film component ─────────────────────────────────────────────
 function FeaturedFilm({ film, bannerRef, textRef }) {
-  const [imgUrl, setImgUrl] = useState(null);
-
-  useEffect(() => {
-    fetchBackdrop(film.tmdbId, 'w1280', film.mediaType ?? film.type).then(setImgUrl);
-  }, [film.tmdbId, film.mediaType, film.type]);
+  const [imgFailed, setImgFailed] = useState(false);
+  const imgUrl = imgFailed ? null : film.backdropUrl;
 
   return (
     <div style={{ marginBottom: '40px' }}>
@@ -103,6 +74,7 @@ function FeaturedFilm({ film, bannerRef, textRef }) {
             <img
               src={imgUrl}
               alt={film.title}
+              onError={() => setImgFailed(true)}
               style={{
                 width: '100%',
                 height: '100%',
@@ -218,11 +190,8 @@ function FeaturedFilm({ film, bannerRef, textRef }) {
 
 // ── Grid item film lainnya ──────────────────────────────────────────────
 function GridFilmItem({ film }) {
-  const [imgUrl, setImgUrl] = useState(null);
-
-  useEffect(() => {
-    fetchBackdrop(film.tmdbId, 'w780', film.mediaType ?? film.type).then(setImgUrl);
-  }, [film.tmdbId, film.mediaType, film.type]);
+  const [imgFailed, setImgFailed] = useState(false);
+  const imgUrl = imgFailed ? null : film.backdropUrl;
 
   return (
     <div
@@ -254,6 +223,7 @@ function GridFilmItem({ film }) {
           <img
             src={imgUrl}
             alt={film.title}
+            onError={() => setImgFailed(true)}
             style={{
               width: '100%',
               height: '100%',

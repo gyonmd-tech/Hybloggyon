@@ -16,10 +16,6 @@ const nextConfig = {
       bodySizeLimit: `${Math.max(1, Number(process.env.MEDIA_MAX_SIZE_MB || 8) + 1)}mb`,
     },
   },
-  env: {
-    NEXT_PUBLIC_TMDB_API_KEY:
-      process.env.NEXT_PUBLIC_TMDB_API_KEY || process.env.VITE_TMDB_API_KEY || '',
-  },
   async headers() {
     return [
       {

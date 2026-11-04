@@ -77,7 +77,7 @@ Gunakan `.env.example` sebagai referensi utama. Jangan commit `.env`, `.env.loca
 | `ADMIN_PASSWORD` | Bootstrap | Password awal, minimal 12 karakter. |
 | `ADMIN_DISPLAY_NAME` | Tidak | Nama pemilik pada panel. |
 | `GOOGLE_SITE_VERIFICATION` | Tidak | Token verifikasi Google Search Console. |
-| `NEXT_PUBLIC_TMDB_API_KEY` | Tidak | Poster dan backdrop halaman Kurasi. |
+| `TMDB_API_KEY` | Tidak | Backdrop halaman Kurasi, diambil di server dan di-cache 24 jam. Nama lama `NEXT_PUBLIC_TMDB_API_KEY` masih dibaca sebagai fallback. |
 
 Contoh lokal:
 
