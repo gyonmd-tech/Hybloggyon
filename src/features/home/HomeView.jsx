@@ -7,15 +7,12 @@ import LatestTopics from '../../components/LatestTopics';
 import FeaturedEssays from '../../components/FeaturedEssays';
 import AccentQuote from '../../components/AccentQuote';
 import HobbiesScroll from '../../components/HobbiesScroll';
-import CuratedConsumption from '../../components/CuratedConsumption';
-import LoggedObservations from '../../components/LoggedObservations';
-import ClassificationGrid from '../../components/ClassificationGrid';
 import Timeline from '../../components/Timeline';
 import ManifestoAbout from '../../components/ManifestoAbout';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 
-export default function HomeView({ posts, categories, content, footerContent }) {
+export default function HomeView({ posts, content, footerContent }) {
   return (
     <>
       <div className="grain-overlay-body" aria-hidden="true" />
@@ -28,9 +25,6 @@ export default function HomeView({ posts, categories, content, footerContent }) 
           <MarqueeTicker text={content.ticker} />
           <IntroDescription content={content.intro} />
 
-          {/* Navigasi Kategori (Dipindah ke atas agar pengunjung bisa langsung melompat ke topik spesifik) */}
-          <ClassificationGrid categories={categories} />
-
           <LatestTopics posts={posts} />
           <FeaturedEssays posts={posts} />
 
@@ -38,8 +32,6 @@ export default function HomeView({ posts, categories, content, footerContent }) 
 
           {/* Konten Personal / Sekunder */}
           <HobbiesScroll items={content.hobbies} />
-          <CuratedConsumption items={content.showcase} />
-          <LoggedObservations logs={content.logs} />
 
           <Timeline events={content.timeline} />
           <ManifestoAbout content={content.manifesto} />

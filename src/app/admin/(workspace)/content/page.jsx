@@ -3,7 +3,7 @@ import AdminPageHeader from '../../../../features/admin/components/AdminPageHead
 import { requireAdmin } from '../../../../lib/auth/session';
 
 const sections = [
-  { slug: 'home', icon: 'home', title: 'Beranda', description: 'Hero, ticker, pengantar, minat, showcase, log, timeline, dan manifesto ringkas.' },
+  { slug: 'home', icon: 'home', title: 'Beranda', description: 'Hero, ticker, pengantar, minat, timeline, dan manifesto ringkas.' },
   { slug: 'notes', icon: 'sticky_note_2', title: 'Notes', description: 'Current thinking, generator pemikiran acak, dan relasi antarcatatan.' },
   { slug: 'hobby', icon: 'collections_bookmark', title: 'Kurasi / Hobi', description: 'Musik, tontonan, buku, observasi, serta identitas halaman kurasi.' },
   { slug: 'about', icon: 'person', title: 'Tentang', description: 'Profil, foto, manifesto, prinsip, kontak, dan tautan sosial.' },

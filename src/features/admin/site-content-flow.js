@@ -7,8 +7,6 @@ export const siteContentSections = {
       { slug: 'hero', icon: 'web_asset', title: 'Hero & pengantar', description: 'Judul utama, gambar LCP, ticker, CTA, dan paragraf pembuka.' },
       { slug: 'manifesto', icon: 'format_quote', title: 'Kutipan & manifesto', description: 'Pernyataan pendek yang menutup narasi beranda.' },
       { slug: 'hobbies', icon: 'interests', title: 'Minat & obsesi', description: 'Kartu hobi yang muncul dalam alur horizontal.' },
-      { slug: 'showcase', icon: 'view_carousel', title: 'Showcase', description: 'Koleksi dan arsip visual pilihan.' },
-      { slug: 'observations', icon: 'data_object', title: 'Log observasi', description: 'Catatan aktivitas dan observasi singkat di homepage.' },
       { slug: 'timeline', icon: 'timeline', title: 'Jejak & evolusi', description: 'Riwayat perjalanan dan versi HyBloggyon.' },
     ],
   },
