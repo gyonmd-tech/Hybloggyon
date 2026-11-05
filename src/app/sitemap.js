@@ -1,5 +1,6 @@
 import { getAllPosts } from '../lib/content/posts';
 import { getCategories } from '../lib/content/categories';
+import { getArchiveFolders } from '../lib/content/archive';
 import { absoluteUrl } from '../config/site';
 
 export const dynamic = 'force-dynamic';
@@ -21,6 +22,13 @@ export default async function sitemap() {
       priority: 0.6,
     }));
 
+  const folderPages = (await getArchiveFolders()).map((folder) => ({
+    url: absoluteUrl(`/archive/${folder.slug}`),
+    lastModified: new Date(folder.lastDate),
+    changeFrequency: 'weekly',
+    priority: 0.6,
+  }));
+
   const articles = (await getAllPosts())
     .filter((post) => !post.noIndex)
     .map((post) => ({
@@ -30,5 +38,5 @@ export default async function sitemap() {
       priority: 0.8,
     }));
 
-  return [...staticPages, ...categoryPages, ...articles];
+  return [...staticPages, ...categoryPages, ...folderPages, ...articles];
 }

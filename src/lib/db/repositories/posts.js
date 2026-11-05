@@ -21,6 +21,7 @@ function postSelection(includeContent) {
     readingTime: posts.readingTime,
     pullQuote: posts.pullQuote,
     series: series.name,
+    seriesSlug: series.slug,
     seriesOrder: posts.seriesOrder,
     publishedAt: posts.publishedAt,
     scheduledAt: posts.scheduledAt,
@@ -81,6 +82,7 @@ function toPublicPost(row) {
     readingTime: row.readingTime,
     pullQuote: row.pullQuote,
     series: row.series || '',
+    seriesSlug: row.seriesSlug || '',
     seriesOrder: row.seriesOrder,
     seoTitle: row.seoTitle,
     seoDescription: row.seoDescription,
@@ -156,4 +158,10 @@ export async function findPostForPreview(id) {
 
   const [post] = await attachTags(rows);
   return post ? { status: post.status, post: toPublicPost(post) } : null;
+}
+
+export async function listPublicSeries() {
+  return getDatabase()
+    .select({ slug: series.slug, name: series.name, description: series.description })
+    .from(series);
 }

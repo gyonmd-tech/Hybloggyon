@@ -29,7 +29,7 @@ export async function generateMetadata({ params }) {
   if (!post) return {};
   const profile = await getResolvedSiteProfile();
 
-  const image = post.ogImageUrl || (post.coverExists ? post.coverImage : '');
+  const image = post.ogImageUrl || (post.coverExists ? post.coverImage : `/og/${post.category}/${post.slug}`);
   const description = post.seoDescription || post.excerpt;
   const title = post.seoTitle || post.title;
   const canonical = post.canonicalUrl || post.url;

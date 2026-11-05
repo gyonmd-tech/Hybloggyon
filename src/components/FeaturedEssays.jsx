@@ -2,16 +2,9 @@
 import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import PostCover from './PostCover';
 
 gsap.registerPlugin(ScrollTrigger);
-
-// ── Gambar hero per kategori ─────────────────────────────────────────────────
-const CATEGORY_IMAGES = {
-  'esai':       'https://images.unsplash.com/photo-1455390582262-044cdead277a?w=1600&q=75',
-  'notes':      'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=1600&q=75',
-  'film-anime': 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=1600&q=75',
-  'musik':      'https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=1600&q=75',
-};
 
 export default function FeaturedEssays({ posts }) {
   const containerRef = useRef(null);
@@ -23,7 +16,7 @@ export default function FeaturedEssays({ posts }) {
     title: post.title,
     subtitle: post.subtitle || post.excerpt,
     href: post.url,
-    image: CATEGORY_IMAGES[post.category] ?? CATEGORY_IMAGES.esai,
+    post,
   }));
 
   useEffect(() => {
@@ -163,14 +156,13 @@ export default function FeaturedEssays({ posts }) {
               inset: '0', 
               width: '100%',
               height: '100%',
-              backgroundImage: `url('${essay.image}')`,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
               filter: 'grayscale(100%)',
               transition: 'filter 0.5s ease',
               willChange: 'transform, filter', // Guarantee hardware acceleration for scrub & hover
             }}
-          />
+          >
+            <PostCover post={essay.post} fill showText={false} />
+          </div>
 
           {/* Overlay gradient */}
           <div
