@@ -23,6 +23,7 @@ export const postSummarySchema = z.object({
   readingTime: z.number().int().positive(),
   pullQuote: z.string().default(''),
   series: z.string().default(''),
+  seriesSlug: z.string().default(''),
   seriesOrder: z.number().int().positive().nullable().default(null),
   seoTitle: z.string().default(''),
   seoDescription: z.string().default(''),

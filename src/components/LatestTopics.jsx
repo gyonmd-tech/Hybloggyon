@@ -1,10 +1,14 @@
 // src/components/LatestTopics.jsx
+import PostCover from './PostCover';
+
 
 export default function LatestTopics({ posts }) {
   const topics = posts.slice(0, 5).map((post, index) => ({
     num: String(index + 1).padStart(2, '0'),
     category: post.category.toUpperCase().replace('-', ' & '),
     title: post.title,
+    excerpt: post.excerpt,
+    post,
     date: new Date(post.date).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }).toUpperCase(),
     readTime: `${post.readingTime} MIN READ`,
     href: post.url,
@@ -78,7 +82,8 @@ export default function LatestTopics({ posts }) {
                 className="notes-row topic-row-hover topic-grid-row"
                 style={{
                   display: 'grid',
-                  gridTemplateColumns: '1fr 4fr 1fr',
+                  gridTemplateColumns: '140px minmax(0, 1fr) 150px 168px',
+                  gap: '32px',
                   alignItems: 'center',
                   padding: 'clamp(20px, 3vw, 32px) clamp(20px, 3vw, 40px)',
                   borderBottom: '1px solid var(--color-ink)',
@@ -86,7 +91,7 @@ export default function LatestTopics({ posts }) {
                   transition: 'background-color 0.3s ease, color 0.3s ease',
                 }}
               >
-                <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                <div className="topic-tag-cell" style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
                   <span
                     className="topic-category-tag"
                     style={{
@@ -103,7 +108,7 @@ export default function LatestTopics({ posts }) {
                 </div>
 
                 {/* Title */}
-                <div>
+                <div className="topic-title-cell" style={{ minWidth: 0 }}>
                   <h3
                     className="topic-title"
                     style={{
@@ -117,6 +122,22 @@ export default function LatestTopics({ posts }) {
                   >
                     {topic.title}
                   </h3>
+                  {topic.excerpt ? (
+                    <p
+                      className="topic-excerpt topic-meta-text"
+                      style={{
+                        fontFamily: 'var(--font-sans)',
+                        fontSize: '15px',
+                        lineHeight: 1.6,
+                        color: 'var(--color-espresso)',
+                        marginTop: '8px',
+                        maxWidth: '62ch',
+                        transition: 'color 0.3s ease',
+                      }}
+                    >
+                      {topic.excerpt}
+                    </p>
+                  ) : null}
                 </div>
 
                 {/* Meta Right & Arrow */}
@@ -167,6 +188,11 @@ export default function LatestTopics({ posts }) {
                     →
                   </span>
                 </div>
+
+                {/* Thumbnail cover */}
+                <div className="topic-thumb" style={{ border: '1px solid var(--color-ink)' }}>
+                  <PostCover post={topic.post} />
+                </div>
               </a>
             ))}
           </div>
@@ -205,14 +231,24 @@ export default function LatestTopics({ posts }) {
         @media (max-width: 768px) {
           .journal-count-meta { display: none !important; }
           .topic-grid-row {
-            display: flex !important;
-            flex-direction: column !important;
-            align-items: flex-start !important;
-            gap: 6px !important;
+            grid-template-columns: minmax(0, 1fr) 96px !important;
+            grid-template-areas: "tag thumb" "title thumb" !important;
+            align-items: start !important;
+            gap: 8px 16px !important;
             padding: 16px clamp(20px, 3vw, 40px) !important;
           }
+          .topic-tag-cell { grid-area: tag; }
+          .topic-title-cell { grid-area: title; }
+          .topic-thumb { grid-area: thumb; }
           .topic-meta-right { display: none !important; }
           .topic-title { font-size: 18px !important; }
+          .topic-excerpt {
+            font-size: 13px !important;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+          }
         }
       `}</style>
     </>

@@ -1,14 +1,19 @@
 import ArchiveView from '../../features/archive/ArchiveView';
 import { getAllPosts } from '../../lib/content/posts';
-import { getCategories } from '../../lib/content/categories';
+import { getArchiveFolders } from '../../lib/content/archive';
+import { getResolvedSiteContent } from '../../lib/content/site-content';
 
 export const metadata = {
   title: 'Archive',
-  description: 'Arsip seluruh esai, notes, tulisan musik, film, dan anime di HyBloggyon.',
+  description: 'Lemari arsip HyBloggyon: tulisan dikelompokkan per seri seperti folder, bisa dicari dan dibaca berurutan.',
   alternates: { canonical: '/archive' },
 };
 
 export default async function ArchivePage() {
-  const [posts, categories] = await Promise.all([getAllPosts(), getCategories()]);
-  return <ArchiveView posts={posts} categories={categories} />;
+  const [posts, folders, footerContent] = await Promise.all([
+    getAllPosts(),
+    getArchiveFolders(),
+    getResolvedSiteContent('about'),
+  ]);
+  return <ArchiveView posts={posts} folders={folders} footerContent={footerContent} />;
 }

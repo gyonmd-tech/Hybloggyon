@@ -14,7 +14,7 @@ const MARKDOWN_CATEGORIES = [
 
 // Slug kategori menjadi segmen URL pertama, jadi tidak boleh bentrok dengan route statis.
 export const RESERVED_CATEGORY_SLUGS = [
-  'about', 'admin', 'api', 'archive', 'hobby', 'uploads', 'images',
+  'about', 'admin', 'api', 'archive', 'hobby', 'og', 'uploads', 'images',
   'feed.xml', 'sitemap.xml', 'robots.txt', 'manifest.webmanifest',
 ];
 

@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import matter from 'gray-matter';
 import readingTime from 'reading-time';
+import { slugify } from '../slugify.js';
 
 export const POST_CATEGORIES = ['esai', 'notes', 'musik', 'film-anime'];
 
@@ -37,6 +38,7 @@ function normalizePost(fileName, source, includeContent) {
     readingTime: Number(data.readingTime) || Math.max(1, Math.ceil(readingTime(content).minutes)),
     pullQuote: String(data.pullQuote || ''),
     series: String(data.series || ''),
+    seriesSlug: slugify(data.series),
     seriesOrder: Number(data.seriesOrder) || null,
     seoTitle: String(data.seoTitle || ''),
     seoDescription: String(data.seoDescription || ''),

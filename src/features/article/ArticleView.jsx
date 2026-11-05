@@ -13,6 +13,7 @@ import ArticleSidebar from '../../components/article/ArticleSidebar';
 import ArticleFooter from '../../components/article/ArticleFooter';
 import { makeMarkdownComponents } from '../../components/article/MarkdownComponents';
 import { getCategoryColor } from '../../lib/categoryColors';
+import { markRead } from '../../lib/readingProgress';
 
 export default function ArticleView({
   post,
@@ -30,10 +31,13 @@ export default function ArticleView({
     function handleScroll() {
       const total = document.documentElement.scrollHeight - window.innerHeight;
       setScrollProgress(total > 0 ? (window.scrollY / total) * 100 : 0);
+      // Dianggap dibaca setelah 70% artikel dilewati (atau artikel muat satu layar).
+      if (total <= 0 || window.scrollY / total >= 0.7) markRead(post.url);
     }
+    handleScroll();
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [post.url]);
 
   // Headings untuk TOC — baca dari DOM setelah render
   const [headings, setHeadings] = useState([]);

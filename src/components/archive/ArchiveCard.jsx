@@ -6,6 +6,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { getCategoryColor } from '../../lib/categoryColors';
+import PostCover from '../PostCover';
 
 function formatDate(dateStr) {
   if (!dateStr) return '';
@@ -45,6 +46,10 @@ export default function ArchiveCard({ post, index }) {
         filter:          isHovered ? 'brightness(0.95)' : 'brightness(1)',
       }}
     >
+      <div style={{ border: `1px solid ${textColor}` }}>
+        <PostCover post={post} />
+      </div>
+
       {/* Top Header: Nomor & Tanggal */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
         <span style={{

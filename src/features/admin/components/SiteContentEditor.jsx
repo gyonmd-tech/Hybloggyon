@@ -132,8 +132,6 @@ function HomeFields({ data, setData, group }) {
     </div></section>
   );
   if (group === 'hobbies') return <RepeatableList data={data} setData={setData} path={['hobbies']} title="Minat & obsesi" fields={[{ key: 'label', label: 'Kategori' }, { key: 'tag', label: 'Tag' }, { key: 'title', label: 'Judul' }, { key: 'imageUrl', label: 'Gambar', help: urlHelp }, { key: 'description', label: 'Deskripsi', type: 'textarea' }]} createItem={() => ({ label: '', title: '', description: '', tag: '[ NEW ]', imageUrl: '/images/og/default.webp' })} />;
-  if (group === 'showcase') return <RepeatableList data={data} setData={setData} path={['showcase']} title="Showcase / Koleksi & arsip" fields={[{ key: 'title', label: 'Judul' }, { key: 'tag', label: 'Keterangan' }, { key: 'imageUrl', label: 'Gambar', help: urlHelp }]} createItem={() => ({ title: '', tag: '', imageUrl: '/images/og/default.webp' })} />;
-  if (group === 'observations') return <RepeatableList data={data} setData={setData} path={['logs']} title="Log observasi" fields={[{ key: 'date', label: 'Tanggal' }, { key: 'time', label: 'Waktu', required: false }, { key: 'status', label: 'Status', type: 'select', options: [{ value: 'OPEN', label: 'Open' }, { value: 'CLOSED', label: 'Closed' }] }, { key: 'text', label: 'Catatan', type: 'textarea' }]} createItem={() => ({ date: '', time: '', text: '', status: 'OPEN' })} />;
   return <RepeatableList data={data} setData={setData} path={['timeline']} title="Jejak & evolusi" fields={[{ key: 'year', label: 'Tahun' }, { key: 'title', label: 'Judul' }, { key: 'description', label: 'Deskripsi', type: 'textarea' }]} createItem={() => ({ year: String(new Date().getFullYear()), title: '', description: '' })} />;
 }
 
